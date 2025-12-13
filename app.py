@@ -692,6 +692,7 @@ def serve(path):
 logger.info("=" * 50)
 logger.info("STARTING APPLICATION")
 logger.info(f"Static folder exists: {os.path.exists('dist')}")
+logger.info(f"Static folder contents: {os.listdir('dist') if os.path.exists('dist') else 'N/A'}")
 logger.info(f"DATABASE_URL set: {bool(os.getenv('DATABASE_URL'))}")
 logger.info(f"OPENAI_API_KEY set: {bool(OPENAI_API_KEY)}")
 logger.info("=" * 50)
@@ -699,6 +700,7 @@ logger.info("=" * 50)
 with app.app_context():
     try:
         logger.info("Attempting to create database tables...")
+        # Use checkfirst=True to skip existing tables
         db.create_all()
         logger.info("Database tables created/verified successfully")
         
@@ -706,8 +708,17 @@ with app.app_context():
         db.session.execute(text('SELECT 1'))
         logger.info("Database connection test: OK")
     except Exception as e:
-        logger.error(f"Failed to initialize database: {e}")
-        logger.exception("Full traceback:")
+        # If tables already exist, that's fine
+        if "already exists" in str(e) or "duplicate key" in str(e).lower():
+            logger.info("Tables already exist - skipping creation")
+            try:
+                db.session.execute(text('SELECT 1'))
+                logger.info("Database connection test: OK")
+            except Exception as e2:
+                logger.error(f"Database connection failed: {e2}")
+        else:
+            logger.error(f"Failed to initialize database: {e}")
+            logger.exception("Full traceback:")
 
 # ============================================
 # PRODUCTION SERVER CONFIGURATION
