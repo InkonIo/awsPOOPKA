@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, redirect, make_response
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import ARRAY
@@ -25,9 +25,84 @@ load_dotenv()
 # Flask app setup
 app = Flask(__name__, static_folder='dist', static_url_path='')
 
+# Secret key for sessions
+app.secret_key = os.getenv('SECRET_KEY', 'your-secret-key-change-in-production')
+
 # CORS
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 
+# ============================================
+# IP WHITELIST CONFIGURATION
+# ============================================
+# Admin password for managing IPs (set in Railway Variables)
+ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', 'admin123')
+
+# Initial whitelist from environment (comma-separated)
+# Example: ALLOWED_IPS=123.45.67.89,98.76.54.32
+INITIAL_IPS = os.getenv('ALLOWED_IPS', '').split(',') if os.getenv('ALLOWED_IPS') else []
+
+# In-memory whitelist (will be synced with DB)
+allowed_ips = set(ip.strip() for ip in INITIAL_IPS if ip.strip())
+
+# Always allow these
+ALWAYS_ALLOWED = {'127.0.0.1', 'localhost'}
+
+# Paths that don't require IP check
+PUBLIC_PATHS = {'/api/health', '/blocked', '/admin/login', '/admin/auth'}
+
+def get_client_ip():
+    """Get real client IP behind proxy"""
+    if request.headers.get('X-Forwarded-For'):
+        return request.headers.get('X-Forwarded-For').split(',')[0].strip()
+    return request.remote_addr or '127.0.0.1'
+
+def is_ip_allowed(ip):
+    """Check if IP is in whitelist"""
+    if ip in ALWAYS_ALLOWED:
+        return True
+    if ip in allowed_ips:
+        return True
+    # Check DB for allowed IPs
+    try:
+        db_ip = AllowedIP.query.filter_by(ip_address=ip, is_active=True).first()
+        if db_ip:
+            allowed_ips.add(ip)  # Cache it
+            return True
+    except:
+        pass
+    return False
+
+@app.before_request
+def check_ip_whitelist():
+    """Check if request IP is allowed"""
+    # Skip for public paths
+    if request.path in PUBLIC_PATHS or request.path.startswith('/admin'):
+        return None
+    
+    client_ip = get_client_ip()
+    
+    # If no whitelist configured, allow all (for initial setup)
+    try:
+        has_any_ips = allowed_ips or AllowedIP.query.first()
+    except:
+        # Table doesn't exist yet
+        has_any_ips = bool(allowed_ips)
+    
+    if not has_any_ips:
+        return None
+    
+    if not is_ip_allowed(client_ip):
+        logger.warning(f"Blocked access from IP: {client_ip}")
+        # Return blocked page
+        if request.path.startswith('/api/'):
+            return jsonify({
+                'error': 'Access denied',
+                'message': 'Your IP is not authorized',
+                'your_ip': client_ip
+            }), 403
+        return redirect('/blocked')
+    
+    return None
 # ============================================
 # DATABASE CONFIGURATION FOR RAILWAY
 # ============================================
@@ -138,6 +213,28 @@ def rate_limit(f):
 # ============================================
 # MODELS
 # ============================================
+
+# IP Whitelist Model
+class AllowedIP(db.Model):
+    __tablename__ = 'allowed_ips'
+    
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    ip_address = db.Column(db.String(45), unique=True, nullable=False)  # 45 for IPv6
+    description = db.Column(db.String(255), nullable=True)  # "Hamza's home", "Office", etc.
+    is_active = db.Column(db.Boolean, default=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    last_access = db.Column(db.DateTime, nullable=True)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'ip': self.ip_address,
+            'description': self.description,
+            'isActive': self.is_active,
+            'createdAt': self.created_at.isoformat() if self.created_at else None,
+            'lastAccess': self.last_access.isoformat() if self.last_access else None
+        }
+
 class Question(db.Model):
     __tablename__ = 'questions'
     
@@ -673,6 +770,380 @@ def health_check():
             'error': str(e)
         }), 500
 
+# ============================================
+# IP WHITELIST ADMIN ROUTES
+# ============================================
+@app.route('/blocked')
+def blocked_page():
+    """Page shown to blocked IPs"""
+    client_ip = get_client_ip()
+    return f'''
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Access Denied</title>
+        <style>
+            body {{
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                margin: 0;
+                background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+                color: white;
+            }}
+            .container {{
+                text-align: center;
+                padding: 40px;
+                background: rgba(255,255,255,0.1);
+                border-radius: 20px;
+                backdrop-filter: blur(10px);
+            }}
+            h1 {{ font-size: 4rem; margin: 0; }}
+            h2 {{ color: #ff6b6b; }}
+            .ip {{ 
+                background: rgba(255,255,255,0.2);
+                padding: 10px 20px;
+                border-radius: 10px;
+                font-family: monospace;
+                margin: 20px 0;
+            }}
+            p {{ color: #a0aec0; }}
+            a {{ color: #667eea; }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>🚫</h1>
+            <h2>Access Denied</h2>
+            <p>Your IP address is not authorized to access this site.</p>
+            <div class="ip">{client_ip}</div>
+            <p>Contact the administrator if you believe this is an error.</p>
+            <p><a href="https://t.me/Inkonio">@Inkonio</a></p>
+        </div>
+    </body>
+    </html>
+    ''', 403
+
+@app.route('/admin/login')
+def admin_login_page():
+    """Admin login page"""
+    return '''
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Admin Login</title>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                margin: 0;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            }
+            .login-box {
+                background: white;
+                padding: 40px;
+                border-radius: 20px;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+                width: 100%;
+                max-width: 400px;
+            }
+            h2 { text-align: center; margin-bottom: 30px; }
+            input {
+                width: 100%;
+                padding: 15px;
+                margin: 10px 0;
+                border: 2px solid #e2e8f0;
+                border-radius: 10px;
+                font-size: 1rem;
+                box-sizing: border-box;
+            }
+            button {
+                width: 100%;
+                padding: 15px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border: none;
+                border-radius: 10px;
+                font-size: 1.1rem;
+                cursor: pointer;
+                margin-top: 10px;
+            }
+            button:hover { opacity: 0.9; }
+            .error { color: #e53e3e; text-align: center; margin-top: 15px; }
+        </style>
+    </head>
+    <body>
+        <div class="login-box">
+            <h2>🔐 Admin Login</h2>
+            <form method="POST" action="/admin/auth">
+                <input type="password" name="password" placeholder="Enter admin password" required>
+                <button type="submit">Login</button>
+            </form>
+            <p id="error" class="error"></p>
+        </div>
+    </body>
+    </html>
+    '''
+
+@app.route('/admin/auth', methods=['POST'])
+def admin_auth():
+    """Authenticate admin"""
+    password = request.form.get('password')
+    
+    if password == ADMIN_PASSWORD:
+        response = make_response(redirect('/admin'))
+        response.set_cookie('admin_token', hashlib.sha256(ADMIN_PASSWORD.encode()).hexdigest(), 
+                          httponly=True, max_age=86400)  # 24 hours
+        return response
+    
+    return redirect('/admin/login?error=1')
+
+def admin_required(f):
+    """Decorator to require admin authentication"""
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.cookies.get('admin_token')
+        expected = hashlib.sha256(ADMIN_PASSWORD.encode()).hexdigest()
+        if token != expected:
+            return redirect('/admin/login')
+        return f(*args, **kwargs)
+    return decorated
+
+@app.route('/admin')
+@admin_required
+def admin_panel():
+    """Admin panel for managing IPs"""
+    client_ip = get_client_ip()
+    ips = AllowedIP.query.order_by(AllowedIP.created_at.desc()).all()
+    
+    ip_rows = ''.join([f'''
+        <tr>
+            <td><code>{ip.ip_address}</code></td>
+            <td>{ip.description or '-'}</td>
+            <td><span class="status {'active' if ip.is_active else 'inactive'}">
+                {'✅ Active' if ip.is_active else '❌ Inactive'}</span></td>
+            <td>{ip.last_access.strftime('%Y-%m-%d %H:%M') if ip.last_access else 'Never'}</td>
+            <td>
+                <button onclick="toggleIP({ip.id}, {str(not ip.is_active).lower()})" class="btn-sm">
+                    {'Disable' if ip.is_active else 'Enable'}
+                </button>
+                <button onclick="deleteIP({ip.id})" class="btn-sm btn-danger">Delete</button>
+            </td>
+        </tr>
+    ''' for ip in ips])
+    
+    return f'''
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>IP Whitelist Admin</title>
+        <style>
+            body {{
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                margin: 0;
+                padding: 20px;
+                background: #f7fafc;
+            }}
+            .container {{ max-width: 1000px; margin: 0 auto; }}
+            h1 {{ color: #2d3748; }}
+            .card {{
+                background: white;
+                border-radius: 15px;
+                padding: 25px;
+                margin: 20px 0;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            }}
+            .current-ip {{
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                display: inline-block;
+            }}
+            table {{ width: 100%; border-collapse: collapse; }}
+            th, td {{ padding: 12px; text-align: left; border-bottom: 1px solid #e2e8f0; }}
+            th {{ background: #f7fafc; font-weight: 600; }}
+            code {{ background: #edf2f7; padding: 3px 8px; border-radius: 5px; }}
+            .status {{ padding: 5px 10px; border-radius: 20px; font-size: 0.85rem; }}
+            .status.active {{ background: #c6f6d5; color: #22543d; }}
+            .status.inactive {{ background: #fed7d7; color: #822727; }}
+            input, select {{
+                padding: 10px 15px;
+                border: 2px solid #e2e8f0;
+                border-radius: 8px;
+                margin-right: 10px;
+            }}
+            .btn {{
+                padding: 10px 20px;
+                background: #667eea;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+            }}
+            .btn:hover {{ opacity: 0.9; }}
+            .btn-sm {{ padding: 5px 12px; font-size: 0.85rem; margin: 2px; }}
+            .btn-danger {{ background: #e53e3e; }}
+            .add-form {{ display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }}
+            .logout {{ float: right; color: #667eea; text-decoration: none; }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <a href="/admin/logout" class="logout">🚪 Logout</a>
+            <h1>🛡️ IP Whitelist Management</h1>
+            
+            <div class="card">
+                <h3>Your Current IP</h3>
+                <div class="current-ip">{client_ip}</div>
+                <button class="btn" style="margin-left: 15px;" onclick="addCurrentIP()">Add My IP</button>
+            </div>
+            
+            <div class="card">
+                <h3>Add New IP</h3>
+                <form class="add-form" onsubmit="addIP(event)">
+                    <input type="text" id="newIP" placeholder="IP Address (e.g., 123.45.67.89)" required>
+                    <input type="text" id="newDesc" placeholder="Description (e.g., Hamza's home)">
+                    <button type="submit" class="btn">+ Add IP</button>
+                </form>
+            </div>
+            
+            <div class="card">
+                <h3>Allowed IPs ({len(ips)})</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>IP Address</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                            <th>Last Access</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {ip_rows if ip_rows else '<tr><td colspan="5" style="text-align:center;color:#a0aec0;">No IPs added yet</td></tr>'}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <script>
+            const currentIP = "{client_ip}";
+            
+            async function addIP(e) {{
+                e.preventDefault();
+                const ip = document.getElementById('newIP').value;
+                const desc = document.getElementById('newDesc').value;
+                
+                const res = await fetch('/admin/api/ips', {{
+                    method: 'POST',
+                    headers: {{ 'Content-Type': 'application/json' }},
+                    body: JSON.stringify({{ ip, description: desc }})
+                }});
+                
+                if (res.ok) location.reload();
+                else alert('Error adding IP');
+            }}
+            
+            function addCurrentIP() {{
+                document.getElementById('newIP').value = currentIP;
+                document.getElementById('newDesc').value = 'Added from admin panel';
+            }}
+            
+            async function toggleIP(id, active) {{
+                const res = await fetch(`/admin/api/ips/${{id}}`, {{
+                    method: 'PATCH',
+                    headers: {{ 'Content-Type': 'application/json' }},
+                    body: JSON.stringify({{ is_active: active }})
+                }});
+                if (res.ok) location.reload();
+            }}
+            
+            async function deleteIP(id) {{
+                if (!confirm('Delete this IP?')) return;
+                const res = await fetch(`/admin/api/ips/${{id}}`, {{ method: 'DELETE' }});
+                if (res.ok) location.reload();
+            }}
+        </script>
+    </body>
+    </html>
+    '''
+
+@app.route('/admin/logout')
+def admin_logout():
+    """Logout admin"""
+    response = make_response(redirect('/admin/login'))
+    response.delete_cookie('admin_token')
+    return response
+
+@app.route('/admin/api/ips', methods=['GET', 'POST'])
+@admin_required
+def admin_ips():
+    """API for managing IPs"""
+    if request.method == 'GET':
+        ips = AllowedIP.query.all()
+        return jsonify([ip.to_dict() for ip in ips])
+    
+    # POST - add new IP
+    data = request.get_json()
+    ip_address = data.get('ip', '').strip()
+    description = data.get('description', '').strip()
+    
+    if not ip_address:
+        return jsonify({'error': 'IP address required'}), 400
+    
+    # Check if already exists
+    existing = AllowedIP.query.filter_by(ip_address=ip_address).first()
+    if existing:
+        return jsonify({'error': 'IP already exists'}), 409
+    
+    new_ip = AllowedIP(
+        ip_address=ip_address,
+        description=description,
+        is_active=True
+    )
+    db.session.add(new_ip)
+    db.session.commit()
+    
+    # Add to in-memory cache
+    allowed_ips.add(ip_address)
+    
+    return jsonify(new_ip.to_dict()), 201
+
+@app.route('/admin/api/ips/<int:ip_id>', methods=['PATCH', 'DELETE'])
+@admin_required
+def admin_ip_detail(ip_id):
+    """Update or delete IP"""
+    ip = db.session.get(AllowedIP, ip_id)
+    if not ip:
+        return jsonify({'error': 'IP not found'}), 404
+    
+    if request.method == 'DELETE':
+        # Remove from cache
+        allowed_ips.discard(ip.ip_address)
+        db.session.delete(ip)
+        db.session.commit()
+        return jsonify({'success': True})
+    
+    # PATCH - update
+    data = request.get_json()
+    if 'is_active' in data:
+        ip.is_active = data['is_active']
+        if data['is_active']:
+            allowed_ips.add(ip.ip_address)
+        else:
+            allowed_ips.discard(ip.ip_address)
+    if 'description' in data:
+        ip.description = data['description']
+    
+    db.session.commit()
+    return jsonify(ip.to_dict())
+
 @app.cli.command()
 def init_db():
     db.create_all()
@@ -682,9 +1153,23 @@ def init_db():
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve(path):
-    if path and os.path.exists(os.path.join(app.static_folder, path)):
-        return send_from_directory(app.static_folder, path)
-    return send_from_directory(app.static_folder, 'index.html')
+    logger.info(f"Serve request: path='{path}', static_folder='{app.static_folder}'")
+    
+    if path and path.startswith('api'):
+        # Let API routes handle this
+        return jsonify({'error': 'Not found'}), 404
+    
+    try:
+        if path and os.path.exists(os.path.join(app.static_folder, path)):
+            logger.info(f"Serving file: {path}")
+            return send_from_directory(app.static_folder, path)
+        
+        index_path = os.path.join(app.static_folder, 'index.html')
+        logger.info(f"Serving index.html, exists: {os.path.exists(index_path)}")
+        return send_from_directory(app.static_folder, 'index.html')
+    except Exception as e:
+        logger.error(f"Error serving {path}: {e}")
+        return jsonify({'error': str(e)}), 500
 
 # ============================================
 # AUTO-CREATE TABLES ON STARTUP
