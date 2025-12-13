@@ -31,24 +31,18 @@ class InstructionsAnimator {
     
     init() {
         // Control buttons
-        this.replayBtn.addEventListener('click', () => this.replay());
-        this.pauseBtn.addEventListener('click', () => this.togglePause());
+        if (this.replayBtn) this.replayBtn.addEventListener('click', () => this.replay());
+        if (this.pauseBtn) this.pauseBtn.addEventListener('click', () => this.togglePause());
         
         // Language toggle
         document.querySelectorAll('.lang-btn').forEach(btn => {
             btn.addEventListener('click', (e) => this.changeLanguage(e.target.dataset.lang));
         });
         
-        // CTA button
-        document.getElementById('uploadCTA').addEventListener('click', () => {
-            // Redirect to main page or open upload modal
-            window.parent?.postMessage({ action: 'openUpload' }, '*');
-            // Or redirect
-            // window.location.href = '/';
-        });
-        
-        // Start animation
-        this.startAnimation();
+        // Start animation only if elements exist
+        if (this.menuBtn && this.cursor) {
+            this.startAnimation();
+        }
     }
     
     // Translations
@@ -351,6 +345,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.innerWidth > 768) {
         new InstructionsAnimator();
     }
+    
+    // Initialize Upload Handler
+    new UploadHandler();
 });
 
 // Handle resize
@@ -360,3 +357,242 @@ window.addEventListener('resize', () => {
         animator = new InstructionsAnimator();
     }
 });
+
+// ============================================
+// UPLOAD HANDLER CLASS
+// ============================================
+class UploadHandler {
+    constructor() {
+        this.modal = document.getElementById('uploadModalOverlay');
+        this.dropArea = document.getElementById('uploadDropArea');
+        this.fileInput = document.getElementById('fileInput');
+        this.uploadProgress = document.getElementById('uploadProgress');
+        this.uploadResult = document.getElementById('uploadResult');
+        this.resultIcon = document.getElementById('resultIcon');
+        this.resultTitle = document.getElementById('resultTitle');
+        this.resultStats = document.getElementById('resultStats');
+        
+        this.currentLang = 'en';
+        
+        this.translations = {
+            en: {
+                uploadTitle: 'Upload Telegram JSON',
+                dropHere: 'Drop JSON file here',
+                orClick: 'or click to browse',
+                uploading: 'Uploading...',
+                uploadComplete: 'Upload Complete!',
+                uploadFailed: 'Upload Failed',
+                newQuestions: 'New Questions',
+                duplicates: 'Duplicates',
+                total: 'Total in DB',
+                uploadAnother: 'Upload Another',
+                startQuiz: 'Start Quiz →',
+                invalidFile: 'Please upload a JSON file',
+                networkError: 'Network error. Please try again.'
+            },
+            ru: {
+                uploadTitle: 'Загрузить Telegram JSON',
+                dropHere: 'Перетащите JSON файл сюда',
+                orClick: 'или нажмите для выбора',
+                uploading: 'Загрузка...',
+                uploadComplete: 'Загрузка завершена!',
+                uploadFailed: 'Ошибка загрузки',
+                newQuestions: 'Новых вопросов',
+                duplicates: 'Дубликатов',
+                total: 'Всего в базе',
+                uploadAnother: 'Загрузить ещё',
+                startQuiz: 'Начать тест →',
+                invalidFile: 'Пожалуйста, загрузите JSON файл',
+                networkError: 'Ошибка сети. Попробуйте снова.'
+            }
+        };
+        
+        this.init();
+    }
+    
+    init() {
+        // CTA button opens modal
+        const ctaBtn = document.getElementById('uploadCTA');
+        if (ctaBtn) {
+            ctaBtn.addEventListener('click', () => this.openModal());
+        }
+        
+        // Close modal
+        const closeBtn = document.getElementById('closeModalBtn');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => this.closeModal());
+        }
+        
+        // Close on overlay click
+        if (this.modal) {
+            this.modal.addEventListener('click', (e) => {
+                if (e.target === this.modal) this.closeModal();
+            });
+        }
+        
+        // File input
+        if (this.dropArea && this.fileInput) {
+            this.dropArea.addEventListener('click', () => this.fileInput.click());
+            
+            // Drag and drop
+            this.dropArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                this.dropArea.classList.add('dragover');
+            });
+            
+            this.dropArea.addEventListener('dragleave', () => {
+                this.dropArea.classList.remove('dragover');
+            });
+            
+            this.dropArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                this.dropArea.classList.remove('dragover');
+                if (e.dataTransfer.files.length) {
+                    this.handleFile(e.dataTransfer.files[0]);
+                }
+            });
+            
+            this.fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length) {
+                    this.handleFile(e.target.files[0]);
+                }
+            });
+        }
+        
+        // Upload another button
+        const uploadAnotherBtn = document.getElementById('uploadAnotherBtn');
+        if (uploadAnotherBtn) {
+            uploadAnotherBtn.addEventListener('click', () => this.resetModal());
+        }
+        
+        // Listen for language changes
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                this.currentLang = e.target.dataset.lang;
+            });
+        });
+        
+        // Close on Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.modal && !this.modal.classList.contains('hidden')) {
+                this.closeModal();
+            }
+        });
+    }
+    
+    t(key) {
+        return this.translations[this.currentLang][key] || key;
+    }
+    
+    openModal() {
+        if (this.modal) {
+            this.modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+    
+    closeModal() {
+        if (this.modal) {
+            this.modal.classList.add('hidden');
+            document.body.style.overflow = '';
+            this.resetModal();
+        }
+    }
+    
+    resetModal() {
+        if (this.dropArea) this.dropArea.classList.remove('hidden');
+        if (this.uploadProgress) this.uploadProgress.classList.add('hidden');
+        if (this.uploadResult) this.uploadResult.classList.add('hidden');
+        if (this.fileInput) this.fileInput.value = '';
+    }
+    
+    async handleFile(file) {
+        if (!file.name.endsWith('.json')) {
+            this.showToast(this.t('invalidFile'), 'error');
+            return;
+        }
+        
+        // Show progress
+        this.dropArea.classList.add('hidden');
+        this.uploadProgress.classList.remove('hidden');
+        
+        try {
+            const text = await file.text();
+            const json = JSON.parse(text);
+            
+            // Determine API base
+            const apiBase = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                ? 'http://localhost:5000/api'
+                : '/api';
+            
+            const response = await fetch(`${apiBase}/questions/upload`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(json)
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+            
+            const result = await response.json();
+            
+            // Show success
+            this.uploadProgress.classList.add('hidden');
+            this.uploadResult.classList.remove('hidden');
+            this.uploadResult.classList.remove('error');
+            
+            this.resultIcon.textContent = '✅';
+            this.resultTitle.textContent = this.t('uploadComplete');
+            this.resultStats.innerHTML = `
+                <div class="stat">
+                    <span class="stat-num">${result.new}</span>
+                    <span class="stat-label">${this.t('newQuestions')}</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-num">${result.duplicates}</span>
+                    <span class="stat-label">${this.t('duplicates')}</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-num">${result.total}</span>
+                    <span class="stat-label">${this.t('total')}</span>
+                </div>
+            `;
+            
+            this.showToast(this.t('uploadComplete'), 'success');
+            
+        } catch (error) {
+            console.error('Upload error:', error);
+            
+            // Show error
+            this.uploadProgress.classList.add('hidden');
+            this.uploadResult.classList.remove('hidden');
+            this.uploadResult.classList.add('error');
+            
+            this.resultIcon.textContent = '❌';
+            this.resultTitle.textContent = this.t('uploadFailed');
+            this.resultStats.innerHTML = `<p style="color: #e53e3e;">${error.message}</p>`;
+            
+            this.showToast(this.t('networkError'), 'error');
+        }
+    }
+    
+    showToast(message, type = 'success') {
+        // Remove existing toasts
+        document.querySelectorAll('.toast-notification').forEach(t => t.remove());
+        
+        const toast = document.createElement('div');
+        toast.className = `toast-notification ${type}`;
+        toast.innerHTML = `
+            <span style="font-size: 1.5rem;">${type === 'success' ? '✅' : '❌'}</span>
+            <span>${message}</span>
+        `;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateX(100px)';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+}

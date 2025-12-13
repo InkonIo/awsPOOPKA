@@ -301,6 +301,41 @@
             </button>
         </div>
 
+        <!-- Upload Modal -->
+        <div class="upload-modal-overlay hidden" id="uploadModalOverlay">
+            <div class="upload-modal-box">
+                <div class="upload-modal-header">
+                    <h3>📤 <span data-translate="uploadTitle">Upload Telegram JSON</span></h3>
+                    <button class="close-modal-btn" id="closeModalBtn">&times;</button>
+                </div>
+                <div class="upload-modal-body">
+                    <div class="upload-drop-area" id="uploadDropArea">
+                        <div class="upload-drop-icon">📁</div>
+                        <p class="upload-drop-text" data-translate="dropHere">Drop JSON file here</p>
+                        <p class="upload-drop-hint" data-translate="orClick">or click to browse</p>
+                        <input type="file" id="fileInput" accept=".json" hidden>
+                    </div>
+                    
+                    <!-- Upload Progress -->
+                    <div class="upload-progress hidden" id="uploadProgress">
+                        <div class="progress-spinner"></div>
+                        <p data-translate="uploading">Uploading...</p>
+                    </div>
+                    
+                    <!-- Upload Result -->
+                    <div class="upload-result hidden" id="uploadResult">
+                        <div class="result-icon" id="resultIcon">✅</div>
+                        <h4 id="resultTitle">Upload Complete!</h4>
+                        <div class="result-stats" id="resultStats">
+                            <!-- Stats will be inserted here -->
+                        </div>
+                        <button class="btn-primary" id="uploadAnotherBtn" data-translate="uploadAnother">Upload Another</button>
+                        <a href="index.html" class="btn-secondary" data-translate="startQuiz">Start Quiz →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Footer -->
         <div class="instructions-footer">
             <p>Made with ❤️ by 
