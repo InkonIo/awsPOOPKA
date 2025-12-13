@@ -22,8 +22,8 @@ logger = logging.getLogger(__name__)
 # Load .env file
 load_dotenv()
 
-static_path = 'dist' if os.path.exists('dist') else '.'
-app = Flask(__name__, static_folder=static_path, static_url_path='')
+# Flask app setup
+app = Flask(__name__, static_folder='dist', static_url_path='')
 
 # CORS
 CORS(app, resources={r"/api/*": {"origins": "*"}})
@@ -689,12 +689,25 @@ def serve(path):
 # ============================================
 # AUTO-CREATE TABLES ON STARTUP
 # ============================================
+logger.info("=" * 50)
+logger.info("STARTING APPLICATION")
+logger.info(f"Static folder exists: {os.path.exists('dist')}")
+logger.info(f"DATABASE_URL set: {bool(os.getenv('DATABASE_URL'))}")
+logger.info(f"OPENAI_API_KEY set: {bool(OPENAI_API_KEY)}")
+logger.info("=" * 50)
+
 with app.app_context():
     try:
+        logger.info("Attempting to create database tables...")
         db.create_all()
         logger.info("Database tables created/verified successfully")
+        
+        # Test database connection
+        db.session.execute(text('SELECT 1'))
+        logger.info("Database connection test: OK")
     except Exception as e:
-        logger.error(f"Failed to create database tables: {e}")
+        logger.error(f"Failed to initialize database: {e}")
+        logger.exception("Full traceback:")
 
 # ============================================
 # PRODUCTION SERVER CONFIGURATION
