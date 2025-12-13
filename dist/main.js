@@ -361,24 +361,12 @@ async function reloadCurrentQuestion() {
     console.log(`Reloading question ${currentQuestion.id} in ${currentLang}`);
     
     try {
-        // Если переключаемся на русский и у вопроса нет перевода
-        if (currentLang === 'ru') {
-            console.log('Loading Russian version...');
-            
-            // Сначала проверяем, есть ли уже перевод в БД
-            const data = await apiCall(`/questions/paginated?page=1&per_page=100&search=&lang=ru`);
-            const found = data.questions.find(q => q.id === currentQuestion.id);
-            
-            console.log('Found in DB:', found ? 'yes' : 'no', 'Has translation:', found?.hasTranslation);
-            
-            if (found && found.hasTranslation) {
-                // Перевод есть в БД
-                console.log('Using existing translation');
-                return found;
-            }
-            
-            // Перевода нет - делаем через AI
-            console.log('Translating via AI...');
+        // Загружаем вопрос напрямую по ID
+        const data = await apiCall(`/questions/${currentQuestion.id}?lang=${currentLang}`);
+        
+        // Если русский и нет перевода - переводим
+        if (currentLang === 'ru' && !data.hasTranslation) {
+            console.log('Translating question...');
             try {
                 const translated = await apiCall('/ai/translate-question', {
                     method: 'POST',
@@ -386,28 +374,15 @@ async function reloadCurrentQuestion() {
                     body: JSON.stringify({ questionId: currentQuestion.id })
                 });
                 
-                console.log('Translation received:', translated);
-                
-                // Возвращаем вопрос с переводом
-                return {
-                    ...currentQuestion,
-                    question: translated.question,
-                    options: translated.options,
-                    hasTranslation: true
-                };
+                data.question = translated.question;
+                data.options = translated.options;
+                data.hasTranslation = true;
             } catch (error) {
                 console.error('Translation failed:', error);
-                // Если перевод не удался, возвращаем оригинал
-                return found || currentQuestion;
             }
-        } else {
-            // Переключаемся на английский - просто загружаем оригинал
-            console.log('Loading English version...');
-            const data = await apiCall(`/questions/paginated?page=1&per_page=100&search=&lang=en`);
-            const found = data.questions.find(q => q.id === currentQuestion.id);
-            console.log('Found English version:', found ? 'yes' : 'no');
-            return found || currentQuestion;
         }
+        
+        return data;
     } catch (error) {
         console.error('Failed to reload question:', error);
         return null;
@@ -458,7 +433,33 @@ async function startQuiz() {
 async function loadRandomQuestion() {
     try {
         showLoading();
+        
+        // Загружаем случайный вопрос
         const data = await apiCall(`/questions/random?lang=${currentLang}`);
+        
+        // Если язык русский И нет перевода - сразу переводим
+        if (currentLang === 'ru' && !data.hasTranslation) {
+            console.log('Question needs translation, translating now...');
+            
+            try {
+                const translated = await apiCall('/ai/translate-question', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ questionId: data.id })
+                });
+                
+                // Обновляем данные вопроса переведенными
+                data.question = translated.question;
+                data.options = translated.options;
+                data.hasTranslation = true;
+                
+                console.log('Translation complete');
+            } catch (error) {
+                console.error('Translation failed, using English:', error);
+                // Продолжаем с английским если перевод не удался
+            }
+        }
+        
         currentQuestion = data;
         aiResultCache = null;
         questionAnswered = false;
@@ -468,6 +469,7 @@ async function loadRandomQuestion() {
         // Hide hints on new question
         elements.aiHintsContainer.classList.add('hidden');
         elements.toggleHintsBtn.textContent = `💡 ${t('showHints')}`;
+        
     } catch (error) {
         showToast('Failed to load question', 'error');
     } finally {
@@ -673,9 +675,15 @@ function arraysEqual(a, b) {
 // AI Hints System
 async function toggleAIHints() {
     if (elements.aiHintsContainer.classList.contains('hidden')) {
-        await loadAIHints();
+        // Показываем контейнер сразу
         elements.aiHintsContainer.classList.remove('hidden');
         elements.toggleHintsBtn.textContent = `💡 ${t('hideHints')}`;
+        elements.toggleHintsBtn.disabled = true; // Блокируем кнопку на время загрузки
+        
+        // Загружаем подсказки
+        await loadAIHints();
+        
+        elements.toggleHintsBtn.disabled = false;
     } else {
         elements.aiHintsContainer.classList.add('hidden');
         elements.toggleHintsBtn.textContent = `💡 ${t('showHints')}`;
@@ -686,12 +694,20 @@ async function loadAIHints() {
     if (!currentQuestion) return;
     
     try {
-        // Показываем красивую загрузку
+        // Показываем красивую загрузку с пульсирующей анимацией
         elements.aiHintsContent.innerHTML = `
             <div class="hint-loading">
-                <div class="hint-loading-spinner"></div>
+                <div class="hint-loading-animation">
+                    <div class="pulse-ring"></div>
+                    <div class="pulse-ring delay-1"></div>
+                    <div class="pulse-ring delay-2"></div>
+                    <div class="hint-brain">🧠</div>
+                </div>
                 <div class="hint-loading-text">
-                    ${currentLang === 'ru' ? 'Загружаем подсказки от AI' : 'Loading AI hints'}<span class="hint-loading-dots"></span>
+                    ${currentLang === 'ru' ? 'AI готовит подсказки' : 'AI preparing hints'}<span class="hint-loading-dots"></span>
+                </div>
+                <div class="hint-loading-subtext">
+                    ${currentLang === 'ru' ? 'Анализируем вопрос...' : 'Analyzing question...'}
                 </div>
             </div>
         `;
@@ -705,49 +721,94 @@ async function loadAIHints() {
             })
         });
         
-        // Если русский язык и нет перевода объяснения, показываем английский
-        // API уже должен вернуть правильный язык
+        // Генерируем подсказки БЕЗ правильных ответов
         const hints = generateHintsFromExplanation(data.explanation, data.correctAnswers);
         
-        elements.aiHintsContent.innerHTML = `
-            <div class="hint-section">
-                <h4>🎯 ${t('keyConcepts')}</h4>
-                <p class="hint-text">${hints.concepts}</p>
-            </div>
+        // Плавно меняем контент
+        elements.aiHintsContent.style.opacity = '0';
+        
+        setTimeout(() => {
+            elements.aiHintsContent.innerHTML = `
+                <div class="hint-section fade-in">
+                    <h4>🎯 ${t('keyConcepts')}</h4>
+                    <p class="hint-text">${hints.concepts}</p>
+                </div>
+                
+                <div class="hint-section fade-in" style="animation-delay: 0.1s">
+                    <h4>💭 ${t('thinkAbout')}</h4>
+                    <p class="hint-text">${hints.thinkAbout}</p>
+                </div>
+                
+                <div class="hint-section fade-in" style="animation-delay: 0.2s">
+                    <h4>📚 ${t('relatedTopics')}</h4>
+                    <p class="hint-text">${hints.relatedTopics}</p>
+                </div>
+                
+                <div class="hint-warning fade-in" style="animation-delay: 0.3s">
+                    <small>⚠️ ${t('hintWarning')}</small>
+                </div>
+            `;
             
-            <div class="hint-section">
-                <h4>💭 ${t('thinkAbout')}</h4>
-                <p class="hint-text">${hints.thinkAbout}</p>
-            </div>
-            
-            <div class="hint-section">
-                <h4>📚 ${t('relatedTopics')}</h4>
-                <p class="hint-text">${hints.relatedTopics}</p>
-            </div>
-            
-            <div class="hint-warning">
-                <small>⚠️ ${t('hintWarning')}</small>
-            </div>
-        `;
+            elements.aiHintsContent.style.opacity = '1';
+        }, 300);
+        
     } catch (error) {
         console.error('Failed to load hints:', error);
-        elements.aiHintsContent.innerHTML = `<p class="hint-error">${t('hintsError')}</p>`;
+        elements.aiHintsContent.innerHTML = `
+            <div class="hint-error">
+                <div style="font-size: 3rem; margin-bottom: 15px;">😞</div>
+                <p>${t('hintsError')}</p>
+            </div>
+        `;
     }
 }
 
 function generateHintsFromExplanation(explanation, correctAnswers) {
+    // Разбиваем объяснение на предложения
     const sentences = explanation.split(/[.!?]+/).filter(s => s.trim());
     
-    const concepts = sentences[0]?.trim() || 'This question tests your AWS knowledge.';
-    const thinkAbout = sentences.slice(1, 3).join('. ').trim() || 'Consider the AWS best practices and service characteristics.';
+    // Key Concepts - первые 2-3 предложения БЕЗ упоминания правильного ответа
+    let concepts = '';
+    for (let i = 0; i < Math.min(3, sentences.length); i++) {
+        const sentence = sentences[i].trim();
+        // Пропускаем предложения с буквами ответов
+        if (!/\b[A-Z]\)/.test(sentence)) {
+            concepts += sentence + '. ';
+        }
+    }
     
+    if (!concepts) {
+        concepts = currentLang === 'ru' 
+            ? 'Этот вопрос проверяет ваши знания AWS сервисов и их характеристик.'
+            : 'This question tests your AWS knowledge and understanding of service characteristics.';
+    }
+    
+    // Think About - общие принципы без конкретных ответов
+    const thinkAbout = currentLang === 'ru'
+        ? 'Подумайте о том, какие сервисы или функции AWS лучше всего подходят для описанного сценария. Рассмотрите факторы стоимости, производительности и простоты управления.'
+        : 'Consider which AWS services or features best fit the described scenario. Think about cost, performance, and ease of management.';
+    
+    // Related Topics - извлекаем AWS сервисы из объяснения
     const awsServices = explanation.match(/AWS [A-Z][a-z]+(?:\s[A-Z][a-z]+)*/g) || [];
-    const uniqueServices = [...new Set(awsServices)];
-    const relatedTopics = uniqueServices.length > 0 
-        ? `Related AWS services: ${uniqueServices.join(', ')}`
-        : 'Review AWS core services and their use cases.';
+    const uniqueServices = [...new Set(awsServices)].slice(0, 5); // Макс 5 сервисов
     
-    return { concepts, thinkAbout, relatedTopics };
+    let relatedTopics = '';
+    if (uniqueServices.length > 0) {
+        const servicesText = currentLang === 'ru' 
+            ? 'Связанные AWS сервисы' 
+            : 'Related AWS services';
+        relatedTopics = `${servicesText}: ${uniqueServices.join(', ')}`;
+    } else {
+        relatedTopics = currentLang === 'ru'
+            ? 'Изучите основные AWS сервисы и их применение.'
+            : 'Review core AWS services and their use cases.';
+    }
+    
+    return { 
+        concepts: concepts.trim(), 
+        thinkAbout, 
+        relatedTopics 
+    };
 }
 
 // Browse Mode

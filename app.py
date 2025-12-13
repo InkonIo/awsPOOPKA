@@ -384,18 +384,30 @@ def get_ai_answer(question_text, options, is_multiple, select_count):
     """Get AI answer for question"""
     if is_multiple:
         system_prompt = f'''You are an AWS Cloud Practitioner expert. Analyze the question and provide EXACTLY {select_count} correct answers.
-IMPORTANT: You MUST select exactly {select_count} answers, no more, no less.
-Respond ONLY in JSON format: {{"correctAnswers": ["A", "B"], "explanation": "detailed explanation"}}'''
+
+IMPORTANT: 
+1. You MUST select exactly {select_count} answers, no more, no less.
+2. In your explanation, DO NOT directly state which options are correct (like "A is correct" or "Choose B and C")
+3. Instead, explain the CONCEPTS and WHY certain characteristics matter for this scenario
+4. Let the student figure out the answer based on understanding, not memorization
+
+Respond in JSON format: {{"correctAnswers": ["A", "B"], "explanation": "conceptual explanation without revealing answers"}}'''
     else:
         system_prompt = '''You are an AWS Cloud Practitioner expert. Analyze the question and provide the ONE correct answer.
-IMPORTANT: This is a SINGLE choice question. You MUST select exactly ONE answer.
-Respond ONLY in JSON format: {"correctAnswers": ["A"], "explanation": "detailed explanation"}'''
+
+IMPORTANT: 
+1. This is a SINGLE choice question. Select exactly ONE answer.
+2. In your explanation, DO NOT directly state which option is correct (like "A is correct")
+3. Instead, explain the KEY CONCEPTS and WHY certain characteristics are important
+4. Guide the student to understand the reasoning, not just memorize the answer
+
+Respond in JSON format: {"correctAnswers": ["A"], "explanation": "conceptual explanation without revealing the answer"}'''
     
     user_content = f"Question: {question_text}\n\nOptions:\n{chr(10).join(options)}\n\n"
     if is_multiple:
-        user_content += f"IMPORTANT: This is a MULTIPLE choice question. Select EXACTLY {select_count} correct answers."
+        user_content += f"Select EXACTLY {select_count} correct answers. Explain concepts without directly revealing which options to choose."
     else:
-        user_content += "IMPORTANT: This is a SINGLE choice question. Select ONLY ONE answer."
+        user_content += "Select ONE answer. Explain the reasoning without directly stating which option is correct."
     
     response = call_openai([
         {'role': 'system', 'content': system_prompt},
@@ -453,8 +465,8 @@ def parse_telegram_json(data):
             select_count_match = re.search(r'\(Select (\d+)\)', question_text)
             select_count = int(select_count_match.group(1)) if select_count_match else 1
             
-            clean_question = re.sub(r'\(Select \d+\)', '', question_text).strip()
-            
+            clean_question = question_text.strip()
+
             option_matches = re.findall(
                 r'([A-Z])\)\s*(.+?)(?=\n[A-Z]\)|$)',
                 options_text,
@@ -666,6 +678,120 @@ def translate_question():
         if not question_id:
             return jsonify({'error': 'Question ID required'}), 400
         
+        logger.info(f"Translation request for question: {question_id}")
+        
+        # Check if already translated
+        existing = Translation.query.filter_by(
+            question_id=question_id,
+            language='ru'
+        ).first()
+        
+        if existing:
+            logger.info(f"Translation exists for {question_id}")
+            return jsonify({
+                'question': existing.question_text,
+                'options': existing.options
+            })
+        
+        # Acquire lock for translation
+        lock = get_processing_lock(f"q_translate_{question_id}")
+        
+        with lock:
+            # Re-check after lock
+            existing = Translation.query.filter_by(
+                question_id=question_id,
+                language='ru'
+            ).first()
+            
+            if existing:
+                logger.info(f"Translation created while waiting for lock: {question_id}")
+                return jsonify({
+                    'question': existing.question_text,
+                    'options': existing.options
+                })
+            
+            # Get original question
+            question = db.session.get(Question, question_id)
+            if not question:
+                logger.error(f"Question not found: {question_id}")
+                return jsonify({'error': 'Question not found'}), 404
+            
+            logger.info(f"Translating question {question_id}")
+            
+            # Translate question
+            translated_question = translate_text(question.question, 'question')
+            
+            # Translate options
+            translated_options = []
+            for opt in question.options:
+                try:
+                    # Extract letter and text more safely
+                    # Format is usually "A) text" or "A) text"
+                    if len(opt) > 3 and opt[1:3] in [') ', '). ']:
+                        letter = opt[0]
+                        text = opt[2:].strip() if opt[1] == ')' else opt[3:].strip()
+                    else:
+                        # Fallback - just translate as is
+                        logger.warning(f"Unusual option format: {opt[:20]}...")
+                        letter = opt[0] if len(opt) > 0 else 'A'
+                        text = opt[3:] if len(opt) > 3 else opt
+                    
+                    # Clean the text
+                    text = text.replace('Your responses:', '').replace('Your response:', '').strip()
+                    
+                    # Translate
+                    translated = translate_text(text, 'question')
+                    translated_options.append(f"{letter}) {translated}")
+                    
+                except Exception as e:
+                    logger.error(f"Error translating option '{opt[:50]}...': {e}")
+                    # Use original if translation fails
+                    translated_options.append(opt)
+            
+            # Save translation
+            try:
+                translation = Translation(
+                    question_id=question_id,
+                    language='ru',
+                    question_text=translated_question,
+                    options=translated_options
+                )
+                db.session.add(translation)
+                db.session.commit()
+                logger.info(f"Translation saved for {question_id}")
+            except IntegrityError:
+                db.session.rollback()
+                logger.warning(f"Translation already exists (race condition): {question_id}")
+                existing = Translation.query.filter_by(
+                    question_id=question_id,
+                    language='ru'
+                ).first()
+                if existing:
+                    return jsonify({
+                        'question': existing.question_text,
+                        'options': existing.options
+                    })
+                else:
+                    raise Exception("Failed to save or retrieve translation")
+            
+            return jsonify({
+                'question': translated_question,
+                'options': translated_options
+            })
+        
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f'Translation error for {question_id}: {e}')
+        logger.exception("Full traceback:")
+        return jsonify({'error': str(e)}), 500
+    """Translate question to Russian with concurrency control"""
+    try:
+        data = request.get_json()
+        question_id = data.get('questionId')
+        
+        if not question_id:
+            return jsonify({'error': 'Question ID required'}), 400
+        
         # Check if already translated
         existing = Translation.query.filter_by(
             question_id=question_id,
@@ -738,6 +864,18 @@ def translate_question():
         db.session.rollback()
         logger.error(f'Translation error: {e}')
         return jsonify({'error': str(e)}), 500
+    
+
+@app.route('/api/questions/<question_id>', methods=['GET'])
+def get_question_by_id(question_id):
+    """Get specific question by ID"""
+    lang = request.args.get('lang', 'en')
+    question = db.session.get(Question, question_id)
+    
+    if not question:
+        return jsonify({'error': 'Question not found'}), 404
+    
+    return jsonify(question.to_dict(lang))
 
 @app.route('/api/ai-cache/<question_id>', methods=['GET'])
 def get_ai_cache(question_id):
