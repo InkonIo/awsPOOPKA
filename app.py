@@ -247,11 +247,20 @@ class Question(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
     def to_dict(self, lang='en'):
+        # Очищаем опции от мусора типа "Your responses:"
+        def clean_option(opt):
+            import re
+            cleaned = re.sub(r'\s*Your responses?:?\s*$', '', opt, flags=re.IGNORECASE)
+            cleaned = re.sub(r'Your responses?:?\s*', '', cleaned, flags=re.IGNORECASE)
+            return cleaned.strip()
+        
+        cleaned_options = [clean_option(opt) for opt in self.options]
+        
         data = {
             'id': self.id,
             'number': self.number,
             'question': self.question,
-            'options': self.options,
+            'options': cleaned_options,
             'isMultipleChoice': self.is_multiple_choice,
             'selectCount': self.select_count,
             'aiVerified': None,
@@ -265,7 +274,7 @@ class Question(db.Model):
             ).first()
             if translation:
                 data['question'] = translation.question_text
-                data['options'] = translation.options
+                data['options'] = [clean_option(opt) for opt in translation.options]
                 data['hasTranslation'] = True
         
         cache = db.session.get(AICache, self.id)

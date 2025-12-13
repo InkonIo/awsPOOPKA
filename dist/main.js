@@ -3,7 +3,8 @@ const API_BASE = window.location.hostname === 'localhost' || window.location.hos
     ? 'http://localhost:5000/api' 
     : '/api';
 
-let currentLang = 'en';
+// Загружаем сохранённый язык из localStorage
+let currentLang = localStorage.getItem('awsQuizLang') || 'en';
 let currentQuestion = null;
 let quizMode = false;
 let currentAnswers = [];
@@ -252,6 +253,10 @@ function updateUILanguage() {
 async function toggleLanguage() {
     const oldLang = currentLang;
     currentLang = currentLang === 'en' ? 'ru' : 'en';
+    
+    // Сохраняем язык в localStorage
+    localStorage.setItem('awsQuizLang', currentLang);
+    
     elements.langToggle.textContent = currentLang === 'en' ? '🌐 RU' : '🌐 EN';
     
     // Update all UI text
@@ -472,7 +477,19 @@ async function loadRandomQuestion() {
 
 function loadQuestionData(data, keepAnswers = false) {
     elements.questionNumber.textContent = `#${data.number}`;
-    elements.questionText.textContent = data.question;
+    
+    // Показываем количество ответов для выбора если multiple choice
+    let questionText = data.question;
+    if (data.isMultipleChoice && data.selectCount > 1) {
+        const selectLabel = currentLang === 'ru' 
+            ? `(Выбери ${data.selectCount})` 
+            : `(Select ${data.selectCount})`;
+        // Добавляем подсказку если её ещё нет в тексте
+        if (!questionText.toLowerCase().includes('select') && !questionText.includes('Выбери')) {
+            questionText = `${questionText} ${selectLabel}`;
+        }
+    }
+    elements.questionText.textContent = questionText;
     
     // Update counter
     elements.questionCounter.textContent = `${t('questionCounter')} ${data.number}`;
@@ -483,19 +500,26 @@ function loadQuestionData(data, keepAnswers = false) {
     data.options.forEach((option, idx) => {
         const optionEl = document.createElement('div');
         optionEl.className = 'option';
-        optionEl.textContent = option;
+        
+        // Убираем "Your responses:" и другой мусор из текста опции
+        let cleanOption = option
+            .replace(/Your responses?:?\s*/gi, '')
+            .replace(/\s*Your responses?:?\s*$/gi, '')
+            .trim();
+        
+        optionEl.textContent = cleanOption;
         optionEl.dataset.index = idx;
-        optionEl.dataset.letter = option.charAt(0);
+        optionEl.dataset.letter = cleanOption.charAt(0);
         
         // Восстанавливаем выбор ТОЛЬКО если keepAnswers=true И вопрос уже был отвечен
-        if (keepAnswers && questionAnswered && currentAnswers.includes(option.charAt(0))) {
+        if (keepAnswers && questionAnswered && currentAnswers.includes(cleanOption.charAt(0))) {
             optionEl.classList.add('selected');
         }
         
         // Если уже показан результат, добавляем цвета
         if (questionAnswered && aiResultCache && !elements.resultContainer.classList.contains('hidden')) {
             optionEl.classList.add('disabled');
-            const letter = option.charAt(0);
+            const letter = cleanOption.charAt(0);
             if (aiResultCache.correctAnswers.includes(letter)) {
                 optionEl.classList.add('correct');
             } else if (currentAnswers.includes(letter)) {
@@ -534,23 +558,45 @@ function selectOption(optionEl, isMultiple, selectCount) {
     
     if (isMultiple) {
         if (optionEl.classList.contains('selected')) {
+            // Снимаем выбор
             optionEl.classList.remove('selected');
             currentAnswers = currentAnswers.filter(a => a !== letter);
         } else {
+            // Проверяем лимит
             if (currentAnswers.length < selectCount) {
                 optionEl.classList.add('selected');
                 currentAnswers.push(letter);
             } else {
-                showToast(`${t('selectAnswers')} ${selectCount} ${t('answers')}`, 'warning');
+                // Показываем сообщение о лимите
+                const msg = currentLang === 'ru' 
+                    ? `Можно выбрать только ${selectCount} ответ(ов)` 
+                    : `You can only select ${selectCount} answer(s)`;
+                showToast(msg, 'warning');
+                return;
             }
         }
+        
+        // Показываем сколько выбрано / сколько нужно
+        const remaining = selectCount - currentAnswers.length;
+        if (remaining > 0 && currentAnswers.length > 0) {
+            const remainingMsg = currentLang === 'ru' 
+                ? `Выбрано ${currentAnswers.length} из ${selectCount}` 
+                : `Selected ${currentAnswers.length} of ${selectCount}`;
+            // Обновляем подсказку в интерфейсе (не toast)
+        }
     } else {
+        // Single choice
         document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
         optionEl.classList.add('selected');
         currentAnswers = [letter];
     }
     
-    elements.checkAnswerBtn.disabled = currentAnswers.length === 0;
+    // Кнопка Check Answer активна только когда выбрано нужное количество
+    if (isMultiple) {
+        elements.checkAnswerBtn.disabled = currentAnswers.length !== selectCount;
+    } else {
+        elements.checkAnswerBtn.disabled = currentAnswers.length === 0;
+    }
 }
 
 async function checkAnswer() {
@@ -858,4 +904,8 @@ async function loadStats() {
 // Initialize
 console.log('AWS Quiz App initialized ☁️');
 console.log('API Base:', API_BASE);
+
+// Устанавливаем правильный текст кнопки языка при загрузке
+elements.langToggle.textContent = currentLang === 'en' ? '🌐 RU' : '🌐 EN';
+
 updateUILanguage();
