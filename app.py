@@ -22,8 +22,8 @@ logger = logging.getLogger(__name__)
 # Load .env file
 load_dotenv()
 
-# Flask app setup
-app = Flask(__name__, static_folder='dist', static_url_path='')
+static_path = 'dist' if os.path.exists('dist') else '.'
+app = Flask(__name__, static_folder=static_path, static_url_path='')
 
 # CORS
 CORS(app, resources={r"/api/*": {"origins": "*"}})
