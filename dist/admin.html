@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP Whitelist Admin - AWS Quiz</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Header -->
+        <header class="admin-header">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🛡️</span>
+                    <h1 id="headerTitle">IP Whitelist Manager</h1>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-secondary" onclick="toggleLanguage()">
+                        <span id="langBtn">🌐 RU</span>
+                    </button>
+                    <a href="/admin/logout" class="btn-secondary">
+                        <span id="logoutBtn">🚪 Logout</span>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Current IP Card -->
+            <div class="card current-ip-card">
+                <div class="card-icon">💻</div>
+                <div class="card-content">
+                    <h2 id="currentIpTitle">Your Current IP</h2>
+                    <div class="ip-display" id="currentIP">Loading...</div>
+                    <button class="btn-primary" onclick="addCurrentIP()" id="addMyIpBtn">
+                        ➕ Add My IP
+                    </button>
+                </div>
+            </div>
+
+            <!-- Add New IP Card -->
+            <div class="card">
+                <h2 id="addNewTitle">➕ Add New IP Address</h2>
+                <form class="add-ip-form" onsubmit="addIP(event)">
+                    <div class="form-group">
+                        <label for="newIP" id="ipLabel">IP Address</label>
+                        <input 
+                            type="text" 
+                            id="newIP" 
+                            placeholder="123.45.67.89" 
+                            required
+                            pattern="^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$"
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label for="newDesc" id="descLabel">Description (optional)</label>
+                        <input 
+                            type="text" 
+                            id="newDesc" 
+                            placeholder="e.g., Hamza's home, Office WiFi"
+                        >
+                    </div>
+                    <button type="submit" class="btn-primary" id="addBtn">
+                        ➕ Add IP Address
+                    </button>
+                </form>
+            </div>
+
+            <!-- IP List Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 id="ipListTitle">📋 Authorized IP Addresses</h2>
+                    <span class="badge" id="ipCount">0 IPs</span>
+                </div>
+
+                <div class="table-container">
+                    <table class="ip-table">
+                        <thead>
+                            <tr>
+                                <th id="thIP">IP Address</th>
+                                <th id="thDesc">Description</th>
+                                <th id="thStatus">Status</th>
+                                <th id="thLastAccess">Last Access</th>
+                                <th id="thActions">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ipTableBody">
+                            <tr>
+                                <td colspan="5" class="empty-state">
+                                    <div class="empty-icon">📭</div>
+                                    <p id="emptyText">No IP addresses added yet</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <!-- Toast Notifications -->
+        <div id="toastContainer" class="toast-container"></div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

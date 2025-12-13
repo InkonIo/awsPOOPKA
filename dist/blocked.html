@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Denied - AWS Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            animation: slideUp 0.6s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 60px 40px;
+            text-align: center;
+            color: white;
+        }
+
+        .lock-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 50px 40px;
+            text-align: center;
+        }
+
+        .lang-switch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #667eea;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .lang-switch:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .message {
+            font-size: 1.2rem;
+            color: #4a5568;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .ip-box {
+            background: linear-gradient(135deg, #f7fafc 0%, #e6f7ff 100%);
+            border: 2px solid #bee3f8;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 30px 0;
+            display: inline-block;
+        }
+
+        .ip-label {
+            font-size: 0.9rem;
+            color: #718096;
+            margin-bottom: 5px;
+        }
+
+        .ip-address {
+            font-family: 'Courier New', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe6e6 100%);
+            border-left: 4px solid #f56565;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .info-box h3 {
+            color: #c53030;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .info-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-box li {
+            color: #822727;
+            padding: 8px 0;
+            font-size: 1.05rem;
+        }
+
+        .info-box li::before {
+            content: "🔒 ";
+            margin-right: 8px;
+        }
+
+        .contact-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 18px 40px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .contact-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+
+        .telegram-icon {
+            width: 28px;
+            height: 28px;
+        }
+
+        .footer {
+            padding: 30px;
+            background: #f7fafc;
+            text-align: center;
+            color: #718096;
+            font-size: 0.95rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .content {
+                padding: 30px 25px;
+            }
+
+            .message {
+                font-size: 1.1rem;
+            }
+
+            .contact-btn {
+                padding: 15px 30px;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="lang-switch" onclick="toggleLanguage()">
+        <span id="langText">🌐 RU</span>
+    </button>
+
+    <div class="container">
+        <div class="header">
+            <div class="lock-icon">🔒</div>
+            <h1 id="title">Access Denied</h1>
+            <p id="subtitle">Premium Access Required</p>
+        </div>
+
+        <div class="content">
+            <p class="message" id="message">
+                This AWS Quiz platform is a premium service with restricted access. 
+                Your IP address is not authorized to use this application.
+            </p>
+
+            <div class="ip-box">
+                <div class="ip-label" id="ipLabel">Your IP Address:</div>
+                <div class="ip-address" id="ipAddress">Loading...</div>
+            </div>
+
+            <div class="info-box">
+                <h3 id="infoTitle">💎 Premium Features</h3>
+                <ul id="featuresList">
+                    <li id="feat1">Access to 500+ AWS practice questions</li>
+                    <li id="feat2">AI-powered answer explanations</li>
+                    <li id="feat3">Russian & English language support</li>
+                    <li id="feat4">Progress tracking & statistics</li>
+                </ul>
+            </div>
+
+            <a href="https://t.me/Inkonio" class="contact-btn">
+                <svg class="telegram-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.693-1.653-1.124-2.678-1.8-1.185-.781-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.008-1.252-.241-1.865-.44-.752-.244-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.141.121.099.155.232.171.326.016.094.036.308.02.475z"/>
+                </svg>
+                <span id="contactText">Contact @Inkonio</span>
+            </a>
+        </div>
+
+        <div class="footer">
+            <p id="footerText">To get access, please contact the administrator via Telegram</p>
+        </div>
+    </div>
+
+    <script>
+        let currentLang = 'en';
+
+        const translations = {
+            en: {
+                title: 'Access Denied',
+                subtitle: 'Premium Access Required',
+                message: 'This AWS Quiz platform is a premium service with restricted access. Your IP address is not authorized to use this application.',
+                ipLabel: 'Your IP Address:',
+                infoTitle: '💎 Premium Features',
+                feat1: 'Access to 500+ AWS practice questions',
+                feat2: 'AI-powered answer explanations',
+                feat3: 'Russian & English language support',
+                feat4: 'Progress tracking & statistics',
+                contactText: 'Contact @Inkonio',
+                footerText: 'To get access, please contact the administrator via Telegram',
+                langText: '🌐 RU'
+            },
+            ru: {
+                title: 'Доступ запрещён',
+                subtitle: 'Требуется премиум доступ',
+                message: 'Эта платформа AWS Quiz является премиум-сервисом с ограниченным доступом. Ваш IP-адрес не авторизован для использования этого приложения.',
+                ipLabel: 'Ваш IP-адрес:',
+                infoTitle: '💎 Премиум функции',
+                feat1: 'Доступ к 500+ практических вопросов AWS',
+                feat2: 'AI объяснения ответов',
+                feat3: 'Поддержка русского и английского языков',
+                feat4: 'Отслеживание прогресса и статистика',
+                contactText: 'Связаться с @Inkonio',
+                footerText: 'Для получения доступа свяжитесь с администратором через Telegram',
+                langText: '🌐 EN'
+            }
+        };
+
+        function updateText() {
+            const t = translations[currentLang];
+            document.getElementById('title').textContent = t.title;
+            document.getElementById('subtitle').textContent = t.subtitle;
+            document.getElementById('message').textContent = t.message;
+            document.getElementById('ipLabel').textContent = t.ipLabel;
+            document.getElementById('infoTitle').textContent = t.infoTitle;
+            document.getElementById('feat1').textContent = t.feat1;
+            document.getElementById('feat2').textContent = t.feat2;
+            document.getElementById('feat3').textContent = t.feat3;
+            document.getElementById('feat4').textContent = t.feat4;
+            document.getElementById('contactText').textContent = t.contactText;
+            document.getElementById('footerText').textContent = t.footerText;
+            document.getElementById('langText').textContent = t.langText;
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'ru' : 'en';
+            updateText();
+        }
+
+        // Get client IP
+        async function getClientIP() {
+            try {
+                const response = await fetch('/api/health');
+                // IP will be passed from Flask template
+                const urlParams = new URLSearchParams(window.location.search);
+                const ip = urlParams.get('ip') || 'Unknown';
+                document.getElementById('ipAddress').textContent = ip;
+            } catch (error) {
+                document.getElementById('ipAddress').textContent = 'Unknown';
+            }
+        }
+
+        getClientIP();
+    </script>
+</body>
+</html>

@@ -85,7 +85,6 @@ def check_ip_whitelist():
     try:
         has_any_ips = allowed_ips or AllowedIP.query.first()
     except:
-        # Table doesn't exist yet
         has_any_ips = bool(allowed_ips)
     
     if not has_any_ips:
@@ -93,14 +92,14 @@ def check_ip_whitelist():
     
     if not is_ip_allowed(client_ip):
         logger.warning(f"Blocked access from IP: {client_ip}")
-        # Return blocked page
         if request.path.startswith('/api/'):
             return jsonify({
                 'error': 'Access denied',
                 'message': 'Your IP is not authorized',
                 'your_ip': client_ip
             }), 403
-        return redirect('/blocked')
+        # Redirect with IP in query params
+        return redirect(f'/blocked?ip={client_ip}')
     
     return None
 # ============================================
@@ -924,54 +923,8 @@ def health_check():
 def blocked_page():
     """Page shown to blocked IPs"""
     client_ip = get_client_ip()
-    return f'''
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>Access Denied</title>
-        <style>
-            body {{
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                min-height: 100vh;
-                margin: 0;
-                background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-                color: white;
-            }}
-            .container {{
-                text-align: center;
-                padding: 40px;
-                background: rgba(255,255,255,0.1);
-                border-radius: 20px;
-                backdrop-filter: blur(10px);
-            }}
-            h1 {{ font-size: 4rem; margin: 0; }}
-            h2 {{ color: #ff6b6b; }}
-            .ip {{ 
-                background: rgba(255,255,255,0.2);
-                padding: 10px 20px;
-                border-radius: 10px;
-                font-family: monospace;
-                margin: 20px 0;
-            }}
-            p {{ color: #a0aec0; }}
-            a {{ color: #667eea; }}
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h1>🚫</h1>
-            <h2>Access Denied</h2>
-            <p>Your IP address is not authorized to access this site.</p>
-            <div class="ip">{client_ip}</div>
-            <p>Contact the administrator if you believe this is an error.</p>
-            <p><a href="https://t.me/Inkonio">@Inkonio</a></p>
-        </div>
-    </body>
-    </html>
-    ''', 403
+    # Serve the blocked.html file
+    return send_from_directory(app.static_folder, 'blocked.html')
 
 @app.route('/admin/login')
 def admin_login_page():
@@ -1065,161 +1018,14 @@ def admin_required(f):
 @admin_required
 def admin_panel():
     """Admin panel for managing IPs"""
-    client_ip = get_client_ip()
-    ips = AllowedIP.query.order_by(AllowedIP.created_at.desc()).all()
-    
-    ip_rows = ''.join([f'''
-        <tr>
-            <td><code>{ip.ip_address}</code></td>
-            <td>{ip.description or '-'}</td>
-            <td><span class="status {'active' if ip.is_active else 'inactive'}">
-                {'✅ Active' if ip.is_active else '❌ Inactive'}</span></td>
-            <td>{ip.last_access.strftime('%Y-%m-%d %H:%M') if ip.last_access else 'Never'}</td>
-            <td>
-                <button onclick="toggleIP({ip.id}, {str(not ip.is_active).lower()})" class="btn-sm">
-                    {'Disable' if ip.is_active else 'Enable'}
-                </button>
-                <button onclick="deleteIP({ip.id})" class="btn-sm btn-danger">Delete</button>
-            </td>
-        </tr>
-    ''' for ip in ips])
-    
-    return f'''
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>IP Whitelist Admin</title>
-        <style>
-            body {{
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                margin: 0;
-                padding: 20px;
-                background: #f7fafc;
-            }}
-            .container {{ max-width: 1000px; margin: 0 auto; }}
-            h1 {{ color: #2d3748; }}
-            .card {{
-                background: white;
-                border-radius: 15px;
-                padding: 25px;
-                margin: 20px 0;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            }}
-            .current-ip {{
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
-                padding: 15px 25px;
-                border-radius: 10px;
-                display: inline-block;
-            }}
-            table {{ width: 100%; border-collapse: collapse; }}
-            th, td {{ padding: 12px; text-align: left; border-bottom: 1px solid #e2e8f0; }}
-            th {{ background: #f7fafc; font-weight: 600; }}
-            code {{ background: #edf2f7; padding: 3px 8px; border-radius: 5px; }}
-            .status {{ padding: 5px 10px; border-radius: 20px; font-size: 0.85rem; }}
-            .status.active {{ background: #c6f6d5; color: #22543d; }}
-            .status.inactive {{ background: #fed7d7; color: #822727; }}
-            input, select {{
-                padding: 10px 15px;
-                border: 2px solid #e2e8f0;
-                border-radius: 8px;
-                margin-right: 10px;
-            }}
-            .btn {{
-                padding: 10px 20px;
-                background: #667eea;
-                color: white;
-                border: none;
-                border-radius: 8px;
-                cursor: pointer;
-            }}
-            .btn:hover {{ opacity: 0.9; }}
-            .btn-sm {{ padding: 5px 12px; font-size: 0.85rem; margin: 2px; }}
-            .btn-danger {{ background: #e53e3e; }}
-            .add-form {{ display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }}
-            .logout {{ float: right; color: #667eea; text-decoration: none; }}
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <a href="/admin/logout" class="logout">🚪 Logout</a>
-            <h1>🛡️ IP Whitelist Management</h1>
-            
-            <div class="card">
-                <h3>Your Current IP</h3>
-                <div class="current-ip">{client_ip}</div>
-                <button class="btn" style="margin-left: 15px;" onclick="addCurrentIP()">Add My IP</button>
-            </div>
-            
-            <div class="card">
-                <h3>Add New IP</h3>
-                <form class="add-form" onsubmit="addIP(event)">
-                    <input type="text" id="newIP" placeholder="IP Address (e.g., 123.45.67.89)" required>
-                    <input type="text" id="newDesc" placeholder="Description (e.g., Hamza's home)">
-                    <button type="submit" class="btn">+ Add IP</button>
-                </form>
-            </div>
-            
-            <div class="card">
-                <h3>Allowed IPs ({len(ips)})</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>IP Address</th>
-                            <th>Description</th>
-                            <th>Status</th>
-                            <th>Last Access</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {ip_rows if ip_rows else '<tr><td colspan="5" style="text-align:center;color:#a0aec0;">No IPs added yet</td></tr>'}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        
-        <script>
-            const currentIP = "{client_ip}";
-            
-            async function addIP(e) {{
-                e.preventDefault();
-                const ip = document.getElementById('newIP').value;
-                const desc = document.getElementById('newDesc').value;
-                
-                const res = await fetch('/admin/api/ips', {{
-                    method: 'POST',
-                    headers: {{ 'Content-Type': 'application/json' }},
-                    body: JSON.stringify({{ ip, description: desc }})
-                }});
-                
-                if (res.ok) location.reload();
-                else alert('Error adding IP');
-            }}
-            
-            function addCurrentIP() {{
-                document.getElementById('newIP').value = currentIP;
-                document.getElementById('newDesc').value = 'Added from admin panel';
-            }}
-            
-            async function toggleIP(id, active) {{
-                const res = await fetch(`/admin/api/ips/${{id}}`, {{
-                    method: 'PATCH',
-                    headers: {{ 'Content-Type': 'application/json' }},
-                    body: JSON.stringify({{ is_active: active }})
-                }});
-                if (res.ok) location.reload();
-            }}
-            
-            async function deleteIP(id) {{
-                if (!confirm('Delete this IP?')) return;
-                const res = await fetch(`/admin/api/ips/${{id}}`, {{ method: 'DELETE' }});
-                if (res.ok) location.reload();
-            }}
-        </script>
-    </body>
-    </html>
-    '''
+    # Serve the admin.html file
+    return send_from_directory(app.static_folder, 'admin.html')
+
+@app.route('/admin/api/current-ip', methods=['GET'])
+@admin_required
+def get_current_ip():
+    """API endpoint to get current IP for admin panel"""
+    return jsonify({'ip': get_client_ip()})
 
 @app.route('/admin/logout')
 def admin_logout():
