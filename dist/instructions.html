@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Upload - AWS Quiz</title>
+    <link rel="stylesheet" href="instructions.css">
+</head>
+<body>
+    <div class="instructions-wrapper">
+        <!-- Header -->
+        <div class="instructions-header">
+            <button class="back-btn" onclick="history.back()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Back
+            </button>
+            <h1>📤 How to Upload Questions</h1>
+            <div class="lang-toggle">
+                <button class="lang-btn active" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="ru">RU</button>
+            </div>
+        </div>
+
+        <!-- Animation Container -->
+        <div class="animation-container">
+            <div class="demo-wrapper">
+                <!-- Telegram App Simulation -->
+                <div class="phone-mockup">
+                    <div class="phone-notch"></div>
+                    <div class="phone-screen">
+                        <!-- Telegram Header -->
+                        <div class="tg-header">
+                            <div class="tg-back">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                                </svg>
+                            </div>
+                            <div class="tg-avatar">🤖</div>
+                            <div class="tg-info">
+                                <span class="tg-name">AWS Quiz Bot</span>
+                                <span class="tg-status">bot</span>
+                            </div>
+                            <div class="tg-menu" id="menuBtn">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                                    <circle cx="12" cy="5" r="2"/>
+                                    <circle cx="12" cy="12" r="2"/>
+                                    <circle cx="12" cy="19" r="2"/>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Chat Messages -->
+                        <div class="tg-chat">
+                            <div class="tg-message bot">
+                                <div class="msg-content">
+                                    <strong>Question #42</strong><br><br>
+                                    Which AWS service provides a fully managed NoSQL database?<br><br>
+                                    A) Amazon RDS<br>
+                                    B) Amazon DynamoDB<br>
+                                    C) Amazon Redshift<br>
+                                    D) Amazon Aurora
+                                </div>
+                            </div>
+                            <div class="tg-message bot">
+                                <div class="msg-content">
+                                    <strong>Question #43</strong><br><br>
+                                    What is the AWS service for object storage?<br><br>
+                                    A) Amazon EBS<br>
+                                    B) Amazon S3<br>
+                                    C) Amazon EFS<br>
+                                    D) AWS Storage Gateway
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Dropdown Menu -->
+                        <div class="tg-dropdown hidden" id="dropdown">
+                            <div class="dropdown-item">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="#555">
+                                    <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+                                </svg>
+                                <span data-translate="forward">Forward</span>
+                            </div>
+                            <div class="dropdown-item">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="#555">
+                                    <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                                </svg>
+                                <span data-translate="copy">Copy</span>
+                            </div>
+                            <div class="dropdown-item highlight" id="exportOption">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="#667eea">
+                                    <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                                </svg>
+                                <span data-translate="exportChat">Export chat history</span>
+                            </div>
+                            <div class="dropdown-item">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="#555">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                                </svg>
+                                <span data-translate="info">Info</span>
+                            </div>
+                        </div>
+
+                        <!-- Export Settings Modal -->
+                        <div class="export-modal hidden" id="exportModal">
+                            <div class="export-header">
+                                <span data-translate="exportSettings">Export Settings</span>
+                            </div>
+                            <div class="export-body">
+                                <div class="export-option">
+                                    <span data-translate="format">Format</span>
+                                    <div class="format-toggle">
+                                        <span class="format-opt">HTML</span>
+                                        <span class="format-opt active">JSON</span>
+                                    </div>
+                                </div>
+                                <div class="export-checkboxes">
+                                    <label class="checkbox-item unchecked">
+                                        <span class="checkbox"></span>
+                                        <span data-translate="photos">Photos</span>
+                                    </label>
+                                    <label class="checkbox-item unchecked">
+                                        <span class="checkbox"></span>
+                                        <span data-translate="videos">Videos</span>
+                                    </label>
+                                    <label class="checkbox-item unchecked">
+                                        <span class="checkbox"></span>
+                                        <span data-translate="voiceMessages">Voice messages</span>
+                                    </label>
+                                    <label class="checkbox-item unchecked">
+                                        <span class="checkbox"></span>
+                                        <span data-translate="stickers">Stickers</span>
+                                    </label>
+                                </div>
+                                <button class="export-btn" id="exportBtn" data-translate="export">Export</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Arrow Between -->
+                <div class="transfer-arrow">
+                    <div class="arrow-line"></div>
+                    <div class="file-icon" id="flyingFile">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="#667eea">
+                            <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                        </svg>
+                        <span>result.json</span>
+                    </div>
+                </div>
+
+                <!-- Website Simulation -->
+                <div class="browser-mockup">
+                    <div class="browser-header">
+                        <div class="browser-dots">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <div class="browser-url">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="#48bb78">
+                                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                            </svg>
+                            <span>aws-quiz.vercel.app</span>
+                        </div>
+                    </div>
+                    <div class="browser-content">
+                        <div class="site-header">
+                            <h2>☁️ AWS Quiz</h2>
+                        </div>
+                        <div class="upload-zone" id="uploadZone">
+                            <div class="upload-icon">📁</div>
+                            <p data-translate="dropHere">Drop JSON file here</p>
+                            <p class="upload-hint" data-translate="orClick">or click to browse</p>
+                        </div>
+                        <div class="upload-success hidden" id="uploadSuccess">
+                            <div class="success-icon">✅</div>
+                            <h3 data-translate="uploadComplete">Upload Complete!</h3>
+                            <div class="success-stats">
+                                <div class="stat">
+                                    <span class="stat-num">15</span>
+                                    <span class="stat-label" data-translate="newQuestions">New Questions</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-num">3</span>
+                                    <span class="stat-label" data-translate="duplicates">Duplicates</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Animated Cursor -->
+            <div class="cursor" id="cursor">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="white" stroke="#333" stroke-width="1">
+                    <path d="M4 4l16 12-6 2-4 6-2-8-4-2z"/>
+                </svg>
+            </div>
+
+            <!-- Step Indicator -->
+            <div class="step-indicator">
+                <div class="step active" data-step="1">
+                    <span class="step-num">1</span>
+                    <span class="step-text" data-translate="step1">Open menu</span>
+                </div>
+                <div class="step" data-step="2">
+                    <span class="step-num">2</span>
+                    <span class="step-text" data-translate="step2">Export chat</span>
+                </div>
+                <div class="step" data-step="3">
+                    <span class="step-num">3</span>
+                    <span class="step-text" data-translate="step3">Select JSON</span>
+                </div>
+                <div class="step" data-step="4">
+                    <span class="step-num">4</span>
+                    <span class="step-text" data-translate="step4">Upload file</span>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="animation-controls">
+                <button class="control-btn" id="replayBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
+                    </svg>
+                    <span data-translate="replay">Replay</span>
+                </button>
+                <button class="control-btn" id="pauseBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" id="pauseIcon">
+                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                    </svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" id="playIcon" class="hidden">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                    <span data-translate="pause">Pause</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Text Instructions (Mobile Friendly) -->
+        <div class="text-instructions">
+            <h2 data-translate="stepByStep">Step-by-Step Guide</h2>
+            
+            <div class="instruction-card">
+                <div class="card-icon">1️⃣</div>
+                <div class="card-content">
+                    <h3 data-translate="openBot">Open the Telegram Bot</h3>
+                    <p data-translate="openBotDesc">Go to <a href="https://t.me/c1oud_uib_aws_cp2_bot" target="_blank">@c1oud_uib_aws_cp2_bot</a> in Telegram</p>
+                </div>
+            </div>
+
+            <div class="instruction-card">
+                <div class="card-icon">2️⃣</div>
+                <div class="card-content">
+                    <h3 data-translate="tapMenu">Tap the Menu</h3>
+                    <p data-translate="tapMenuDesc">Click the three dots (⋮) in the top right corner of the chat</p>
+                </div>
+            </div>
+
+            <div class="instruction-card">
+                <div class="card-icon">3️⃣</div>
+                <div class="card-content">
+                    <h3 data-translate="selectExport">Select "Export chat history"</h3>
+                    <p data-translate="selectExportDesc">Choose JSON format and uncheck all media options (photos, videos, etc.)</p>
+                </div>
+            </div>
+
+            <div class="instruction-card">
+                <div class="card-icon">4️⃣</div>
+                <div class="card-content">
+                    <h3 data-translate="uploadFile">Upload the JSON File</h3>
+                    <p data-translate="uploadFileDesc">Drag and drop the result.json file onto the upload area on our website</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Privacy Notice -->
+        <div class="privacy-box">
+            <div class="privacy-icon">🔒</div>
+            <div class="privacy-text">
+                <h3 data-translate="privacyTitle">Your Data is Safe</h3>
+                <ul>
+                    <li data-translate="privacy1">✅ Only quiz questions are extracted</li>
+                    <li data-translate="privacy2">✅ Personal messages are ignored</li>
+                    <li data-translate="privacy3">✅ No user data is stored</li>
+                    <li data-translate="privacy4">✅ Duplicates are automatically removed</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- CTA Button -->
+        <div class="cta-section">
+            <button class="cta-btn" id="uploadCTA">
+                <span data-translate="readyUpload">Ready to Upload?</span>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <div class="instructions-footer">
+            <p>Made with ❤️ by 
+                <a href="https://t.me/Inkonio" target="_blank">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.693-1.653-1.124-2.678-1.8-1.185-.781-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.008-1.252-.241-1.865-.44-.752-.244-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.141.121.099.155.232.171.326.016.094.036.308.02.475z"/>
+                    </svg>
+                    @Inkonio
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <script src="instructions.js"></script>
+</body>
+</html>

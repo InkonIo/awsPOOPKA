@@ -1,0 +1,16 @@
+# Environment
+.env
+.env.local
+.env.production
+
+# НЕ игнорируем .env.example - это пример для других разработчиков
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# IDE
+.idea/
+.vscode/
