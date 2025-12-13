@@ -687,6 +687,16 @@ def serve(path):
     return send_from_directory(app.static_folder, 'index.html')
 
 # ============================================
+# AUTO-CREATE TABLES ON STARTUP
+# ============================================
+with app.app_context():
+    try:
+        db.create_all()
+        logger.info("Database tables created/verified successfully")
+    except Exception as e:
+        logger.error(f"Failed to create database tables: {e}")
+
+# ============================================
 # PRODUCTION SERVER CONFIGURATION
 # ============================================
 if __name__ == '__main__':
