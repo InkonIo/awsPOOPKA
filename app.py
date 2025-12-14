@@ -50,6 +50,111 @@ ALWAYS_ALLOWED = {'127.0.0.1', 'localhost'}
 # Paths that don't require IP check
 PUBLIC_PATHS = {'/api/health', '/blocked', '/admin/login', '/admin/auth'}
 
+# Add these imports at the top of app.py
+import json
+import random
+
+# Add this function to load questions from JSON
+def load_academo_questions():
+    """Load Academo questions from JSON file"""
+    json_path = os.path.join(app.static_folder, 'academo_questions.json')
+    try:
+        with open(json_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            return data['questions']
+    except FileNotFoundError:
+        logger.error(f"Academo questions file not found: {json_path}")
+        return []
+    except json.JSONDecodeError as e:
+        logger.error(f"Error parsing academo_questions.json: {e}")
+        return []
+
+# Load questions at startup
+ACADEMO_QUESTIONS = load_academo_questions()
+logger.info(f"Loaded {len(ACADEMO_QUESTIONS)} Academo questions")
+
+# Add these routes (replace the old ones if they exist)
+
+@app.route('/api/academo/questions', methods=['GET'])
+def get_academo_questions():
+    """Get all Academo questions or filtered by category"""
+    category = request.args.get('category', None)
+    
+    questions = ACADEMO_QUESTIONS.copy()
+    
+    if category and category != 'all':
+        questions = [q for q in questions if q['category'] == category]
+    
+    # Shuffle questions for randomness
+    random.shuffle(questions)
+    
+    # Shuffle options for each question
+    result = []
+    for q in questions:
+        q_copy = q.copy()
+        options = q_copy['options'].copy()
+        random.shuffle(options)
+        q_copy['options'] = options
+        result.append(q_copy)
+    
+    # Get category counts
+    categories = {}
+    for q in ACADEMO_QUESTIONS:
+        cat = q['category']
+        if cat not in categories:
+            categories[cat] = 0
+        categories[cat] += 1
+    
+    return jsonify({
+        'questions': result,
+        'total': len(result),
+        'categories': categories
+    })
+
+@app.route('/api/academo/check', methods=['POST'])
+def check_academo_answer():
+    """Check answer for Academo question"""
+    data = request.get_json()
+    question_id = data.get('questionId')
+    user_answer = data.get('answer')
+    
+    if not question_id or not user_answer:
+        return jsonify({'error': 'Missing questionId or answer'}), 400
+    
+    question = next((q for q in ACADEMO_QUESTIONS if q['id'] == question_id), None)
+    
+    if not question:
+        return jsonify({'error': 'Question not found'}), 404
+    
+    is_correct = user_answer.strip() == question['correct'].strip()
+    
+    return jsonify({
+        'correct': is_correct,
+        'correctAnswer': question['correct'],
+        'explanation': question['explanation']
+    })
+
+@app.route('/api/academo/stats', methods=['GET'])
+def academo_stats():
+    """Get Academo statistics"""
+    categories = {}
+    for q in ACADEMO_QUESTIONS:
+        cat = q['category']
+        if cat not in categories:
+            categories[cat] = 0
+        categories[cat] += 1
+    
+    return jsonify({
+        'totalQuestions': len(ACADEMO_QUESTIONS),
+        'categories': categories
+    })
+
+# Add route for serving academo.html (before the catch-all route)
+@app.route('/academo.html')
+def academo_page():
+    """Serve Academo page"""
+    return send_from_directory(app.static_folder, 'academo.html')
+
 def get_client_ip():
     """Get real client IP behind proxy"""
     if request.headers.get('X-Forwarded-For'):

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тесты Academo - AWS Quiz</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="academo.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>📚 Тесты из Academo</h1>
+                <div class="header-controls">
+                    <a href="/" class="btn-secondary">← Назад к AWS Quiz</a>
+                    <button id="statsBtn" class="btn-secondary">📊 Статистика</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Welcome Screen -->
+            <div id="welcomeScreen" class="welcome-screen">
+                <div class="welcome-card academo-welcome">
+                    <h2>🎓 Добро пожаловать в раздел Academo!</h2>
+                    <p>Здесь собраны вопросы из курса по облачным технологиям</p>
+                    
+                    <div class="category-selector">
+                        <h3>Выберите категорию:</h3>
+                        <div class="category-buttons">
+                            <button class="category-btn" data-category="all">
+                                <span class="cat-icon">🌟</span>
+                                <span class="cat-title">Все вопросы</span>
+                                <span class="cat-count" id="count-all">0</span>
+                            </button>
+                            <button class="category-btn" data-category="cloud_basics">
+                                <span class="cat-icon">☁️</span>
+                                <span class="cat-title">Основы облаков</span>
+                                <span class="cat-count" id="count-cloud_basics">0</span>
+                            </button>
+                            <button class="category-btn" data-category="aws">
+                                <span class="cat-icon">🚀</span>
+                                <span class="cat-title">AWS Сервисы</span>
+                                <span class="cat-count" id="count-aws">0</span>
+                            </button>
+                            <button class="category-btn" data-category="docker">
+                                <span class="cat-icon">🐳</span>
+                                <span class="cat-title">Docker</span>
+                                <span class="cat-count" id="count-docker">0</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Screen -->
+            <div id="quizScreen" class="quiz-screen hidden">
+                <div class="academo-quiz-container">
+                    <!-- Progress Bar -->
+                    <div class="quiz-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <div class="progress-text">
+                            <span id="currentQuestion">1</span> / <span id="totalQuestions">10</span>
+                        </div>
+                    </div>
+
+                    <!-- Score Display -->
+                    <div class="score-display">
+                        <div class="score-item correct">
+                            <span class="score-label">✅ Правильно:</span>
+                            <span class="score-value" id="correctCount">0</span>
+                        </div>
+                        <div class="score-item incorrect">
+                            <span class="score-label">❌ Неправильно:</span>
+                            <span class="score-value" id="incorrectCount">0</span>
+                        </div>
+                        <div class="score-item total">
+                            <span class="score-label">📊 Процент:</span>
+                            <span class="score-value" id="percentScore">0%</span>
+                        </div>
+                    </div>
+
+                    <!-- Question Card -->
+                    <div class="question-card academo-card">
+                        <div class="question-category" id="questionCategory"></div>
+                        <h3 class="question-text" id="questionText">Loading...</h3>
+                        
+                        <div class="options-container" id="optionsContainer">
+                            <!-- Options will be inserted here -->
+                        </div>
+
+                        <div class="quiz-actions">
+                            <button id="checkAnswerBtn" class="btn-primary" disabled>Проверить ответ</button>
+                            <button id="nextQuestionBtn" class="btn-secondary hidden">Следующий вопрос →</button>
+                        </div>
+
+                        <div id="resultContainer" class="result-container hidden">
+                            <!-- Result will be shown here -->
+                        </div>
+                    </div>
+
+                    <!-- Navigation -->
+                    <div class="quiz-navigation">
+                        <button id="prevQuestionBtn" class="btn-secondary" disabled>← Предыдущий</button>
+                        <button id="finishQuizBtn" class="btn-primary hidden">🏁 Завершить тест</button>
+                        <button id="backToMenuBtn" class="btn-secondary">📋 В меню</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Screen -->
+            <div id="resultsScreen" class="results-screen hidden">
+                <div class="results-card">
+                    <div class="results-header">
+                        <h2>🎉 Тест завершен!</h2>
+                    </div>
+                    
+                    <div class="results-stats">
+                        <div class="result-stat-big">
+                            <div class="stat-icon">🎯</div>
+                            <div class="stat-value" id="finalScore">0%</div>
+                            <div class="stat-label">Итоговый результат</div>
+                        </div>
+                        
+                        <div class="results-details">
+                            <div class="result-detail correct">
+                                <span class="detail-icon">✅</span>
+                                <span class="detail-text">Правильных ответов: <strong id="finalCorrect">0</strong></span>
+                            </div>
+                            <div class="result-detail incorrect">
+                                <span class="detail-icon">❌</span>
+                                <span class="detail-text">Неправильных ответов: <strong id="finalIncorrect">0</strong></span>
+                            </div>
+                            <div class="result-detail total">
+                                <span class="detail-icon">📝</span>
+                                <span class="detail-text">Всего вопросов: <strong id="finalTotal">0</strong></span>
+                            </div>
+                        </div>
+
+                        <div class="results-message" id="resultsMessage"></div>
+                    </div>
+
+                    <div class="results-actions">
+                        <button id="restartQuizBtn" class="btn-primary btn-large">🔄 Пройти заново</button>
+                        <button id="backToMenuBtn2" class="btn-secondary btn-large">📋 В меню</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Stats Modal -->
+        <div id="statsModal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>📊 Статистика вопросов</h3>
+                    <button class="modal-close" id="closeStatsModal">×</button>
+                </div>
+                <div class="modal-body">
+                    <div id="statsContent" class="stats-content">
+                        <!-- Stats will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div id="loadingSpinner" class="loading-spinner hidden">
+            <div class="spinner"></div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div id="toastContainer" class="toast-container"></div>
+    </div>
+
+    <script src="academo.js"></script>
+</body>
+</html>
