@@ -113,12 +113,13 @@ def get_academo_questions():
 
 @app.route('/api/academo/check', methods=['POST'])
 def check_academo_answer():
-    """Check answer for Academo question"""
+    """Check answer for Academo question - supports single and multi-select"""
     data = request.get_json()
     question_id = data.get('questionId')
     user_answer = data.get('answer')
+    is_multi_select = data.get('isMultiSelect', False)
     
-    if not question_id or not user_answer:
+    if not question_id or user_answer is None:
         return jsonify({'error': 'Missing questionId or answer'}), 400
     
     question = next((q for q in ACADEMO_QUESTIONS if q['id'] == question_id), None)
@@ -126,11 +127,29 @@ def check_academo_answer():
     if not question:
         return jsonify({'error': 'Question not found'}), 404
     
-    is_correct = user_answer.strip() == question['correct'].strip()
+    correct_answer = question['correct']
+    
+    # Handle multi-select questions
+    if isinstance(correct_answer, list):
+        # Multi-select: user_answer should be a list
+        if isinstance(user_answer, list):
+            # Sort both for comparison
+            user_set = set(a.strip() if isinstance(a, str) else a for a in user_answer)
+            correct_set = set(a.strip() if isinstance(a, str) else a for a in correct_answer)
+            is_correct = user_set == correct_set
+        else:
+            is_correct = False
+    else:
+        # Single select
+        if isinstance(user_answer, list):
+            # If user sent array for single select, take first element
+            is_correct = user_answer[0].strip() == correct_answer.strip() if user_answer else False
+        else:
+            is_correct = user_answer.strip() == correct_answer.strip()
     
     return jsonify({
         'correct': is_correct,
-        'correctAnswer': question['correct'],
+        'correctAnswer': correct_answer,
         'explanation': question['explanation']
     })
 

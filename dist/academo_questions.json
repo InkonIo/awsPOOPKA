@@ -1,18 +1,24 @@
 {
   "questions": [
     {
-      "id": "docker_9",
+      "id": "docker_true_false_1",
       "category": "docker",
       "question": "Верно ли утверждение: Docker image — это неизменяемый образ, из которого разворачивается контейнер.",
-      "options": ["Верно", "Неверно"],
+      "options": [
+        "Верно",
+        "Неверно"
+      ],
       "correct": "Верно",
       "explanation": "Docker image неизменяем (immutable). Любые изменения в контейнере не влияют на образ. Это обеспечивает консистентность и воспроизводимость."
     },
     {
-      "id": "docker_10",
+      "id": "docker_true_false_2",
       "category": "docker",
       "question": "Верно ли утверждение: Docker container — развёрнутое и запущенное приложение.",
-      "options": ["Верно", "Неверно"],
+      "options": [
+        "Верно",
+        "Неверно"
+      ],
       "correct": "Верно",
       "explanation": "Контейнер - это running instance образа. Это изолированный процесс с собственной файловой системой, сетью и ресурсами."
     },
@@ -98,7 +104,12 @@
       "id": "aws_advanced_2",
       "category": "aws",
       "question": "Какой сервис AWS лучше всего подходит для хранения резервных копий с редким доступом?",
-      "options": ["Amazon S3 Standard", "Amazon S3 Glacier", "Amazon EBS", "Amazon RDS"],
+      "options": [
+        "Amazon S3 Standard",
+        "Amazon S3 Glacier",
+        "Amazon EBS",
+        "Amazon RDS"
+      ],
       "correct": "Amazon S3 Glacier",
       "explanation": "S3 Glacier - архивное хранилище с низкой стоимостью для долгосрочного хранения. Время извлечения: от минут до часов. Идеально для бэкапов."
     },
@@ -119,7 +130,12 @@
       "id": "aws_advanced_4",
       "category": "aws",
       "question": "Какой сервис AWS используется для отправки email-уведомлений?",
-      "options": ["Amazon SNS", "Amazon SES", "Amazon SQS", "Amazon EventBridge"],
+      "options": [
+        "Amazon SNS",
+        "Amazon SES",
+        "Amazon SQS",
+        "Amazon EventBridge"
+      ],
       "correct": "Amazon SES",
       "explanation": "Amazon SES (Simple Email Service) - сервис для отправки транзакционных email, маркетинговых рассылок и уведомлений. SNS - для push-уведомлений."
     },
@@ -140,7 +156,12 @@
       "id": "aws_advanced_6",
       "category": "aws",
       "question": "Какой AWS сервис предоставляет managed Kubernetes?",
-      "options": ["AWS ECS", "AWS EKS", "AWS Fargate", "AWS Batch"],
+      "options": [
+        "AWS ECS",
+        "AWS EKS",
+        "AWS Fargate",
+        "AWS Batch"
+      ],
       "correct": "AWS EKS",
       "explanation": "Amazon EKS (Elastic Kubernetes Service) - managed Kubernetes. AWS управляет control plane, вы управляете worker nodes. ECS - собственная система оркестрации контейнеров AWS."
     },
@@ -187,7 +208,12 @@
       "id": "aws_advanced_10",
       "category": "aws",
       "question": "Какой сервис AWS используется для организации очередей сообщений?",
-      "options": ["Amazon SNS", "Amazon SQS", "Amazon EventBridge", "AWS Step Functions"],
+      "options": [
+        "Amazon SNS",
+        "Amazon SQS",
+        "Amazon EventBridge",
+        "AWS Step Functions"
+      ],
       "correct": "Amazon SQS",
       "explanation": "Amazon SQS (Simple Queue Service) - managed очередь сообщений для асинхронной обработки. Позволяет разделить компоненты приложения."
     },
@@ -234,7 +260,12 @@
       "id": "docker_advanced_4",
       "category": "docker",
       "question": "Какая команда Docker используется для просмотра запущенных контейнеров?",
-      "options": ["docker ps", "docker list", "docker show", "docker containers"],
+      "options": [
+        "docker ps",
+        "docker list",
+        "docker show",
+        "docker containers"
+      ],
       "correct": "docker ps",
       "explanation": "docker ps показывает запущенные контейнеры. docker ps -a показывает все контейнеры (включая остановленные)."
     },
@@ -281,7 +312,12 @@
       "id": "aws_practical_1",
       "category": "aws",
       "question": "У вас есть веб-приложение с непредсказуемой нагрузкой. Какой AWS сервис поможет автоматически масштабировать EC2 инстансы?",
-      "options": ["AWS Lambda", "AWS Auto Scaling", "AWS CloudFormation", "AWS Elastic Beanstalk"],
+      "options": [
+        "AWS Lambda",
+        "AWS Auto Scaling",
+        "AWS CloudFormation",
+        "AWS Elastic Beanstalk"
+      ],
       "correct": "AWS Auto Scaling",
       "explanation": "AWS Auto Scaling автоматически добавляет/удаляет EC2 инстансы на основе метрик (CPU, память, custom metrics). Это обеспечивает оптимальную производительность и стоимость."
     },
@@ -289,7 +325,12 @@
       "id": "aws_practical_2",
       "category": "aws",
       "question": "Вам нужно хранить 100 ТБ архивных данных с доступом раз в год. Какой S3 класс выбрать?",
-      "options": ["S3 Standard", "S3 Intelligent-Tiering", "S3 Glacier Deep Archive", "S3 One Zone-IA"],
+      "options": [
+        "S3 Standard",
+        "S3 Intelligent-Tiering",
+        "S3 Glacier Deep Archive",
+        "S3 One Zone-IA"
+      ],
       "correct": "S3 Glacier Deep Archive",
       "explanation": "S3 Glacier Deep Archive - самый дешевый класс хранения для архивов с редким доступом (раз в год). Стоимость извлечения выше, но хранение очень дешевое."
     },
@@ -336,7 +377,12 @@
       "id": "cloud_1",
       "category": "cloud_basics",
       "question": "Напишите аббревиатуру Software as a Service",
-      "options": ["IaaS", "PaaS", "SaaS", "DaaS"],
+      "options": [
+        "IaaS",
+        "PaaS",
+        "SaaS",
+        "DaaS"
+      ],
       "correct": "SaaS",
       "explanation": "SaaS (Software as a Service) - программное обеспечение как услуга. Клиент оплачивает подписку и получает лицензию на определённый срок. Примеры: Google Workspace, Figma, Salesforce."
     },
@@ -344,7 +390,12 @@
       "id": "cloud_2",
       "category": "cloud_basics",
       "question": "Напишите аббревиатуру Infrastructure as a Service",
-      "options": ["IaaS", "PaaS", "SaaS", "DaaS"],
+      "options": [
+        "IaaS",
+        "PaaS",
+        "SaaS",
+        "DaaS"
+      ],
       "correct": "IaaS",
       "explanation": "IaaS (Infrastructure as a Service) - инфраструктура как услуга. Предоставляет виртуальные серверы, сети, хранилища. Примеры: AWS EC2, Google Compute Engine."
     },
@@ -352,7 +403,12 @@
       "id": "cloud_3",
       "category": "cloud_basics",
       "question": "Напишите аббревиатуру Platform as a Service",
-      "options": ["IaaS", "PaaS", "SaaS", "DaaS"],
+      "options": [
+        "IaaS",
+        "PaaS",
+        "SaaS",
+        "DaaS"
+      ],
       "correct": "PaaS",
       "explanation": "PaaS (Platform as a Service) - платформа как услуга. Виртуальная среда для разработки и тестирования. Примеры: AWS Elastic Beanstalk, Google App Engine, Heroku."
     },
@@ -360,7 +416,10 @@
       "id": "cloud_4",
       "category": "cloud_basics",
       "question": "Гибридное облако — часть инфраструктуры или сервисов открыта для общего доступа, часть остаётся приватной.",
-      "options": ["Верно", "Неверно"],
+      "options": [
+        "Верно",
+        "Неверно"
+      ],
       "correct": "Верно",
       "explanation": "Гибридное облако сочетает приватные и публичные компоненты. Это позволяет компаниям держать критичные данные в приватном облаке, а менее чувствительные ресурсы - в публичном."
     },
@@ -433,7 +492,12 @@
       "id": "cloud_10",
       "category": "cloud_basics",
       "question": "Когда впервые появилась идея технологии, которая позволила бы нескольким людям подключаться к одному серверу одновременно?",
-      "options": ["В 40-х годах", "В 60-х годах", "В 90-х годах", "В 2000-х годах"],
+      "options": [
+        "В 40-х годах",
+        "В 60-х годах",
+        "В 90-х годах",
+        "В 2000-х годах"
+      ],
       "correct": "В 60-х годах",
       "explanation": "В 60-х годах появились первые ЭВМ. Для бизнеса было проблемой, что за одной машиной мог работать только один пользователь. Тогда впервые появилась идея разделения ресурсов."
     },
@@ -441,7 +505,12 @@
       "id": "cloud_11",
       "category": "cloud_basics",
       "question": "Когда появились первые облачные платформы Zimki и Amazon Web Services?",
-      "options": ["В 2000 году", "В 2006 году", "В 2010 году", "В 2015 году"],
+      "options": [
+        "В 2000 году",
+        "В 2006 году",
+        "В 2010 году",
+        "В 2015 году"
+      ],
       "correct": "В 2006 году",
       "explanation": "В 2006 году появились первые облачные платформы, которые предоставляли доступ к сервисам для вычислений и работы с данными."
     },
@@ -449,7 +518,12 @@
       "id": "cloud_12",
       "category": "cloud_basics",
       "question": "Когда Google запустил App Engine - первый прототип PaaS?",
-      "options": ["В 2006 году", "В 2008 году", "В 2010 году", "В 2012 году"],
+      "options": [
+        "В 2006 году",
+        "В 2008 году",
+        "В 2010 году",
+        "В 2012 году"
+      ],
       "correct": "В 2008 году",
       "explanation": "В 2008 году Google запустил App Engine - первый прототип PaaS (Platform as a Service), но с ограниченным набором функций."
     },
@@ -492,12 +566,16 @@
       "correct": "Электростанции и оборонные предприятия",
       "explanation": "Облака не подходят компаниям, которые не могут работать онлайн с общим доступом по соображениям безопасности - например, электростанциям или оборонным предприятиям."
     },
-    
     {
       "id": "aws_1",
       "category": "aws",
       "question": "AWS позволяет пользователям управлять своими ресурсами через веб-интерфейс. Как называется этот интерфейс?",
-      "options": ["AWS CLI", "AWS API", "AWS SDK", "AWS Management Console"],
+      "options": [
+        "AWS CLI",
+        "AWS API",
+        "AWS SDK",
+        "AWS Management Console"
+      ],
       "correct": "AWS Management Console",
       "explanation": "AWS Management Console - это веб-интерфейс для управления сервисами AWS. Доступен через браузер и предоставляет графический интерфейс для работы с ресурсами."
     },
@@ -512,14 +590,23 @@
         "Управление приложениями от имени клиентов",
         "Физическая безопасность и безопасность данных обеспечиваются AWS"
       ],
-      "correct": "Повышение скорости и гибкости",
-      "explanation": "AWS обеспечивает: 1) Повышение скорости и гибкости - быстрое развертывание ресурсов, 2) Физическую безопасность - AWS отвечает за безопасность дата-центров."
+      "correct": [
+        "Повышение скорости и гибкости",
+        "Физическая безопасность и безопасность данных обеспечиваются AWS"
+      ],
+      "explanation": "AWS обеспечивает: 1) Повышение скорости и гибкости - быстрое развертывание ресурсов, 2) Физическую безопасность - AWS отвечает за безопасность дата-центров.",
+      "multiSelect": true
     },
     {
       "id": "aws_3",
       "category": "aws",
       "question": "Какой сервис предоставляет DNS в AWS?",
-      "options": ["Route 53", "AWS Config", "Amazon CloudFront", "Amazon EMR"],
+      "options": [
+        "Route 53",
+        "AWS Config",
+        "Amazon CloudFront",
+        "Amazon EMR"
+      ],
       "correct": "Route 53",
       "explanation": "Amazon Route 53 - это масштабируемый DNS-сервис (Domain Name System). Он преобразует доменные имена в IP-адреса и обеспечивает маршрутизацию трафика."
     },
@@ -527,7 +614,12 @@
       "id": "aws_4",
       "category": "aws",
       "question": "У вашей компании есть приложение для хранения данных, которому требуется доступ к базе данных NoSQL. Какое предложение AWS соответствует этому требованию?",
-      "options": ["Amazon Aurora", "Amazon DynamoDB", "Amazon EBS", "Amazon Redshift"],
+      "options": [
+        "Amazon Aurora",
+        "Amazon DynamoDB",
+        "Amazon EBS",
+        "Amazon Redshift"
+      ],
       "correct": "Amazon DynamoDB",
       "explanation": "Amazon DynamoDB - это полностью управляемая NoSQL база данных. Она обеспечивает быструю и предсказуемую производительность с плавным масштабированием."
     },
@@ -535,7 +627,12 @@
       "id": "aws_5",
       "category": "aws",
       "question": "Компания планирует разместить образовательный сайт на AWS. Видеокурсы будут транслироваться по всему миру. Какой сервис поможет достичь высокой скорости передачи данных?",
-      "options": ["Amazon SNS", "Amazon Kinesis Video Streams", "AWS CloudFormation", "Amazon CloudFront"],
+      "options": [
+        "Amazon SNS",
+        "Amazon Kinesis Video Streams",
+        "AWS CloudFormation",
+        "Amazon CloudFront"
+      ],
       "correct": "Amazon CloudFront",
       "explanation": "Amazon CloudFront - это CDN (Content Delivery Network). Он кэширует контент в edge-локациях по всему миру, обеспечивая быструю доставку видео пользователям."
     },
@@ -543,7 +640,12 @@
       "id": "aws_6",
       "category": "aws",
       "question": "Какой сервис позволяет управлять инфраструктурой как кодом?",
-      "options": ["AWS CloudFormation", "AWS Config", "Amazon SES", "Amazon EMR"],
+      "options": [
+        "AWS CloudFormation",
+        "AWS Config",
+        "Amazon SES",
+        "Amazon EMR"
+      ],
       "correct": "AWS CloudFormation",
       "explanation": "AWS CloudFormation позволяет описывать инфраструктуру с помощью шаблонов (JSON/YAML). Это Infrastructure as Code - вы описываете желаемое состояние, а CloudFormation создает ресурсы."
     },
@@ -551,7 +653,12 @@
       "id": "aws_7",
       "category": "aws",
       "question": "Какой сервис AWS предоставит рекомендации по оптимизации безопасности инфраструктуры?",
-      "options": ["AWS Shield", "AWS Management Console", "AWS Secrets Manager", "AWS Trusted Advisor"],
+      "options": [
+        "AWS Shield",
+        "AWS Management Console",
+        "AWS Secrets Manager",
+        "AWS Trusted Advisor"
+      ],
       "correct": "AWS Trusted Advisor",
       "explanation": "AWS Trusted Advisor анализирует вашу AWS среду и дает рекомендации по 5 категориям: оптимизация затрат, производительность, безопасность, отказоустойчивость и лимиты сервисов."
     },
@@ -572,15 +679,30 @@
       "id": "aws_9",
       "category": "aws",
       "question": "Какой из следующих сервисов AWS можно использовать в качестве вычислительного ресурса? (Выберите ДВА)",
-      "options": ["VPC", "CloudWatch", "S3", "EC2", "Lambda"],
-      "correct": "EC2",
-      "explanation": "EC2 (Elastic Compute Cloud) и Lambda - вычислительные сервисы. EC2 предоставляет виртуальные серверы, Lambda - serverless функции для выполнения кода."
+      "options": [
+        "VPC",
+        "CloudWatch",
+        "S3",
+        "EC2",
+        "Lambda"
+      ],
+      "correct": [
+        "EC2",
+        "Lambda"
+      ],
+      "explanation": "EC2 (Elastic Compute Cloud) и Lambda - вычислительные сервисы. EC2 предоставляет виртуальные серверы, Lambda - serverless функции для выполнения кода.",
+      "multiSelect": true
     },
     {
       "id": "aws_10",
       "category": "aws",
       "question": "Ваша компания разрабатывает новое приложение для хранения и извлечения фотографий и видео. Какой сервис вы бы рекомендовали?",
-      "options": ["EBS", "SQS", "S3", "Instance Store"],
+      "options": [
+        "EBS",
+        "SQS",
+        "S3",
+        "Instance Store"
+      ],
       "correct": "S3",
       "explanation": "Amazon S3 (Simple Storage Service) - объектное хранилище для любых типов файлов. Идеально для хранения медиафайлов, обеспечивает 99.999999999% (11 девяток) надежности."
     },
@@ -601,7 +723,12 @@
       "id": "aws_12",
       "category": "aws",
       "question": "В локальной среде вы можете создать столько виртуальных серверов, сколько нужно, используя один шаблон. Что можно использовать для этого в AWS?",
-      "options": ["IAM", "Internet gateway", "EBS Snapshot", "AMI"],
+      "options": [
+        "IAM",
+        "Internet gateway",
+        "EBS Snapshot",
+        "AMI"
+      ],
       "correct": "AMI",
       "explanation": "AMI (Amazon Machine Image) - это шаблон, содержащий ОС, приложения и конфигурацию. Из одного AMI можно создать множество идентичных EC2 инстансов."
     },
@@ -616,8 +743,12 @@
         "Виртуализированные вычислительные ресурсы",
         "Выделенный хостинг"
       ],
-      "correct": "Устранение единых точек отказа (SPOF)",
-      "explanation": "Облака обеспечивают: 1) Устранение SPOF - ресурсы распределены между несколькими дата-центрами, 2) Распределенную инфраструктуру - данные реплицируются в разных зонах."
+      "correct": [
+        "Устранение единых точек отказа (SPOF)",
+        "Распределенная инфраструктура"
+      ],
+      "explanation": "Облака обеспечивают: 1) Устранение SPOF - ресурсы распределены между несколькими дата-центрами, 2) Распределенную инфраструктуру - данные реплицируются в разных зонах.",
+      "multiSelect": true
     },
     {
       "id": "aws_14",
@@ -636,15 +767,30 @@
       "id": "aws_15",
       "category": "aws",
       "question": "Где можно хранить файлы в AWS? (Выберите ДВА)",
-      "options": ["Amazon EFS", "Amazon SNS", "Amazon EBS", "Amazon ECS", "Amazon EMR"],
-      "correct": "Amazon EFS",
-      "explanation": "Amazon EFS (Elastic File System) - файловое хранилище для EC2. Amazon EBS (Elastic Block Store) - блочное хранилище для EC2 инстансов."
+      "options": [
+        "Amazon EFS",
+        "Amazon SNS",
+        "Amazon EBS",
+        "Amazon ECS",
+        "Amazon EMR"
+      ],
+      "correct": [
+        "Amazon EFS",
+        "Amazon EBS"
+      ],
+      "explanation": "Amazon EFS (Elastic File System) - файловое хранилище для EC2. Amazon EBS (Elastic Block Store) - блочное хранилище для EC2 инстансов.",
+      "multiSelect": true
     },
     {
       "id": "aws_16",
       "category": "aws",
       "question": "Какая основная служба хранения используется экземплярами базы данных Amazon RDS?",
-      "options": ["Amazon Glacier", "Amazon EBS", "Amazon EFS", "Amazon S3"],
+      "options": [
+        "Amazon Glacier",
+        "Amazon EBS",
+        "Amazon EFS",
+        "Amazon S3"
+      ],
       "correct": "Amazon EBS",
       "explanation": "Amazon RDS использует EBS для хранения данных базы данных. EBS предоставляет высокопроизводительное блочное хранилище с автоматическим резервным копированием."
     },
@@ -652,7 +798,12 @@
       "id": "aws_17",
       "category": "aws",
       "question": "Использование Amazon EC2 попадает под какую модель облачных вычислений?",
-      "options": ["IaaS & SaaS", "IaaS", "SaaS", "PaaS"],
+      "options": [
+        "IaaS & SaaS",
+        "IaaS",
+        "SaaS",
+        "PaaS"
+      ],
       "correct": "IaaS",
       "explanation": "Amazon EC2 - это Infrastructure as a Service. Вы получаете виртуальные серверы, но управляете ОС, приложениями и данными самостоятельно."
     },
@@ -680,18 +831,26 @@
         "Количество сегментов",
         "Количество частных IP-адресов"
       ],
-      "correct": "Тип экземпляра",
-      "explanation": "Цена EC2 зависит от: 1) Типа инстанса (t2.micro дешевле m5.xlarge), 2) Зоны доступности (в разных регионах разные цены)."
+      "correct": [
+        "Тип экземпляра",
+        "Зона доступности, в которой находится экземпляр"
+      ],
+      "explanation": "Цена EC2 зависит от: 1) Типа инстанса (t2.micro дешевле m5.xlarge), 2) Зоны доступности (в разных регионах разные цены).",
+      "multiSelect": true
     },
     {
       "id": "aws_20",
       "category": "aws",
       "question": "Какой сервис AWS используется для управления разрешениями пользователей?",
-      "options": ["Security Groups", "Amazon ECS", "AWS IAM", "AWS Support"],
+      "options": [
+        "Security Groups",
+        "Amazon ECS",
+        "AWS IAM",
+        "AWS Support"
+      ],
       "correct": "AWS IAM",
       "explanation": "AWS IAM (Identity and Access Management) управляет доступом пользователей и сервисов к ресурсам AWS. Позволяет создавать пользователей, группы, роли и политики."
     },
-    
     {
       "id": "docker_1",
       "category": "docker",
@@ -787,7 +946,10 @@
       "id": "docker_8",
       "category": "docker",
       "question": "Верно ли утверждение: Dockerfile — файл-инструкция для сборки образа.",
-      "options": ["Верно", "Неверно"],
+      "options": [
+        "Верно",
+        "Неверно"
+      ],
       "correct": "Верно",
       "explanation": "Dockerfile - текстовый файл с командами для создания Docker образа. Каждая команда создает новый слой в образе."
     },

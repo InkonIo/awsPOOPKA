@@ -177,6 +177,12 @@ function shuffleArray(array) {
 function loadQuestion() {
     const question = currentQuestions[currentQuestionIndex];
     const answered = userAnswers[currentQuestionIndex] !== null;
+    const isMultiSelect = question.multiSelect === true;
+    
+    // Reset selected options for new question
+    if (!answered) {
+        selectedOptions = [];
+    }
     
     // Update progress
     const progress = ((currentQuestionIndex) / currentQuestions.length) * 100;
@@ -184,16 +190,28 @@ function loadQuestion() {
     elements.currentQuestion.textContent = currentQuestionIndex + 1;
     
     // Update category badge
-    elements.questionCategory.textContent = categoryNames[question.category] || question.category;
+    let categoryText = categoryNames[question.category] || question.category;
+    if (isMultiSelect) {
+        const correctCount = Array.isArray(question.correct) ? question.correct.length : 1;
+        categoryText += ` 📌 Выберите ${correctCount}`;
+    }
+    elements.questionCategory.textContent = categoryText;
     
     // Update question text
     elements.questionText.textContent = question.question;
     
     // Render options
     elements.optionsContainer.innerHTML = '';
+    
+    // Get correct answers as array
+    const correctAnswers = Array.isArray(question.correct) ? question.correct : [question.correct];
+    
     question.options.forEach((option, index) => {
         const optionEl = document.createElement('div');
         optionEl.className = 'option';
+        if (isMultiSelect) {
+            optionEl.classList.add('multi-select');
+        }
         optionEl.textContent = option;
         optionEl.dataset.option = option;
         
@@ -201,13 +219,15 @@ function loadQuestion() {
         if (answered) {
             optionEl.classList.add('disabled');
             const userAnswer = userAnswers[currentQuestionIndex];
-            if (option === question.correct) {
+            const userAnswerArray = Array.isArray(userAnswer.answer) ? userAnswer.answer : [userAnswer.answer];
+            
+            if (correctAnswers.includes(option)) {
                 optionEl.classList.add('correct');
-            } else if (option === userAnswer.answer) {
+            } else if (userAnswerArray.includes(option)) {
                 optionEl.classList.add('incorrect');
             }
         } else {
-            optionEl.addEventListener('click', () => selectOption(optionEl, option));
+            optionEl.addEventListener('click', () => selectOption(optionEl, option, isMultiSelect));
         }
         
         elements.optionsContainer.appendChild(optionEl);
@@ -236,39 +256,79 @@ function loadQuestion() {
     }
 }
 
-// Select Option
+// Select Option - supports both single and multi-select
 let selectedOption = null;
+let selectedOptions = [];
 
-function selectOption(optionEl, option) {
-    // Remove previous selection
-    document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+function selectOption(optionEl, option, isMultiSelect = false) {
+    const question = currentQuestions[currentQuestionIndex];
+    const requiredCount = Array.isArray(question.correct) ? question.correct.length : 1;
     
-    // Select new option
-    optionEl.classList.add('selected');
-    selectedOption = option;
-    elements.checkAnswerBtn.disabled = false;
+    if (isMultiSelect) {
+        // Multi-select mode
+        const optionIndex = selectedOptions.indexOf(option);
+        
+        if (optionIndex > -1) {
+            // Deselect if already selected
+            selectedOptions.splice(optionIndex, 1);
+            optionEl.classList.remove('selected');
+        } else {
+            // Select new option (limit to required count)
+            if (selectedOptions.length < requiredCount) {
+                selectedOptions.push(option);
+                optionEl.classList.add('selected');
+            } else {
+                // Replace oldest selection
+                const oldestOption = selectedOptions.shift();
+                document.querySelectorAll('.option').forEach(opt => {
+                    if (opt.dataset.option === oldestOption) {
+                        opt.classList.remove('selected');
+                    }
+                });
+                selectedOptions.push(option);
+                optionEl.classList.add('selected');
+            }
+        }
+        
+        // Enable check button when required selections made
+        elements.checkAnswerBtn.disabled = selectedOptions.length !== requiredCount;
+        
+        // Also update selectedOption for compatibility
+        selectedOption = selectedOptions.length > 0 ? selectedOptions : null;
+    } else {
+        // Single select mode (original behavior)
+        document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+        optionEl.classList.add('selected');
+        selectedOption = option;
+        selectedOptions = [option];
+        elements.checkAnswerBtn.disabled = false;
+    }
 }
 
 // Check Answer
 elements.checkAnswerBtn.addEventListener('click', async () => {
-    if (!selectedOption) return;
+    const question = currentQuestions[currentQuestionIndex];
+    const isMultiSelect = question.multiSelect === true;
+    const answerToSend = isMultiSelect ? selectedOptions : selectedOption;
+    
+    if (!answerToSend || (Array.isArray(answerToSend) && answerToSend.length === 0)) return;
     
     try {
         showLoading();
-        const question = currentQuestions[currentQuestionIndex];
         
         const result = await apiCall('/academo/check', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 questionId: question.id,
-                answer: selectedOption
+                answer: answerToSend,
+                isMultiSelect: isMultiSelect
             })
         });
         
         // Save answer
         userAnswers[currentQuestionIndex] = {
-            answer: selectedOption,
+            answer: answerToSend,
             correct: result.correct,
             correctAnswer: result.correctAnswer,
             explanation: result.explanation
@@ -292,11 +352,14 @@ elements.checkAnswerBtn.addEventListener('click', async () => {
         elements.nextQuestionBtn.classList.remove('hidden');
         
         // Highlight options
+        const correctAnswers = Array.isArray(result.correctAnswer) ? result.correctAnswer : [result.correctAnswer];
+        const userAnswerArray = Array.isArray(answerToSend) ? answerToSend : [answerToSend];
+        
         document.querySelectorAll('.option').forEach(opt => {
             opt.classList.add('disabled');
-            if (opt.dataset.option === result.correctAnswer) {
+            if (correctAnswers.includes(opt.dataset.option)) {
                 opt.classList.add('correct');
-            } else if (opt.dataset.option === selectedOption) {
+            } else if (userAnswerArray.includes(opt.dataset.option)) {
                 opt.classList.add('incorrect');
             }
         });
@@ -311,10 +374,18 @@ elements.checkAnswerBtn.addEventListener('click', async () => {
 function showResult(answerData) {
     const isCorrect = answerData.correct;
     
+    // Format correct answer(s) for display
+    let correctAnswerText;
+    if (Array.isArray(answerData.correctAnswer)) {
+        correctAnswerText = answerData.correctAnswer.map((a, i) => `${i + 1}. ${a}`).join('<br>');
+    } else {
+        correctAnswerText = answerData.correctAnswer;
+    }
+    
     elements.resultContainer.className = `result-container ${isCorrect ? 'result-correct' : 'result-incorrect'}`;
     elements.resultContainer.innerHTML = `
         <h4>${isCorrect ? '✅ Правильно!' : '❌ Неправильно'}</h4>
-        <p><strong>Правильный ответ:</strong> ${answerData.correctAnswer}</p>
+        <p><strong>Правильный ответ:</strong><br>${correctAnswerText}</p>
         <p>${answerData.explanation}</p>
     `;
     elements.resultContainer.classList.remove('hidden');

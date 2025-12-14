@@ -362,3 +362,61 @@
         flex-direction: column;
     }
 }
+
+/* Multi-Select Styles */
+.option.multi-select {
+    position: relative;
+    padding-left: 45px;
+}
+
+.option.multi-select::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid #cbd5e0;
+    border-radius: 4px;
+    background: white;
+    transition: all 0.2s ease;
+}
+
+.option.multi-select.selected::before {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-color: #667eea;
+}
+
+.option.multi-select.selected::after {
+    content: '✓';
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.option.multi-select.correct::before {
+    background: #48bb78;
+    border-color: #48bb78;
+}
+
+.option.multi-select.incorrect::before {
+    background: #f56565;
+    border-color: #f56565;
+}
+
+/* Badge for multi-select hint */
+.question-category {
+    display: inline-block;
+    padding: 8px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
