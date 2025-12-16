@@ -58,7 +58,8 @@ const categoryNames = {
     'cloud_basics': '☁️ Основы облаков',
     'aws': '🚀 AWS Сервисы',
     'aws_storage': '💾 AWS Storage',
-    'docker': '🐳 Docker'
+    'docker': '🐳 Docker',
+    'terms': '📖 Термины'
 };
 
 // Utility Functions

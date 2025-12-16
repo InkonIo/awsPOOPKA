@@ -2272,6 +2272,1160 @@
       ],
       "correct": "Reserved Instances",
       "explanation": "Для стабильных долгосрочных нагрузок (production DB 24/7) Reserved Instances дают до 75% экономии при обязательстве на 1-3 года."
+    },
+    {
+      "id": "exam_management_console_1",
+      "category": "aws",
+      "question": "AWS позволяет пользователям управлять своими ресурсами через веб-интерфейс. Как называется этот интерфейс?",
+      "options": [
+        "AWS CLI",
+        "AWS API",
+        "AWS SDK",
+        "AWS Management Console"
+      ],
+      "correct": "AWS Management Console",
+      "explanation": "AWS Management Console — это веб-интерфейс для управления ресурсами AWS. CLI — командная строка, SDK — библиотеки для разработчиков, API — программный интерфейс."
+    },
+    {
+      "id": "exam_aws_benefits_1",
+      "category": "cloud_basics",
+      "question": "Каковы преимущества размещения инфраструктуры в AWS? (Выберите ДВА)",
+      "options": [
+        "Повышение скорости и гибкости",
+        "Отсутствие необходимости беспокоиться о безопасности",
+        "Полный контроль над физической инфраструктурой",
+        "Управление приложениями от имени клиентов",
+        "Физическая безопасность и безопасность данных обеспечиваются AWS"
+      ],
+      "correct": [
+        "Повышение скорости и гибкости",
+        "Физическая безопасность и безопасность данных обеспечиваются AWS"
+      ],
+      "explanation": "AWS обеспечивает: 1) скорость и гибкость развертывания, 2) физическую безопасность дата-центров. Но клиент всё ещё отвечает за безопасность своих данных (Shared Responsibility Model).",
+      "multiSelect": true
+    },
+    {
+      "id": "exam_route53_dns_1",
+      "category": "aws",
+      "question": "Какой сервис предоставляет DNS в AWS?",
+      "options": [
+        "Route 53",
+        "AWS Config",
+        "Amazon CloudFront",
+        "Amazon EMR"
+      ],
+      "correct": "Route 53",
+      "explanation": "Route 53 — DNS сервис AWS (порт 53). CloudFront — CDN, Config — отслеживание конфигураций, EMR — обработка больших данных."
+    },
+    {
+      "id": "exam_dynamodb_nosql_1",
+      "category": "aws",
+      "question": "У вашей компании есть приложение для хранения данных, которому требуется доступ к базе данных NoSQL. Какое предложение AWS соответствует этому требованию?",
+      "options": [
+        "Amazon Aurora",
+        "Amazon DynamoDB",
+        "Amazon EBS",
+        "Amazon Redshift"
+      ],
+      "correct": "Amazon DynamoDB",
+      "explanation": "DynamoDB — NoSQL база данных AWS. Aurora — реляционная БД, EBS — блочное хранилище, Redshift — хранилище для аналитики."
+    },
+    {
+      "id": "exam_cloudfront_streaming_1",
+      "category": "aws",
+      "question": "Компания планирует разместить образовательный сайт на AWS. Видеокурсы будут транслироваться по всему миру. Какой сервис поможет достичь высокой скорости передачи?",
+      "options": [
+        "Amazon SNS",
+        "Amazon Kinesis Video Streams",
+        "AWS CloudFormation",
+        "Amazon CloudFront"
+      ],
+      "correct": "Amazon CloudFront",
+      "explanation": "CloudFront — CDN для быстрой доставки контента по всему миру через edge locations. SNS — уведомления, Kinesis — обработка потоков, CloudFormation — IaC."
+    },
+    {
+      "id": "exam_cloudformation_iac_1",
+      "category": "aws",
+      "question": "Какой сервис позволяет управлять инфраструктурой как кодом?",
+      "options": [
+        "AWS CloudFormation",
+        "AWS Config",
+        "Amazon SES",
+        "Amazon EMR"
+      ],
+      "correct": "AWS CloudFormation",
+      "explanation": "CloudFormation — Infrastructure as Code (IaC). Config — отслеживание изменений, SES — email сервис, EMR — обработка больших данных."
+    },
+    {
+      "id": "exam_trusted_advisor_1",
+      "category": "aws",
+      "question": "Ваша компания разрабатывает критически важное веб-приложение, и безопасность является главным приоритетом. Какой сервис предоставит рекомендации по оптимизации безопасности?",
+      "options": [
+        "AWS Shield",
+        "AWS Management Console",
+        "AWS Secrets Manager",
+        "AWS Trusted Advisor"
+      ],
+      "correct": "AWS Trusted Advisor",
+      "explanation": "Trusted Advisor даёт рекомендации по 5 категориям: безопасность, производительность, стоимость, отказоустойчивость, лимиты. Shield — защита от DDoS."
+    },
+    {
+      "id": "exam_best_practice_1",
+      "category": "cloud_basics",
+      "question": "Лучшая практика при проектировании решений в AWS:",
+      "options": [
+        "Инвестировать много заранее",
+        "Использовать резервации для тестов",
+        "Автоматизировать всё возможное",
+        "Всегда брать больше мощности"
+      ],
+      "correct": "Автоматизировать всё возможное",
+      "explanation": "Автоматизация — ключевой принцип AWS. Это снижает ошибки, ускоряет развертывание и обеспечивает повторяемость. Не нужно инвестировать заранее — pay-as-you-go."
+    },
+    {
+      "id": "exam_compute_services_1",
+      "category": "aws",
+      "question": "Какие из следующих сервисов AWS можно использовать в качестве вычислительного ресурса? (Выберите ДВА)",
+      "options": [
+        "VPC",
+        "CloudWatch",
+        "S3",
+        "EC2",
+        "Lambda"
+      ],
+      "correct": [
+        "EC2",
+        "Lambda"
+      ],
+      "explanation": "EC2 — виртуальные серверы, Lambda — serverless вычисления. VPC — сеть, CloudWatch — мониторинг, S3 — хранилище (не compute).",
+      "multiSelect": true
+    },
+    {
+      "id": "exam_s3_media_storage_1",
+      "category": "aws_storage",
+      "question": "Ваша компания разрабатывает приложение для хранения и извлечения фотографий и видео. Какой сервис рекомендуется в качестве базового механизма хранения?",
+      "options": [
+        "EBS",
+        "SQS",
+        "S3",
+        "Instance Store"
+      ],
+      "correct": "S3",
+      "explanation": "S3 — объектное хранилище, идеально для медиафайлов. Неограниченная масштабируемость, высокая durability. EBS — для дисков EC2, SQS — очереди, Instance Store — временное хранилище."
+    },
+    {
+      "id": "exam_style_iam_1",
+      "category": "aws",
+      "question": "Какой сервис AWS используется для управления пользователями и их доступом к ресурсам?",
+      "options": [
+        "Amazon Cognito",
+        "AWS IAM",
+        "AWS Shield",
+        "AWS KMS"
+      ],
+      "correct": "AWS IAM",
+      "explanation": "IAM (Identity and Access Management) — управление пользователями, группами, ролями и политиками доступа. Cognito — для аутентификации в приложениях."
+    },
+    {
+      "id": "exam_style_shield_1",
+      "category": "aws",
+      "question": "Какой сервис AWS обеспечивает защиту от DDoS-атак?",
+      "options": [
+        "AWS WAF",
+        "AWS Shield",
+        "AWS Trusted Advisor",
+        "Amazon GuardDuty"
+      ],
+      "correct": "AWS Shield",
+      "explanation": "AWS Shield — защита от DDoS. Standard бесплатный, Advanced платный с расширенной защитой. WAF — файрвол для веб-приложений."
+    },
+    {
+      "id": "exam_style_rds_1",
+      "category": "aws",
+      "question": "Компании нужна managed реляционная база данных MySQL. Какой сервис выбрать?",
+      "options": [
+        "Amazon DynamoDB",
+        "Amazon RDS",
+        "Amazon Redshift",
+        "Amazon ElastiCache"
+      ],
+      "correct": "Amazon RDS",
+      "explanation": "RDS — managed реляционные БД (MySQL, PostgreSQL, Oracle, SQL Server, MariaDB, Aurora). DynamoDB — NoSQL, Redshift — аналитика, ElastiCache — кэширование."
+    },
+    {
+      "id": "exam_style_elb_1",
+      "category": "aws",
+      "question": "Какой сервис распределяет входящий трафик между несколькими EC2 инстансами?",
+      "options": [
+        "Amazon Route 53",
+        "Elastic Load Balancing",
+        "Amazon CloudFront",
+        "AWS Direct Connect"
+      ],
+      "correct": "Elastic Load Balancing",
+      "explanation": "ELB распределяет трафик между EC2 для отказоустойчивости и масштабируемости. Route 53 — DNS, CloudFront — CDN, Direct Connect — выделенное соединение."
+    },
+    {
+      "id": "exam_style_cloudtrail_1",
+      "category": "aws",
+      "question": "Какой сервис записывает все API вызовы в вашем AWS аккаунте для аудита?",
+      "options": [
+        "Amazon CloudWatch",
+        "AWS CloudTrail",
+        "AWS Config",
+        "AWS Trusted Advisor"
+      ],
+      "correct": "AWS CloudTrail",
+      "explanation": "CloudTrail — аудит API вызовов (кто, что, когда сделал). CloudWatch — метрики и логи, Config — отслеживание конфигураций ресурсов."
+    },
+    {
+      "id": "exam_style_sqs_1",
+      "category": "aws",
+      "question": "Какой сервис AWS используется для организации очередей сообщений между компонентами приложения?",
+      "options": [
+        "Amazon SNS",
+        "Amazon SQS",
+        "Amazon SES",
+        "AWS Step Functions"
+      ],
+      "correct": "Amazon SQS",
+      "explanation": "SQS (Simple Queue Service) — очереди сообщений для асинхронной связи. SNS — pub/sub уведомления, SES — email, Step Functions — оркестрация."
+    },
+    {
+      "id": "exam_style_glacier_1",
+      "category": "aws_storage",
+      "question": "Компания хочет архивировать данные с минимальной стоимостью. Доступ к данным нужен редко. Какой сервис выбрать?",
+      "options": [
+        "Amazon S3 Standard",
+        "Amazon S3 Glacier",
+        "Amazon EBS",
+        "Amazon EFS"
+      ],
+      "correct": "Amazon S3 Glacier",
+      "explanation": "S3 Glacier — дешевое архивное хранение для редко используемых данных. Восстановление занимает минуты-часы. Standard — для частого доступа."
+    },
+    {
+      "id": "exam_style_auto_scaling_1",
+      "category": "aws",
+      "question": "Какой сервис автоматически добавляет или удаляет EC2 инстансы в зависимости от нагрузки?",
+      "options": [
+        "Elastic Load Balancing",
+        "Amazon EC2 Auto Scaling",
+        "AWS Lambda",
+        "Amazon CloudWatch"
+      ],
+      "correct": "Amazon EC2 Auto Scaling",
+      "explanation": "Auto Scaling автоматически масштабирует количество EC2 по метрикам (CPU, память). ELB — балансировка, Lambda — serverless, CloudWatch — мониторинг."
+    },
+    {
+      "id": "exam_style_kms_1",
+      "category": "aws",
+      "question": "Какой сервис AWS используется для создания и управления ключами шифрования?",
+      "options": [
+        "AWS IAM",
+        "AWS KMS",
+        "AWS Secrets Manager",
+        "AWS Certificate Manager"
+      ],
+      "correct": "AWS KMS",
+      "explanation": "KMS (Key Management Service) — создание и управление ключами шифрования. Secrets Manager — хранение секретов, Certificate Manager — SSL сертификаты."
+    },
+    {
+      "id": "exam_style_budgets_1",
+      "category": "aws",
+      "question": "Какой сервис позволяет установить бюджет и получать алерты при превышении затрат?",
+      "options": [
+        "AWS Cost Explorer",
+        "AWS Budgets",
+        "AWS Trusted Advisor",
+        "AWS Pricing Calculator"
+      ],
+      "correct": "AWS Budgets",
+      "explanation": "AWS Budgets — установка бюджетов и алертов. Cost Explorer — анализ затрат, Trusted Advisor — рекомендации, Pricing Calculator — оценка стоимости."
+    },
+    {
+      "id": "term_ec2",
+      "category": "terms",
+      "question": "Что такое Amazon EC2?",
+      "options": [
+        "Виртуальные серверы в облаке",
+        "База данных",
+        "Хранилище файлов",
+        "DNS сервис"
+      ],
+      "correct": "Виртуальные серверы в облаке",
+      "explanation": "Amazon EC2 (Elastic Compute Cloud) — виртуальные серверы в облаке. Можно выбрать ОС, CPU, память, диск. Оплата по использованию."
+    },
+    {
+      "id": "term_lambda",
+      "category": "terms",
+      "question": "Что такое AWS Lambda?",
+      "options": [
+        "Виртуальные серверы",
+        "Serverless — запуск кода без управления серверами",
+        "База данных",
+        "CDN сервис"
+      ],
+      "correct": "Serverless — запуск кода без управления серверами",
+      "explanation": "AWS Lambda — serverless вычисления. Загружаете код, он запускается по событиям. Платите только за время выполнения (миллисекунды)."
+    },
+    {
+      "id": "term_elastic_beanstalk",
+      "category": "terms",
+      "question": "Что такое AWS Elastic Beanstalk?",
+      "options": [
+        "Балансировщик нагрузки",
+        "Автоматическое развертывание и управление приложениями",
+        "База данных",
+        "Хранилище"
+      ],
+      "correct": "Автоматическое развертывание и управление приложениями",
+      "explanation": "Elastic Beanstalk — PaaS сервис. Загружаете код, AWS автоматически настраивает EC2, балансировщик, Auto Scaling. Поддерживает Java, Python, Node.js, Docker."
+    },
+    {
+      "id": "term_auto_scaling",
+      "category": "terms",
+      "question": "Что такое Amazon EC2 Auto Scaling?",
+      "options": [
+        "Ручное добавление серверов",
+        "Автоматическое масштабирование количества EC2 по нагрузке",
+        "Балансировка трафика",
+        "Мониторинг"
+      ],
+      "correct": "Автоматическое масштабирование количества EC2 по нагрузке",
+      "explanation": "Auto Scaling автоматически добавляет/удаляет EC2 инстансы по метрикам (CPU, память). Обеспечивает производительность и экономию."
+    },
+    {
+      "id": "term_ecs",
+      "category": "terms",
+      "question": "Что такое Amazon ECS?",
+      "options": [
+        "Email сервис",
+        "Сервис для запуска Docker контейнеров",
+        "База данных",
+        "DNS сервис"
+      ],
+      "correct": "Сервис для запуска Docker контейнеров",
+      "explanation": "Amazon ECS (Elastic Container Service) — managed сервис для запуска Docker контейнеров. Интегрируется с ELB, IAM, CloudWatch."
+    },
+    {
+      "id": "term_eks",
+      "category": "terms",
+      "question": "Что такое Amazon EKS?",
+      "options": [
+        "Email сервис",
+        "Managed Kubernetes",
+        "Хранилище",
+        "DNS"
+      ],
+      "correct": "Managed Kubernetes",
+      "explanation": "Amazon EKS (Elastic Kubernetes Service) — managed Kubernetes. AWS управляет control plane, вы управляете worker nodes."
+    },
+    {
+      "id": "term_ecr",
+      "category": "terms",
+      "question": "Что такое Amazon ECR?",
+      "options": [
+        "Реестр для хранения Docker образов",
+        "База данных",
+        "Email сервис",
+        "Вычислительный сервис"
+      ],
+      "correct": "Реестр для хранения Docker образов",
+      "explanation": "Amazon ECR (Elastic Container Registry) — managed Docker registry. Храните, управляйте и деплойте Docker образы. Интегрируется с ECS/EKS."
+    },
+    {
+      "id": "term_fargate",
+      "category": "terms",
+      "question": "Что такое AWS Fargate?",
+      "options": [
+        "Serverless запуск контейнеров без управления серверами",
+        "База данных",
+        "Хранилище",
+        "DNS"
+      ],
+      "correct": "Serverless запуск контейнеров без управления серверами",
+      "explanation": "AWS Fargate — serverless compute для контейнеров. Не нужно управлять EC2. Работает с ECS и EKS. Платите за ресурсы контейнера."
+    },
+    {
+      "id": "term_s3",
+      "category": "terms",
+      "question": "Что такое Amazon S3?",
+      "options": [
+        "Объектное хранилище для файлов, изображений, видео",
+        "Блочное хранилище",
+        "База данных",
+        "Вычислительный сервис"
+      ],
+      "correct": "Объектное хранилище для файлов, изображений, видео",
+      "explanation": "Amazon S3 (Simple Storage Service) — объектное хранилище. Хранит файлы любого типа. Durability 99.999999999% (11 девяток). Неограниченный объем."
+    },
+    {
+      "id": "term_s3_glacier",
+      "category": "terms",
+      "question": "Что такое Amazon S3 Glacier?",
+      "options": [
+        "Быстрое хранилище",
+        "Дешевое архивное хранилище для редко используемых данных",
+        "База данных",
+        "CDN"
+      ],
+      "correct": "Дешевое архивное хранилище для редко используемых данных",
+      "explanation": "S3 Glacier — архивное хранилище. Очень дешевое, но восстановление занимает минуты-часы. Для бэкапов, архивов, compliance данных."
+    },
+    {
+      "id": "term_ebs",
+      "category": "terms",
+      "question": "Что такое Amazon EBS?",
+      "options": [
+        "Объектное хранилище",
+        "Блочное хранилище (диски) для EC2",
+        "Файловое хранилище",
+        "Архивное хранилище"
+      ],
+      "correct": "Блочное хранилище (диски) для EC2",
+      "explanation": "Amazon EBS (Elastic Block Store) — блочные диски для EC2. Как жесткий диск. Сохраняются после остановки EC2. Поддерживает snapshots."
+    },
+    {
+      "id": "term_efs",
+      "category": "terms",
+      "question": "Что такое Amazon EFS?",
+      "options": [
+        "Блочное хранилище",
+        "Сетевая файловая система для Linux (NFS)",
+        "Объектное хранилище",
+        "Архив"
+      ],
+      "correct": "Сетевая файловая система для Linux (NFS)",
+      "explanation": "Amazon EFS (Elastic File System) — managed NFS. Может монтироваться к нескольким EC2 одновременно. Автоматически масштабируется."
+    },
+    {
+      "id": "term_rds",
+      "category": "terms",
+      "question": "Что такое Amazon RDS?",
+      "options": [
+        "NoSQL база данных",
+        "Managed реляционные базы данных (MySQL, PostgreSQL)",
+        "Хранилище файлов",
+        "Кэш"
+      ],
+      "correct": "Managed реляционные базы данных (MySQL, PostgreSQL)",
+      "explanation": "Amazon RDS (Relational Database Service) — managed реляционные БД. Поддерживает MySQL, PostgreSQL, Oracle, SQL Server, MariaDB, Aurora."
+    },
+    {
+      "id": "term_dynamodb",
+      "category": "terms",
+      "question": "Что такое Amazon DynamoDB?",
+      "options": [
+        "Реляционная БД",
+        "NoSQL база данных ключ-значение",
+        "Хранилище файлов",
+        "Аналитика"
+      ],
+      "correct": "NoSQL база данных ключ-значение",
+      "explanation": "DynamoDB — managed NoSQL БД. Высокая производительность, автомасштабирование, миллисекундные ответы. Для игр, IoT, мобильных приложений."
+    },
+    {
+      "id": "term_redshift",
+      "category": "terms",
+      "question": "Что такое Amazon Redshift?",
+      "options": [
+        "NoSQL база",
+        "Хранилище данных для аналитики (Data Warehouse)",
+        "Кэш",
+        "Очередь сообщений"
+      ],
+      "correct": "Хранилище данных для аналитики (Data Warehouse)",
+      "explanation": "Amazon Redshift — облачное хранилище данных (Data Warehouse). Для аналитики петабайтов данных. SQL запросы. В 10 раз быстрее обычных DW."
+    },
+    {
+      "id": "term_aurora",
+      "category": "terms",
+      "question": "Что такое Amazon Aurora?",
+      "options": [
+        "NoSQL база",
+        "Высокопроизводительная реляционная БД от AWS",
+        "Кэш",
+        "Хранилище"
+      ],
+      "correct": "Высокопроизводительная реляционная БД от AWS",
+      "explanation": "Aurora — реляционная БД от AWS. В 5 раз быстрее MySQL, в 3 раза быстрее PostgreSQL. Совместима с MySQL и PostgreSQL. Автомасштабирование."
+    },
+    {
+      "id": "term_elasticache",
+      "category": "terms",
+      "question": "Что такое Amazon ElastiCache?",
+      "options": [
+        "Managed кэш в памяти (Redis, Memcached)",
+        "База данных",
+        "Хранилище",
+        "CDN"
+      ],
+      "correct": "Managed кэш в памяти (Redis, Memcached)",
+      "explanation": "ElastiCache — managed in-memory кэш. Поддерживает Redis и Memcached. Ускоряет приложения за счет кэширования данных в памяти."
+    },
+    {
+      "id": "term_iam",
+      "category": "terms",
+      "question": "Что такое AWS IAM?",
+      "options": [
+        "Управление пользователями, группами и доступом к ресурсам",
+        "Защита от DDoS",
+        "Шифрование",
+        "Мониторинг"
+      ],
+      "correct": "Управление пользователями, группами и доступом к ресурсам",
+      "explanation": "IAM (Identity and Access Management) — управление доступом. Создание пользователей, групп, ролей, политик. Кто и что может делать в AWS."
+    },
+    {
+      "id": "term_cognito",
+      "category": "terms",
+      "question": "Что такое Amazon Cognito?",
+      "options": [
+        "Аутентификация пользователей для веб и мобильных приложений",
+        "База данных",
+        "CDN",
+        "DNS"
+      ],
+      "correct": "Аутентификация пользователей для веб и мобильных приложений",
+      "explanation": "Cognito — аутентификация для приложений. User pools (регистрация/вход), Identity pools (доступ к AWS ресурсам). Поддерживает Google, Facebook, SAML."
+    },
+    {
+      "id": "term_shield",
+      "category": "terms",
+      "question": "Что такое AWS Shield?",
+      "options": [
+        "Файрвол",
+        "Защита от DDoS атак",
+        "Антивирус",
+        "Шифрование"
+      ],
+      "correct": "Защита от DDoS атак",
+      "explanation": "AWS Shield — защита от DDoS. Standard (бесплатный) защищает от типичных атак. Advanced (платный) — расширенная защита, поддержка 24/7."
+    },
+    {
+      "id": "term_waf",
+      "category": "terms",
+      "question": "Что такое AWS WAF?",
+      "options": [
+        "Защита от DDoS",
+        "Web Application Firewall — защита веб-приложений",
+        "Антивирус",
+        "VPN"
+      ],
+      "correct": "Web Application Firewall — защита веб-приложений",
+      "explanation": "AWS WAF — файрвол для веб-приложений. Защищает от SQL injection, XSS, ботов. Работает с CloudFront, ALB, API Gateway."
+    },
+    {
+      "id": "term_kms",
+      "category": "terms",
+      "question": "Что такое AWS KMS?",
+      "options": [
+        "Управление ключами шифрования",
+        "База данных",
+        "Мониторинг",
+        "DNS"
+      ],
+      "correct": "Управление ключами шифрования",
+      "explanation": "KMS (Key Management Service) — создание и управление ключами шифрования. Интегрируется с S3, EBS, RDS для шифрования данных."
+    },
+    {
+      "id": "term_secrets_manager",
+      "category": "terms",
+      "question": "Что такое AWS Secrets Manager?",
+      "options": [
+        "Хранение и ротация секретов (паролей, ключей API)",
+        "Шифрование дисков",
+        "Управление пользователями",
+        "Мониторинг"
+      ],
+      "correct": "Хранение и ротация секретов (паролей, ключей API)",
+      "explanation": "Secrets Manager — безопасное хранение секретов. Автоматическая ротация паролей БД. Не храните пароли в коде — используйте Secrets Manager."
+    },
+    {
+      "id": "term_artifact",
+      "category": "terms",
+      "question": "Что такое AWS Artifact?",
+      "options": [
+        "CI/CD сервис",
+        "Доступ к отчетам по compliance и безопасности AWS",
+        "Хранилище артефактов",
+        "Мониторинг"
+      ],
+      "correct": "Доступ к отчетам по compliance и безопасности AWS",
+      "explanation": "AWS Artifact — портал с отчетами по compliance (SOC, PCI, ISO). Для аудиторов и compliance требований вашей компании."
+    },
+    {
+      "id": "term_vpc",
+      "category": "terms",
+      "question": "Что такое Amazon VPC?",
+      "options": [
+        "Виртуальный процессор",
+        "Изолированная виртуальная сеть в AWS",
+        "VPN сервис",
+        "CDN"
+      ],
+      "correct": "Изолированная виртуальная сеть в AWS",
+      "explanation": "VPC (Virtual Private Cloud) — ваша изолированная сеть в AWS. Контролируете IP-адреса, подсети, маршрутизацию, security groups."
+    },
+    {
+      "id": "term_route53",
+      "category": "terms",
+      "question": "Что такое Amazon Route 53?",
+      "options": [
+        "CDN",
+        "DNS сервис (система доменных имен)",
+        "VPN",
+        "Балансировщик"
+      ],
+      "correct": "DNS сервис (система доменных имен)",
+      "explanation": "Route 53 — DNS сервис AWS. Регистрация доменов, маршрутизация трафика, health checks. Название от порта DNS — 53."
+    },
+    {
+      "id": "term_cloudfront",
+      "category": "terms",
+      "question": "Что такое Amazon CloudFront?",
+      "options": [
+        "DNS",
+        "CDN — сеть доставки контента",
+        "База данных",
+        "Мониторинг"
+      ],
+      "correct": "CDN — сеть доставки контента",
+      "explanation": "CloudFront — CDN (Content Delivery Network). Кэширует контент в edge locations по всему миру. Быстрая доставка сайтов, видео, API."
+    },
+    {
+      "id": "term_elb",
+      "category": "terms",
+      "question": "Что такое Elastic Load Balancing?",
+      "options": [
+        "Автомасштабирование",
+        "Распределение трафика между несколькими серверами",
+        "DNS",
+        "CDN"
+      ],
+      "correct": "Распределение трафика между несколькими серверами",
+      "explanation": "ELB — балансировщик нагрузки. Распределяет входящий трафик между EC2. Типы: ALB (HTTP), NLB (TCP), CLB (classic)."
+    },
+    {
+      "id": "term_direct_connect",
+      "category": "terms",
+      "question": "Что такое AWS Direct Connect?",
+      "options": [
+        "VPN",
+        "Выделенное сетевое соединение между офисом и AWS",
+        "CDN",
+        "DNS"
+      ],
+      "correct": "Выделенное сетевое соединение между офисом и AWS",
+      "explanation": "Direct Connect — выделенная линия от вашего дата-центра к AWS. Стабильнее и быстрее VPN. Для больших объемов данных."
+    },
+    {
+      "id": "term_api_gateway",
+      "category": "terms",
+      "question": "Что такое Amazon API Gateway?",
+      "options": [
+        "Создание, публикация и управление API",
+        "База данных",
+        "CDN",
+        "DNS"
+      ],
+      "correct": "Создание, публикация и управление API",
+      "explanation": "API Gateway — managed сервис для создания REST и WebSocket API. Интегрируется с Lambda, EC2, другими сервисами. Авторизация, throttling, кэширование."
+    },
+    {
+      "id": "term_cloudwatch",
+      "category": "terms",
+      "question": "Что такое Amazon CloudWatch?",
+      "options": [
+        "Мониторинг ресурсов, метрики и логи",
+        "Аудит API вызовов",
+        "DNS",
+        "CDN"
+      ],
+      "correct": "Мониторинг ресурсов, метрики и логи",
+      "explanation": "CloudWatch — мониторинг AWS. Собирает метрики (CPU, память), логи, события. Настройка алертов и дашбордов."
+    },
+    {
+      "id": "term_cloudtrail",
+      "category": "terms",
+      "question": "Что такое AWS CloudTrail?",
+      "options": [
+        "Мониторинг производительности",
+        "Аудит и логирование всех API вызовов в аккаунте",
+        "CDN",
+        "DNS"
+      ],
+      "correct": "Аудит и логирование всех API вызовов в аккаунте",
+      "explanation": "CloudTrail — аудит API. Записывает кто, что, когда сделал в AWS. Для безопасности, compliance, troubleshooting."
+    },
+    {
+      "id": "term_cloudformation",
+      "category": "terms",
+      "question": "Что такое AWS CloudFormation?",
+      "options": [
+        "Мониторинг",
+        "Infrastructure as Code — описание инфраструктуры в шаблонах",
+        "CI/CD",
+        "База данных"
+      ],
+      "correct": "Infrastructure as Code — описание инфраструктуры в шаблонах",
+      "explanation": "CloudFormation — IaC сервис. Описываете инфраструктуру в JSON/YAML шаблонах. AWS создает ресурсы автоматически. Версионирование, повторяемость."
+    },
+    {
+      "id": "term_trusted_advisor",
+      "category": "terms",
+      "question": "Что такое AWS Trusted Advisor?",
+      "options": [
+        "Рекомендации по оптимизации (безопасность, стоимость, производительность)",
+        "Техподдержка",
+        "Мониторинг",
+        "Аудит"
+      ],
+      "correct": "Рекомендации по оптимизации (безопасность, стоимость, производительность)",
+      "explanation": "Trusted Advisor — автоматические рекомендации по 5 категориям: стоимость, производительность, безопасность, отказоустойчивость, лимиты сервисов."
+    },
+    {
+      "id": "term_config",
+      "category": "terms",
+      "question": "Что такое AWS Config?",
+      "options": [
+        "Отслеживание конфигураций ресурсов и их изменений",
+        "Мониторинг производительности",
+        "DNS",
+        "CDN"
+      ],
+      "correct": "Отслеживание конфигураций ресурсов и их изменений",
+      "explanation": "AWS Config — отслеживает конфигурации ресурсов. История изменений, compliance rules. Кто изменил security group? Config покажет."
+    },
+    {
+      "id": "term_systems_manager",
+      "category": "terms",
+      "question": "Что такое AWS Systems Manager?",
+      "options": [
+        "Управление и автоматизация операций на EC2 и on-premises",
+        "База данных",
+        "CDN",
+        "DNS"
+      ],
+      "correct": "Управление и автоматизация операций на EC2 и on-premises",
+      "explanation": "Systems Manager — операционное управление. Патчинг, инвентаризация, удаленный доступ (Session Manager), автоматизация задач."
+    },
+    {
+      "id": "term_organizations",
+      "category": "terms",
+      "question": "Что такое AWS Organizations?",
+      "options": [
+        "Управление несколькими AWS аккаунтами централизованно",
+        "Управление пользователями",
+        "Мониторинг",
+        "Billing"
+      ],
+      "correct": "Управление несколькими AWS аккаунтами централизованно",
+      "explanation": "Organizations — управление множеством AWS аккаунтов. Consolidated billing (единый счет), Service Control Policies (SCP), организационные единицы."
+    },
+    {
+      "id": "term_management_console",
+      "category": "terms",
+      "question": "Что такое AWS Management Console?",
+      "options": [
+        "Веб-интерфейс для управления AWS ресурсами",
+        "Командная строка",
+        "SDK",
+        "API"
+      ],
+      "correct": "Веб-интерфейс для управления AWS ресурсами",
+      "explanation": "Management Console — веб-интерфейс AWS. Управляйте ресурсами через браузер. Альтернативы: CLI (командная строка), SDK (код), API."
+    },
+    {
+      "id": "term_cli",
+      "category": "terms",
+      "question": "Что такое AWS CLI?",
+      "options": [
+        "Веб-интерфейс",
+        "Командная строка для управления AWS",
+        "База данных",
+        "CDN"
+      ],
+      "correct": "Командная строка для управления AWS",
+      "explanation": "AWS CLI (Command Line Interface) — управление AWS из терминала. Автоматизация, скрипты. Устанавливается на Windows, Mac, Linux."
+    },
+    {
+      "id": "term_cost_explorer",
+      "category": "terms",
+      "question": "Что такое AWS Cost Explorer?",
+      "options": [
+        "Визуализация и анализ затрат AWS",
+        "Установка бюджетов",
+        "Калькулятор цен",
+        "Billing dashboard"
+      ],
+      "correct": "Визуализация и анализ затрат AWS",
+      "explanation": "Cost Explorer — анализ затрат. Графики, тренды, прогнозы. Фильтры по сервисам, регионам, тегам. Понять куда уходят деньги."
+    },
+    {
+      "id": "term_budgets",
+      "category": "terms",
+      "question": "Что такое AWS Budgets?",
+      "options": [
+        "Анализ затрат",
+        "Установка бюджетов и алертов при превышении",
+        "Калькулятор",
+        "Отчеты"
+      ],
+      "correct": "Установка бюджетов и алертов при превышении",
+      "explanation": "AWS Budgets — установите лимит расходов и получайте алерты при приближении/превышении. Бюджеты по стоимости, использованию, Reserved Instances."
+    },
+    {
+      "id": "term_pricing_calculator",
+      "category": "terms",
+      "question": "Что такое AWS Pricing Calculator?",
+      "options": [
+        "Анализ текущих затрат",
+        "Оценка стоимости до использования сервисов",
+        "Установка бюджетов",
+        "Billing"
+      ],
+      "correct": "Оценка стоимости до использования сервисов",
+      "explanation": "Pricing Calculator — оцените стоимость AWS до использования. Выберите сервисы, конфигурацию — получите примерную стоимость в месяц."
+    },
+    {
+      "id": "term_cost_usage_report",
+      "category": "terms",
+      "question": "Что такое AWS Cost & Usage Report?",
+      "options": [
+        "Детальный отчет по всем расходам AWS",
+        "Установка бюджетов",
+        "Калькулятор",
+        "Дашборд"
+      ],
+      "correct": "Детальный отчет по всем расходам AWS",
+      "explanation": "Cost & Usage Report — самый детальный отчет. Почасовые данные по каждому ресурсу. Экспорт в S3 для анализа в Athena, QuickSight."
+    },
+    {
+      "id": "term_sqs",
+      "category": "terms",
+      "question": "Что такое Amazon SQS?",
+      "options": [
+        "Очередь сообщений для асинхронной связи между компонентами",
+        "Email сервис",
+        "Push уведомления",
+        "База данных"
+      ],
+      "correct": "Очередь сообщений для асинхронной связи между компонентами",
+      "explanation": "SQS (Simple Queue Service) — managed очередь. Разделяет компоненты приложения. Producer отправляет сообщение, Consumer обрабатывает когда готов."
+    },
+    {
+      "id": "term_sns",
+      "category": "terms",
+      "question": "Что такое Amazon SNS?",
+      "options": [
+        "Очередь сообщений",
+        "Pub/Sub сервис — уведомления и рассылки",
+        "Email сервис",
+        "База данных"
+      ],
+      "correct": "Pub/Sub сервис — уведомления и рассылки",
+      "explanation": "SNS (Simple Notification Service) — pub/sub. Один publisher, много subscribers. Push в SMS, email, HTTP, Lambda, SQS."
+    },
+    {
+      "id": "term_ses",
+      "category": "terms",
+      "question": "Что такое Amazon SES?",
+      "options": [
+        "Очередь сообщений",
+        "Сервис отправки email",
+        "Push уведомления",
+        "SMS"
+      ],
+      "correct": "Сервис отправки email",
+      "explanation": "SES (Simple Email Service) — отправка и получение email. Транзакционные письма, маркетинговые рассылки. Высокая доставляемость."
+    },
+    {
+      "id": "term_eventbridge",
+      "category": "terms",
+      "question": "Что такое Amazon EventBridge?",
+      "options": [
+        "Serverless событийная шина для интеграции приложений",
+        "Очередь",
+        "Email",
+        "DNS"
+      ],
+      "correct": "Serverless событийная шина для интеграции приложений",
+      "explanation": "EventBridge — событийная шина. Получает события от AWS сервисов, SaaS, своих приложений. Маршрутизирует к Lambda, SQS, и др."
+    },
+    {
+      "id": "term_step_functions",
+      "category": "terms",
+      "question": "Что такое AWS Step Functions?",
+      "options": [
+        "Оркестрация workflows из Lambda и других сервисов",
+        "Очередь",
+        "Email",
+        "Мониторинг"
+      ],
+      "correct": "Оркестрация workflows из Lambda и других сервисов",
+      "explanation": "Step Functions — визуальная оркестрация. Создавайте workflows из Lambda, ECS, и др. State machine с условиями, циклами, параллельным выполнением."
+    },
+    {
+      "id": "term_codecommit",
+      "category": "terms",
+      "question": "Что такое AWS CodeCommit?",
+      "options": [
+        "Managed Git репозитории",
+        "CI/CD",
+        "Деплой",
+        "Мониторинг"
+      ],
+      "correct": "Managed Git репозитории",
+      "explanation": "CodeCommit — managed Git. Приватные репозитории в AWS. Интегрируется с CodeBuild, CodePipeline. Альтернатива GitHub."
+    },
+    {
+      "id": "term_codebuild",
+      "category": "terms",
+      "question": "Что такое AWS CodeBuild?",
+      "options": [
+        "Git репозиторий",
+        "Сервис сборки и тестирования кода",
+        "Деплой",
+        "Мониторинг"
+      ],
+      "correct": "Сервис сборки и тестирования кода",
+      "explanation": "CodeBuild — managed CI сервис. Компилирует код, запускает тесты, создает артефакты. Serverless, платите за время сборки."
+    },
+    {
+      "id": "term_codedeploy",
+      "category": "terms",
+      "question": "Что такое AWS CodeDeploy?",
+      "options": [
+        "Git репозиторий",
+        "Сборка кода",
+        "Автоматический деплой на EC2, Lambda, ECS",
+        "Мониторинг"
+      ],
+      "correct": "Автоматический деплой на EC2, Lambda, ECS",
+      "explanation": "CodeDeploy — автоматизация деплоя. Rolling updates, blue/green deployments. Деплой на EC2, Lambda, ECS, on-premises."
+    },
+    {
+      "id": "term_codepipeline",
+      "category": "terms",
+      "question": "Что такое AWS CodePipeline?",
+      "options": [
+        "Git репозиторий",
+        "CI/CD пайплайн — автоматизация релизов",
+        "Сборка",
+        "Мониторинг"
+      ],
+      "correct": "CI/CD пайплайн — автоматизация релизов",
+      "explanation": "CodePipeline — CI/CD оркестратор. Объединяет CodeCommit, CodeBuild, CodeDeploy в автоматический пайплайн. Push → Build → Test → Deploy."
+    },
+    {
+      "id": "term_athena",
+      "category": "terms",
+      "question": "Что такое Amazon Athena?",
+      "options": [
+        "SQL запросы к данным в S3 без серверов",
+        "База данных",
+        "Хранилище",
+        "Визуализация"
+      ],
+      "correct": "SQL запросы к данным в S3 без серверов",
+      "explanation": "Athena — serverless SQL. Анализируйте данные прямо в S3 с помощью SQL. Без инфраструктуры, платите за объем сканированных данных."
+    },
+    {
+      "id": "term_kinesis",
+      "category": "terms",
+      "question": "Что такое Amazon Kinesis?",
+      "options": [
+        "Обработка потоковых данных в реальном времени",
+        "База данных",
+        "Хранилище",
+        "Email"
+      ],
+      "correct": "Обработка потоковых данных в реальном времени",
+      "explanation": "Kinesis — стриминг данных. Обработка логов, кликстрима, IoT данных в реальном времени. Kinesis Streams, Firehose, Analytics."
+    },
+    {
+      "id": "term_quicksight",
+      "category": "terms",
+      "question": "Что такое Amazon QuickSight?",
+      "options": [
+        "BI сервис — визуализация данных и дашборды",
+        "База данных",
+        "ETL",
+        "Хранилище"
+      ],
+      "correct": "BI сервис — визуализация данных и дашборды",
+      "explanation": "QuickSight — Business Intelligence. Создание интерактивных дашбордов и отчетов. Подключается к RDS, Redshift, Athena, S3."
+    },
+    {
+      "id": "term_glue",
+      "category": "terms",
+      "question": "Что такое AWS Glue?",
+      "options": [
+        "Serverless ETL сервис для подготовки данных",
+        "База данных",
+        "Визуализация",
+        "Хранилище"
+      ],
+      "correct": "Serverless ETL сервис для подготовки данных",
+      "explanation": "AWS Glue — serverless ETL. Extract, Transform, Load. Data Catalog для метаданных. Подготовка данных для аналитики."
+    },
+    {
+      "id": "term_sagemaker",
+      "category": "terms",
+      "question": "Что такое Amazon SageMaker?",
+      "options": [
+        "Платформа для создания, обучения и деплоя ML моделей",
+        "База данных",
+        "Хранилище",
+        "CDN"
+      ],
+      "correct": "Платформа для создания, обучения и деплоя ML моделей",
+      "explanation": "SageMaker — полный цикл ML. Jupyter notebooks, обучение моделей, деплой endpoints. Встроенные алгоритмы или свои."
+    },
+    {
+      "id": "term_rekognition",
+      "category": "terms",
+      "question": "Что такое Amazon Rekognition?",
+      "options": [
+        "Распознавание изображений и видео (лица, объекты, текст)",
+        "Распознавание речи",
+        "Текст в речь",
+        "Чат-бот"
+      ],
+      "correct": "Распознавание изображений и видео (лица, объекты, текст)",
+      "explanation": "Rekognition — компьютерное зрение. Распознавание лиц, объектов, текста, знаменитостей, неприемлемого контента. API без ML знаний."
+    },
+    {
+      "id": "term_lex",
+      "category": "terms",
+      "question": "Что такое Amazon Lex?",
+      "options": [
+        "Распознавание изображений",
+        "Создание чат-ботов с голосом и текстом (как Alexa)",
+        "Текст в речь",
+        "Перевод"
+      ],
+      "correct": "Создание чат-ботов с голосом и текстом (как Alexa)",
+      "explanation": "Amazon Lex — создание conversational interfaces. Та же технология что в Alexa. Распознавание намерений, слотов. Интеграция с Lambda."
+    },
+    {
+      "id": "term_polly",
+      "category": "terms",
+      "question": "Что такое Amazon Polly?",
+      "options": [
+        "Речь в текст",
+        "Текст в речь (голосовой синтез)",
+        "Перевод",
+        "Чат-бот"
+      ],
+      "correct": "Текст в речь (голосовой синтез)",
+      "explanation": "Amazon Polly — Text-to-Speech. Превращает текст в реалистичную речь. Множество голосов и языков. Для озвучки, accessibility."
+    },
+    {
+      "id": "term_transcribe",
+      "category": "terms",
+      "question": "Что такое Amazon Transcribe?",
+      "options": [
+        "Текст в речь",
+        "Речь в текст (распознавание речи)",
+        "Перевод",
+        "Чат-бот"
+      ],
+      "correct": "Речь в текст (распознавание речи)",
+      "explanation": "Amazon Transcribe — Speech-to-Text. Автоматическая транскрипция аудио. Для субтитров, колл-центров, поиска по аудио."
+    },
+    {
+      "id": "term_translate",
+      "category": "terms",
+      "question": "Что такое Amazon Translate?",
+      "options": [
+        "Речь в текст",
+        "Нейронный машинный перевод текста",
+        "Текст в речь",
+        "Чат-бот"
+      ],
+      "correct": "Нейронный машинный перевод текста",
+      "explanation": "Amazon Translate — машинный перевод. Десятки языков. Для локализации, перевода чатов, анализа мультиязычного контента."
+    },
+    {
+      "id": "term_dms",
+      "category": "terms",
+      "question": "Что такое AWS DMS?",
+      "options": [
+        "Миграция баз данных в AWS",
+        "Миграция серверов",
+        "Физический перенос данных",
+        "CDN"
+      ],
+      "correct": "Миграция баз данных в AWS",
+      "explanation": "DMS (Database Migration Service) — миграция БД. Из on-premises в AWS, между БД. Поддерживает гомогенную и гетерогенную миграцию."
+    },
+    {
+      "id": "term_snowball",
+      "category": "terms",
+      "question": "Что такое AWS Snowball?",
+      "options": [
+        "Онлайн миграция",
+        "Физическое устройство для переноса больших объемов данных",
+        "CDN",
+        "База данных"
+      ],
+      "correct": "Физическое устройство для переноса больших объемов данных",
+      "explanation": "Snowball — физическое устройство (50-80 TB). AWS присылает, вы загружаете данные, отправляете обратно. Для петабайтов данных."
+    },
+    {
+      "id": "term_migration_hub",
+      "category": "terms",
+      "question": "Что такое AWS Migration Hub?",
+      "options": [
+        "Центральный дашборд для отслеживания миграций",
+        "Миграция БД",
+        "Физическая миграция",
+        "CDN"
+      ],
+      "correct": "Центральный дашборд для отслеживания миграций",
+      "explanation": "Migration Hub — единое место для отслеживания прогресса миграций. Интегрируется с DMS, Server Migration Service, партнерскими инструментами."
+    },
+    {
+      "id": "term_support_plans",
+      "category": "terms",
+      "question": "Какие планы поддержки AWS существуют?",
+      "options": [
+        "Только платные",
+        "Basic (бесплатный), Developer, Business, Enterprise",
+        "Только Basic",
+        "Standard и Premium"
+      ],
+      "correct": "Basic (бесплатный), Developer, Business, Enterprise",
+      "explanation": "4 плана: Basic (бесплатный, документация), Developer ($29+), Business ($100+, 24/7), Enterprise ($15K+, TAM, 15 мин response для critical)."
+    },
+    {
+      "id": "term_personal_health_dashboard",
+      "category": "terms",
+      "question": "Что такое AWS Personal Health Dashboard?",
+      "options": [
+        "Статус здоровья ваших ресурсов и предстоящие события AWS",
+        "Общий статус AWS",
+        "Мониторинг",
+        "Billing"
+      ],
+      "correct": "Статус здоровья ваших ресурсов и предстоящие события AWS",
+      "explanation": "Personal Health Dashboard — персонализированный статус. Показывает события AWS, влияющие на ВАШИ ресурсы. Плановые работы, инциденты."
+    },
+    {
+      "id": "term_marketplace",
+      "category": "terms",
+      "question": "Что такое AWS Marketplace?",
+      "options": [
+        "Магазин готовых решений и ПО от сторонних производителей",
+        "Биллинг",
+        "Документация",
+        "Поддержка"
+      ],
+      "correct": "Магазин готовых решений и ПО от сторонних производителей",
+      "explanation": "AWS Marketplace — каталог ПО. AMI, SaaS, контейнеры от партнеров. Антивирусы, файрволы, БД. Биллинг через AWS."
     }
   ],
   "aws_storage_questions": [
