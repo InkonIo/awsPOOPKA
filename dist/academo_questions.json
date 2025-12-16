@@ -1017,6 +1017,1596 @@
       ],
       "correct": "Инструмент для оркестрации многоконтейнерных приложений",
       "explanation": "Docker Compose позволяет определять и запускать многоконтейнерные приложения с помощью файла docker-compose.yml. Упрощает управление зависимостями между сервисами."
+    },
+    {
+      "id": "aws_storage_object_lock_1",
+      "category": "aws_storage",
+      "question": "Что такое S3 Object Lock?",
+      "options": [
+        "Блокировка доступа к bucket",
+        "Защита объектов от удаления и перезаписи (WORM)",
+        "Шифрование объектов",
+        "Ограничение IP-адресов"
+      ],
+      "correct": "Защита объектов от удаления и перезаписи (WORM)",
+      "explanation": "S3 Object Lock реализует модель WORM (Write Once Read Many). Объекты нельзя удалить или изменить в течение retention period. Используется для compliance."
+    },
+    {
+      "id": "aws_storage_intelligent_tiering_1",
+      "category": "aws_storage",
+      "question": "Как работает S3 Intelligent-Tiering?",
+      "options": [
+        "Автоматически перемещает данные между классами по паттернам доступа",
+        "Сжимает файлы автоматически",
+        "Шифрует все данные",
+        "Удаляет неиспользуемые файлы"
+      ],
+      "correct": "Автоматически перемещает данные между классами по паттернам доступа",
+      "explanation": "Intelligent-Tiering анализирует паттерны доступа и перемещает объекты: частый доступ → Standard, редкий → IA, очень редкий → Archive. Нет платы за извлечение."
+    },
+    {
+      "id": "aws_storage_access_points_1",
+      "category": "aws_storage",
+      "question": "Для чего используются S3 Access Points?",
+      "options": [
+        "Ускорение загрузки файлов",
+        "Упрощение управления доступом для shared data sets",
+        "Шифрование данных",
+        "Мониторинг производительности"
+      ],
+      "correct": "Упрощение управления доступом для shared data sets",
+      "explanation": "S3 Access Points — именованные сетевые конечные точки с собственными политиками. Упрощают управление доступом когда один bucket используется многими приложениями."
+    },
+    {
+      "id": "aws_storage_event_notifications_1",
+      "category": "aws_storage",
+      "question": "Какие сервисы могут получать S3 Event Notifications? (Выберите ДВА)",
+      "options": [
+        "AWS Lambda",
+        "Amazon SQS",
+        "Amazon RDS",
+        "Amazon EC2"
+      ],
+      "correct": [
+        "AWS Lambda",
+        "Amazon SQS"
+      ],
+      "explanation": "S3 Event Notifications могут триггерить: Lambda (обработка), SQS (очередь), SNS (уведомления), EventBridge (маршрутизация). RDS и EC2 не получают напрямую.",
+      "multiSelect": true
+    },
+    {
+      "id": "aws_storage_select_1",
+      "category": "aws_storage",
+      "question": "Что позволяет S3 Select?",
+      "options": [
+        "Выбирать файлы для удаления",
+        "Извлекать только нужные данные из объекта с помощью SQL",
+        "Выбирать регион хранения",
+        "Выбирать класс хранения"
+      ],
+      "correct": "Извлекать только нужные данные из объекта с помощью SQL",
+      "explanation": "S3 Select позволяет выполнять SQL-запросы к CSV/JSON/Parquet файлам и получать только нужные данные. Экономит трафик и ускоряет обработку до 400%."
+    },
+    {
+      "id": "aws_storage_batch_operations_1",
+      "category": "aws_storage",
+      "question": "Для чего используется S3 Batch Operations?",
+      "options": [
+        "Пакетная загрузка файлов",
+        "Выполнение операций над миллиардами объектов",
+        "Резервное копирование",
+        "Мониторинг"
+      ],
+      "correct": "Выполнение операций над миллиардами объектов",
+      "explanation": "S3 Batch Operations выполняет массовые операции: копирование, изменение ACL, тегирование, вызов Lambda. Обрабатывает миллиарды объектов без написания кода."
+    },
+    {
+      "id": "aws_storage_presigned_url_1",
+      "category": "aws_storage",
+      "question": "Что такое Pre-signed URL в S3?",
+      "options": [
+        "URL с постоянным доступом",
+        "Временный URL с ограниченным доступом к объекту",
+        "URL для административных функций",
+        "Зашифрованный URL"
+      ],
+      "correct": "Временный URL с ограниченным доступом к объекту",
+      "explanation": "Pre-signed URL дает временный доступ к приватному объекту без AWS credentials. Указывается срок действия. Используется для безопасного sharing."
+    },
+    {
+      "id": "aws_storage_glacier_vault_lock_1",
+      "category": "aws_storage",
+      "question": "Что такое Glacier Vault Lock?",
+      "options": [
+        "Блокировка физического хранилища",
+        "Неизменяемая политика compliance для vault",
+        "Шифрование архива",
+        "Ограничение количества файлов"
+      ],
+      "correct": "Неизменяемая политика compliance для vault",
+      "explanation": "Vault Lock применяет неизменяемую (immutable) политику к Glacier vault. После lock никто не может изменить политику. Соответствует SEC Rule 17a-4."
+    },
+    {
+      "id": "aws_storage_storage_lens_1",
+      "category": "aws_storage",
+      "question": "Что такое Amazon S3 Storage Lens?",
+      "options": [
+        "Инструмент для увеличения изображений",
+        "Аналитика хранения и рекомендации по оптимизации",
+        "Сервис шифрования",
+        "Инструмент миграции"
+      ],
+      "correct": "Аналитика хранения и рекомендации по оптимизации",
+      "explanation": "S3 Storage Lens предоставляет организационные insights: метрики использования, тренды, рекомендации по оптимизации затрат. Dashboard для всех buckets."
+    },
+    {
+      "id": "aws_storage_replication_time_control_1",
+      "category": "aws_storage",
+      "question": "Что гарантирует S3 Replication Time Control (RTC)?",
+      "options": [
+        "Мгновенную репликацию",
+        "Репликацию 99.99% объектов за 15 минут",
+        "Бесплатную репликацию",
+        "Репликацию только новых объектов"
+      ],
+      "correct": "Репликацию 99.99% объектов за 15 минут",
+      "explanation": "S3 RTC обеспечивает SLA: 99.99% объектов реплицируются в течение 15 минут. Включает метрики репликации. Используется для критичных данных."
+    },
+    {
+      "id": "aws_storage_ebs_types_1",
+      "category": "aws_storage",
+      "question": "Какой тип EBS лучше для boot volumes с умеренной нагрузкой?",
+      "options": [
+        "Provisioned IOPS SSD (io2)",
+        "General Purpose SSD (gp3)",
+        "Throughput Optimized HDD (st1)",
+        "Cold HDD (sc1)"
+      ],
+      "correct": "General Purpose SSD (gp3)",
+      "explanation": "gp3 — оптимальный выбор для boot volumes. Дает 3000 IOPS baseline бесплатно, можно увеличить до 16000. Дешевле io2, достаточно для большинства задач."
+    },
+    {
+      "id": "aws_storage_ebs_multi_attach_1",
+      "category": "aws_storage",
+      "question": "Что позволяет EBS Multi-Attach?",
+      "options": [
+        "Подключение одного EBS к нескольким EC2 одновременно",
+        "Создание нескольких snapshot",
+        "Увеличение размера на лету",
+        "Репликацию между регионами"
+      ],
+      "correct": "Подключение одного EBS к нескольким EC2 одновременно",
+      "explanation": "Multi-Attach позволяет подключить io1/io2 volume к нескольким EC2 в одной AZ (до 16). Используется для кластеров с shared storage. Требует cluster-aware FS."
+    },
+    {
+      "id": "aws_storage_fsx_1",
+      "category": "aws_storage",
+      "question": "Какой FSx тип оптимален для Windows File Server?",
+      "options": [
+        "FSx for Lustre",
+        "FSx for Windows File Server",
+        "FSx for NetApp ONTAP",
+        "FSx for OpenZFS"
+      ],
+      "correct": "FSx for Windows File Server",
+      "explanation": "FSx for Windows File Server — managed Windows native FS с SMB протоколом, AD интеграцией, DFS. Lustre — для HPC. ONTAP — для enterprise features."
+    },
+    {
+      "id": "aws_storage_fsx_lustre_1",
+      "category": "aws_storage",
+      "question": "Для каких задач лучше всего подходит FSx for Lustre?",
+      "options": [
+        "Файловый сервер для офиса",
+        "High-Performance Computing и Machine Learning",
+        "Архивное хранение",
+        "Email attachments"
+      ],
+      "correct": "High-Performance Computing и Machine Learning",
+      "explanation": "FSx for Lustre — высокопроизводительная параллельная FS для HPC, ML, финансового моделирования. Throughput до 100+ GB/s, интеграция с S3."
+    },
+    {
+      "id": "aws_storage_snowball_1",
+      "category": "aws_storage",
+      "question": "Когда использовать AWS Snowball вместо интернет-передачи?",
+      "options": [
+        "Для данных менее 10 GB",
+        "Для миграции 10+ TB когда сеть занимает >1 недели",
+        "Для ежедневных бэкапов",
+        "Для streaming данных"
+      ],
+      "correct": "Для миграции 10+ TB когда сеть занимает >1 недели",
+      "explanation": "Snowball — физическое устройство для миграции 10-80 TB. Экономичнее когда интернет-передача займет > недели. Snowball Edge добавляет вычисления на edge."
+    },
+    {
+      "id": "aws_storage_snowmobile_1",
+      "category": "aws_storage",
+      "question": "Какой объем данных может перенести AWS Snowmobile?",
+      "options": [
+        "До 80 TB",
+        "До 1 PB",
+        "До 100 PB",
+        "До 1 EB"
+      ],
+      "correct": "До 100 PB",
+      "explanation": "Snowmobile — 45-футовый грузовой контейнер с хранилищем до 100 PB. Используется для миграции дата-центров. Snowball — до 80 TB, Snowcone — до 14 TB."
+    },
+    {
+      "id": "aws_storage_datasync_1",
+      "category": "aws_storage",
+      "question": "Что такое AWS DataSync?",
+      "options": [
+        "Сервис синхронизации баз данных",
+        "Автоматизированная передача данных между on-premises и AWS",
+        "Синхронизация кода",
+        "Репликация EC2"
+      ],
+      "correct": "Автоматизированная передача данных между on-premises и AWS",
+      "explanation": "DataSync автоматизирует и ускоряет перемещение данных в S3, EFS, FSx. До 10x быстрее обычных инструментов. Поддерживает scheduling и верификацию."
+    },
+    {
+      "id": "aws_storage_backup_1",
+      "category": "aws_storage",
+      "question": "Какой сервис AWS централизует управление бэкапами?",
+      "options": [
+        "AWS Backup",
+        "Amazon S3",
+        "AWS DataSync",
+        "Amazon EBS Snapshots"
+      ],
+      "correct": "AWS Backup",
+      "explanation": "AWS Backup — централизованный сервис для бэкапов EC2, EBS, RDS, DynamoDB, EFS, FSx. Единые политики, retention rules, compliance reports."
+    },
+    {
+      "id": "aws_storage_s3_glacier_classes_1",
+      "category": "aws_storage",
+      "question": "Сколько классов Glacier существует в S3?",
+      "options": [
+        "Один",
+        "Два",
+        "Три",
+        "Четыре"
+      ],
+      "correct": "Три",
+      "explanation": "Три класса Glacier: 1) Glacier Instant Retrieval (миллисекунды), 2) Glacier Flexible Retrieval (минуты-часы), 3) Glacier Deep Archive (12+ часов). Выбор зависит от SLA доступа."
+    },
+    {
+      "id": "aws_storage_s3_consistency_1",
+      "category": "aws_storage",
+      "question": "Какую консистентность обеспечивает S3 с 2020 года?",
+      "options": [
+        "Eventual consistency для всех операций",
+        "Strong read-after-write consistency",
+        "Только для GET запросов",
+        "Зависит от региона"
+      ],
+      "correct": "Strong read-after-write consistency",
+      "explanation": "С декабря 2020 S3 дает strong consistency: после PUT/DELETE сразу видно результат для GET/LIST. Раньше была eventual consistency. Без дополнительной платы."
+    },
+    {
+      "id": "aws_storage_bucket_naming_1",
+      "category": "aws_storage",
+      "question": "Какие правила именования S3 bucket верны? (Выберите ДВА)",
+      "options": [
+        "Имя должно быть глобально уникальным",
+        "Длина 3-63 символа",
+        "Можно использовать заглавные буквы",
+        "Можно начинать с цифры"
+      ],
+      "correct": [
+        "Имя должно быть глобально уникальным",
+        "Длина 3-63 символа"
+      ],
+      "explanation": "Bucket name: глобально уникальное, 3-63 символа, только lowercase, цифры, дефисы. Нельзя как IP-адрес. Можно начинать с буквы или цифры.",
+      "multiSelect": true
+    },
+    {
+      "id": "aws_storage_s3_hosting_1",
+      "category": "aws_storage",
+      "question": "Что можно хостить на S3 Static Website Hosting?",
+      "options": [
+        "Динамические PHP сайты",
+        "Статические HTML/CSS/JS сайты",
+        "Node.js приложения",
+        "WordPress"
+      ],
+      "correct": "Статические HTML/CSS/JS сайты",
+      "explanation": "S3 Static Website Hosting — только для статики: HTML, CSS, JS, изображения. Нет server-side обработки. Для динамики нужен Lambda@Edge или CloudFront Functions."
+    },
+    {
+      "id": "aws_storage_requester_pays_1",
+      "category": "aws_storage",
+      "question": "Что такое S3 Requester Pays?",
+      "options": [
+        "Предоплата за хранение",
+        "Запрашивающий платит за трафик вместо владельца bucket",
+        "Подписка на S3",
+        "Кредитная система"
+      ],
+      "correct": "Запрашивающий платит за трафик вместо владельца bucket",
+      "explanation": "Requester Pays — запрашивающий (не владелец) оплачивает трафик и запросы. Используется для shared datasets. Запрашивающий должен быть authenticated."
+    },
+    {
+      "id": "aws_storage_mfa_delete_1",
+      "category": "aws_storage",
+      "question": "Для чего используется MFA Delete в S3?",
+      "options": [
+        "Шифрование объектов",
+        "Дополнительная защита от удаления версий объектов",
+        "Двухфакторная аутентификация для загрузки",
+        "Блокировка bucket"
+      ],
+      "correct": "Дополнительная защита от удаления версий объектов",
+      "explanation": "MFA Delete требует MFA код для удаления версий объектов или отключения versioning. Защищает от случайного удаления и компрометации credentials. Только root может включить."
+    },
+    {
+      "id": "aws_storage_cors_1",
+      "category": "aws_storage",
+      "question": "Для чего настраивается CORS в S3?",
+      "options": [
+        "Шифрование",
+        "Разрешение cross-origin запросов из браузера",
+        "Репликация",
+        "Логирование"
+      ],
+      "correct": "Разрешение cross-origin запросов из браузера",
+      "explanation": "CORS (Cross-Origin Resource Sharing) разрешает JavaScript на одном домене обращаться к S3 bucket на другом. Нужно для web-приложений загружающих контент из S3."
+    },
+    {
+      "id": "aws_storage_block_public_access_1",
+      "category": "aws_storage",
+      "question": "Что делает S3 Block Public Access?",
+      "options": [
+        "Блокирует весь доступ к bucket",
+        "Предотвращает случайное открытие публичного доступа",
+        "Блокирует определенные IP",
+        "Отключает bucket"
+      ],
+      "correct": "Предотвращает случайное открытие публичного доступа",
+      "explanation": "Block Public Access — защита от случайного public exposure. Можно включить на уровне account или bucket. Переопределяет любые policies разрешающие публичный доступ."
+    },
+    {
+      "id": "aws_storage_server_access_logs_1",
+      "category": "aws_storage",
+      "question": "Что записывают S3 Server Access Logs?",
+      "options": [
+        "Ошибки приложения",
+        "Все запросы к bucket (кто, когда, что)",
+        "Изменения в политиках",
+        "Стоимость хранения"
+      ],
+      "correct": "Все запросы к bucket (кто, когда, что)",
+      "explanation": "Server Access Logs записывают детали запросов: requester, bucket, key, action, response, latency. Используются для аудита и анализа. Доставляются в target bucket."
+    },
+    {
+      "id": "aws_storage_inventory_1",
+      "category": "aws_storage",
+      "question": "Для чего используется S3 Inventory?",
+      "options": [
+        "Подсчет стоимости",
+        "Регулярный отчет о объектах и их метаданных",
+        "Инвентаризация серверов",
+        "Мониторинг производительности"
+      ],
+      "correct": "Регулярный отчет о объектах и их метаданных",
+      "explanation": "S3 Inventory генерирует ежедневные/еженедельные отчеты: список объектов, размер, класс хранения, шифрование, replication status. Альтернатива LIST для больших buckets."
+    },
+    {
+      "id": "aws_storage_object_lambda_1",
+      "category": "aws_storage",
+      "question": "Что позволяет S3 Object Lambda?",
+      "options": [
+        "Запускать Lambda при изменении объекта",
+        "Трансформировать данные на лету при GET запросе",
+        "Автоматически сжимать объекты",
+        "Шифровать объекты"
+      ],
+      "correct": "Трансформировать данные на лету при GET запросе",
+      "explanation": "S3 Object Lambda обрабатывает данные при запросе: редактирование PII, конвертация форматов, resize изображений. Не нужно создавать копии для разных use cases."
+    },
+    {
+      "id": "aws_storage_same_region_replication_1",
+      "category": "aws_storage",
+      "question": "Для чего используется S3 Same-Region Replication (SRR)?",
+      "options": [
+        "Disaster recovery",
+        "Копирование между разными accounts, агрегация логов",
+        "Ускорение доступа",
+        "Уменьшение стоимости"
+      ],
+      "correct": "Копирование между разными accounts, агрегация логов",
+      "explanation": "SRR реплицирует внутри региона. Use cases: копия в другой account, агрегация логов из нескольких buckets, test/dev копии production данных."
+    },
+    {
+      "id": "aws_storage_gp3_vs_gp2_1",
+      "category": "aws_storage",
+      "question": "В чем преимущество EBS gp3 над gp2?",
+      "options": [
+        "gp3 быстрее",
+        "gp3 позволяет независимо настраивать IOPS и throughput",
+        "gp3 больше по объему",
+        "gp3 дороже но надежнее"
+      ],
+      "correct": "gp3 позволяет независимо настраивать IOPS и throughput",
+      "explanation": "gp3 отделяет IOPS и throughput от размера volume. В gp2 они были связаны (3 IOPS/GB). gp3: baseline 3000 IOPS, 125 MB/s, можно увеличить независимо. Обычно дешевле gp2."
+    },
+    {
+      "id": "aws_storage_ebs_encryption_1",
+      "category": "aws_storage",
+      "question": "Что шифруется при включении EBS encryption?",
+      "options": [
+        "Только данные в покое",
+        "Данные, snapshots, и трафик между EC2 и EBS",
+        "Только snapshots",
+        "Только метаданные"
+      ],
+      "correct": "Данные, snapshots, и трафик между EC2 и EBS",
+      "explanation": "EBS encryption шифрует: данные на volume, все snapshots, трафик EC2↔EBS. Использует AWS KMS. Минимальное влияние на производительность."
+    },
+    {
+      "id": "aws_storage_ebs_resize_1",
+      "category": "aws_storage",
+      "question": "Можно ли увеличить размер EBS volume без остановки EC2?",
+      "options": [
+        "Нет, нужно остановить",
+        "Да, через Elastic Volumes",
+        "Только для gp3",
+        "Только для io2"
+      ],
+      "correct": "Да, через Elastic Volumes",
+      "explanation": "Elastic Volumes позволяет увеличивать размер, менять тип и настраивать IOPS на лету. После изменения нужно расширить файловую систему в ОС."
+    },
+    {
+      "id": "aws_storage_instance_store_1",
+      "category": "aws_storage",
+      "question": "Что такое EC2 Instance Store?",
+      "options": [
+        "Постоянное блочное хранилище",
+        "Временное хранилище на физических дисках хоста",
+        "Сетевое хранилище",
+        "Object storage"
+      ],
+      "correct": "Временное хранилище на физических дисках хоста",
+      "explanation": "Instance Store — ephemeral storage на физическом сервере. Очень быстрый, но данные теряются при остановке EC2. Подходит для cache, temp files, buffers."
+    },
+    {
+      "id": "aws_storage_efs_performance_modes_1",
+      "category": "aws_storage",
+      "question": "Какие performance modes доступны в EFS?",
+      "options": [
+        "Standard и Premium",
+        "General Purpose и Max I/O",
+        "Fast и Slow",
+        "SSD и HDD"
+      ],
+      "correct": "General Purpose и Max I/O",
+      "explanation": "EFS Performance Modes: General Purpose (низкая latency, для большинства задач) и Max I/O (высокий throughput, для HPC и больших параллельных нагрузок)."
+    },
+    {
+      "id": "aws_storage_efs_storage_classes_1",
+      "category": "aws_storage",
+      "question": "Какие storage classes есть в EFS?",
+      "options": [
+        "Standard и Glacier",
+        "Standard и Infrequent Access (IA)",
+        "Hot и Cold",
+        "Только Standard"
+      ],
+      "correct": "Standard и Infrequent Access (IA)",
+      "explanation": "EFS имеет Standard (частый доступ) и Infrequent Access (редкий, до 92% дешевле). Lifecycle management автоматически перемещает файлы по паттернам доступа."
+    },
+    {
+      "id": "aws_storage_s3_transfer_family_1",
+      "category": "aws_storage",
+      "question": "Что такое AWS Transfer Family?",
+      "options": [
+        "Сервис миграции баз данных",
+        "Managed SFTP/FTPS/FTP для S3 и EFS",
+        "Физическое перемещение данных",
+        "VPN сервис"
+      ],
+      "correct": "Managed SFTP/FTPS/FTP для S3 и EFS",
+      "explanation": "AWS Transfer Family предоставляет managed SFTP, FTPS, FTP серверы с хранением в S3 или EFS. Позволяет легко мигрировать legacy file transfer workflows."
+    },
+    {
+      "id": "aws_storage_storage_gateway_types_1",
+      "category": "aws_storage",
+      "question": "Какие типы AWS Storage Gateway существуют? (Выберите ДВА)",
+      "options": [
+        "S3 File Gateway",
+        "Volume Gateway",
+        "Database Gateway",
+        "Compute Gateway"
+      ],
+      "correct": [
+        "S3 File Gateway",
+        "Volume Gateway"
+      ],
+      "explanation": "Storage Gateway типы: S3 File Gateway (NFS/SMB to S3), Volume Gateway (iSCSI to S3), Tape Gateway (VTL to S3/Glacier). Гибридное облачное хранение.",
+      "multiSelect": true
+    },
+    {
+      "id": "aws_storage_s3_object_size_1",
+      "category": "aws_storage",
+      "question": "Какой максимальный размер одного объекта в S3?",
+      "options": [
+        "5 GB",
+        "5 TB",
+        "50 TB",
+        "Без ограничений"
+      ],
+      "correct": "5 TB",
+      "explanation": "Максимальный размер объекта S3 — 5 TB. Для объектов > 5 GB рекомендуется multipart upload. Один PUT запрос ограничен 5 GB."
+    },
+    {
+      "id": "aws_storage_s3_min_storage_1",
+      "category": "aws_storage",
+      "question": "Какой минимальный срок хранения в S3 Glacier Deep Archive?",
+      "options": [
+        "30 дней",
+        "90 дней",
+        "180 дней",
+        "365 дней"
+      ],
+      "correct": "180 дней",
+      "explanation": "Glacier Deep Archive: минимум 180 дней. Glacier Flexible: минимум 90 дней. S3 IA: минимум 30 дней. Раннее удаление влечет оплату за остаток срока."
+    },
+    {
+      "id": "aws_storage_s3_one_zone_ia_1",
+      "category": "aws_storage",
+      "question": "В чем особенность S3 One Zone-IA?",
+      "options": [
+        "Хранит данные только в одной Availability Zone",
+        "Хранит данные только в одном регионе",
+        "Только для архивов",
+        "Только для мультимедиа"
+      ],
+      "correct": "Хранит данные только в одной Availability Zone",
+      "explanation": "One Zone-IA хранит данные в одной AZ (vs 3+ для Standard). На 20% дешевле Standard-IA. Риск потери при отказе AZ. Подходит для реплицируемых данных."
+    },
+    {
+      "id": "aws_storage_bucket_policy_vs_iam_1",
+      "category": "aws_storage",
+      "question": "Когда лучше использовать Bucket Policy вместо IAM Policy?",
+      "options": [
+        "Для конкретных пользователей",
+        "Для cross-account доступа и публичного доступа",
+        "Для внутренних приложений",
+        "Для Lambda функций"
+      ],
+      "correct": "Для cross-account доступа и публичного доступа",
+      "explanation": "Bucket Policy: resource-based, прикрепляется к bucket. Лучше для cross-account, public access, условий на bucket уровне. IAM Policy: identity-based, для конкретных users/roles."
+    },
+    {
+      "id": "aws_storage_s3_delete_marker_1",
+      "category": "aws_storage",
+      "question": "Что такое Delete Marker в S3 Versioning?",
+      "options": [
+        "Метка для автоматического удаления",
+        "Маркер показывающий что объект 'удален' без реального удаления",
+        "Флаг безопасного удаления",
+        "Индикатор поврежденного файла"
+      ],
+      "correct": "Маркер показывающий что объект 'удален' без реального удаления",
+      "explanation": "При DELETE с включенным versioning создается Delete Marker. Объект выглядит удаленным, но предыдущие версии остаются. Удаление маркера 'восстанавливает' объект."
+    },
+    {
+      "id": "aws_storage_outposts_1",
+      "category": "aws_storage",
+      "question": "Что такое S3 on Outposts?",
+      "options": [
+        "S3 для внешних пользователей",
+        "S3 хранилище на локальном оборудовании AWS Outposts",
+        "S3 для IoT устройств",
+        "Резервное S3 хранилище"
+      ],
+      "correct": "S3 хранилище на локальном оборудовании AWS Outposts",
+      "explanation": "S3 on Outposts размещает S3 storage на AWS Outposts hardware в вашем дата-центре. Низкая latency для on-premises приложений с S3 API совместимостью."
+    },
+    {
+      "id": "aws_storage_s3_intelligent_archive_1",
+      "category": "aws_storage",
+      "question": "Какие archive tiers добавлены в S3 Intelligent-Tiering?",
+      "options": [
+        "Glacier и Deep Archive",
+        "Archive Access и Deep Archive Access",
+        "Cold и Frozen",
+        "Архив не поддерживается"
+      ],
+      "correct": "Archive Access и Deep Archive Access",
+      "explanation": "Intelligent-Tiering включает: Frequent, Infrequent (автоматически), Archive Access (опционально, 90+ дней), Deep Archive Access (опционально, 180+ дней). Экономия до 95%."
+    },
+    {
+      "id": "aws_storage_ebs_fast_snapshot_restore_1",
+      "category": "aws_storage",
+      "question": "Что делает EBS Fast Snapshot Restore?",
+      "options": [
+        "Ускоряет создание snapshot",
+        "Мгновенная полная производительность при создании volume из snapshot",
+        "Быстрое копирование между регионами",
+        "Сжатие snapshot"
+      ],
+      "correct": "Мгновенная полная производительность при создании volume из snapshot",
+      "explanation": "Fast Snapshot Restore (FSR) устраняет latency penalty при первом доступе. Без FSR данные загружаются из S3 по требованию. С FSR — мгновенная производительность."
+    },
+    {
+      "id": "aws_storage_ami_1",
+      "category": "aws_storage",
+      "question": "Где хранятся AMI (Amazon Machine Images)?",
+      "options": [
+        "В EBS",
+        "В S3",
+        "В EC2",
+        "В DynamoDB"
+      ],
+      "correct": "В S3",
+      "explanation": "AMI хранятся в S3. EBS-backed AMI состоит из: EBS snapshots (хранятся в S3) + метаданные. Instance store-backed AMI — bundle в S3. S3 обеспечивает durability."
+    },
+    {
+      "id": "aws_storage_lifecycle_actions_1",
+      "category": "aws_storage",
+      "question": "Какие действия поддерживает S3 Lifecycle? (Выберите ДВА)",
+      "options": [
+        "Transition (перемещение между классами)",
+        "Expiration (удаление объектов)",
+        "Encryption (шифрование)",
+        "Replication (репликация)"
+      ],
+      "correct": [
+        "Transition (перемещение между классами)",
+        "Expiration (удаление объектов)"
+      ],
+      "explanation": "Lifecycle поддерживает: Transition (перемещение в другой класс) и Expiration (удаление). Для non-current versions: NoncurrentVersionTransition и NoncurrentVersionExpiration.",
+      "multiSelect": true
+    },
+    {
+      "id": "aws_storage_kms_vs_sse_s3_1",
+      "category": "aws_storage",
+      "question": "В чем преимущество SSE-KMS над SSE-S3?",
+      "options": [
+        "SSE-KMS быстрее",
+        "SSE-KMS дает аудит использования ключей и отдельные ключи",
+        "SSE-KMS дешевле",
+        "SSE-KMS проще настроить"
+      ],
+      "correct": "SSE-KMS дает аудит использования ключей и отдельные ключи",
+      "explanation": "SSE-KMS преимущества: CloudTrail аудит, ротация ключей, отдельный CMK для bucket, granular permissions. SSE-S3 проще но без аудита и кастомных ключей."
+    },
+    {
+      "id": "aws_storage_s3_express_one_zone_1",
+      "category": "aws_storage",
+      "question": "Что такое S3 Express One Zone (новый класс 2023)?",
+      "options": [
+        "Самый дешевый класс хранения",
+        "Высокопроизводительное хранилище с single-digit ms latency",
+        "Архивное хранилище",
+        "Replicated storage"
+      ],
+      "correct": "Высокопроизводительное хранилище с single-digit ms latency",
+      "explanation": "S3 Express One Zone — новейший класс для latency-sensitive приложений: ML, analytics, real-time. До 10x быстрее Standard. Хранит в одной AZ для низкой latency."
+    },
+    {
+      "id": "aws_storage_access_analyzer_1",
+      "category": "aws_storage",
+      "question": "Что делает IAM Access Analyzer для S3?",
+      "options": [
+        "Анализирует производительность",
+        "Находит buckets с публичным или cross-account доступом",
+        "Оптимизирует стоимость",
+        "Шифрует данные"
+      ],
+      "correct": "Находит buckets с публичным или cross-account доступом",
+      "explanation": "Access Analyzer сканирует policies и выявляет buckets доступные извне account. Помогает найти непреднамеренно открытые данные. Генерирует findings для review."
+    },
+    {
+      "id": "aws_storage_macie_1",
+      "category": "aws_storage",
+      "question": "Для чего используется Amazon Macie с S3?",
+      "options": [
+        "Ускорение доступа",
+        "Автоматическое обнаружение и защита чувствительных данных (PII)",
+        "Резервное копирование",
+        "Шифрование"
+      ],
+      "correct": "Автоматическое обнаружение и защита чувствительных данных (PII)",
+      "explanation": "Macie использует ML для обнаружения PII (персональные данные, кредитные карты). Сканирует S3 buckets, генерирует alerts. Помогает соответствовать GDPR, HIPAA."
+    },
+    {
+      "id": "aws_storage_glacier_retrieval_options_1",
+      "category": "aws_storage",
+      "question": "Какие retrieval options есть у S3 Glacier Flexible Retrieval?",
+      "options": [
+        "Instant, Standard, Bulk",
+        "Expedited (1-5 мин), Standard (3-5 ч), Bulk (5-12 ч)",
+        "Fast, Medium, Slow",
+        "Только Standard"
+      ],
+      "correct": "Expedited (1-5 мин), Standard (3-5 ч), Bulk (5-12 ч)",
+      "explanation": "Glacier Flexible Retrieval: Expedited (1-5 минут, дорого), Standard (3-5 часов, бесплатно до лимита), Bulk (5-12 часов, самый дешевый). Выбор зависит от срочности."
+    },
+    {
+      "id": "aws_storage_s3_ta_endpoint_1",
+      "category": "aws_storage",
+      "question": "Какой endpoint используется для S3 Transfer Acceleration?",
+      "options": [
+        "s3.amazonaws.com",
+        "bucketname.s3-accelerate.amazonaws.com",
+        "s3-fast.amazonaws.com",
+        "accelerate.s3.amazonaws.com"
+      ],
+      "correct": "bucketname.s3-accelerate.amazonaws.com",
+      "explanation": "Transfer Acceleration endpoint: bucketname.s3-accelerate.amazonaws.com. Данные идут через CloudFront edge locations. Можно сравнить скорость с обычным endpoint."
+    },
+    {
+      "id": "aws_storage_s3_event_types_1",
+      "category": "aws_storage",
+      "question": "Какие события можно отслеживать через S3 Event Notifications?",
+      "options": [
+        "Только PUT",
+        "PUT, DELETE, COPY, Replication, Lifecycle transitions",
+        "Только DELETE",
+        "Только GET"
+      ],
+      "correct": "PUT, DELETE, COPY, Replication, Lifecycle transitions",
+      "explanation": "S3 Events: s3:ObjectCreated:*, s3:ObjectRemoved:*, s3:ObjectRestore:*, s3:Replication:*, s3:LifecycleTransition и др. Гибкая фильтрация по prefix/suffix."
+    },
+    {
+      "id": "aws_storage_ebs_io2_block_express_1",
+      "category": "aws_storage",
+      "question": "Какой максимальный IOPS поддерживает EBS io2 Block Express?",
+      "options": [
+        "64,000 IOPS",
+        "256,000 IOPS",
+        "500,000 IOPS",
+        "1,000,000 IOPS"
+      ],
+      "correct": "256,000 IOPS",
+      "explanation": "io2 Block Express: до 256,000 IOPS, 4000 MB/s throughput, sub-millisecond latency. Для самых требовательных БД: Oracle, SAP HANA. Требует Nitro-based EC2."
+    },
+    {
+      "id": "aws_storage_ebs_snapshot_archive_1",
+      "category": "aws_storage",
+      "question": "Что такое EBS Snapshot Archive?",
+      "options": [
+        "Автоматическое архивирование EC2",
+        "Дешевое хранение редко используемых snapshots",
+        "Удаление старых snapshots",
+        "Шифрование snapshots"
+      ],
+      "correct": "Дешевое хранение редко используемых snapshots",
+      "explanation": "Snapshot Archive — tier для долгосрочного хранения. До 75% дешевле standard tier. Minimum 90 дней. Восстановление до 72 часов. Для compliance/DR snapshots."
+    },
+    {
+      "id": "aws_route53_1",
+      "category": "aws",
+      "question": "Что такое Amazon Route 53?",
+      "options": [
+        "Сервис для маршрутизации трафика между серверами",
+        "Высокодоступный масштабируемый облачный DNS сервис",
+        "Балансировщик нагрузки",
+        "VPN сервис"
+      ],
+      "correct": "Высокодоступный масштабируемый облачный DNS сервис",
+      "explanation": "Amazon Route 53 — это высокодоступный масштабируемый облачный веб-сервис системы доменных имен (DNS). Название '53' — это номер порта DNS."
+    },
+    {
+      "id": "aws_route53_2",
+      "category": "aws",
+      "question": "Почему сервис называется Route 53?",
+      "options": [
+        "Потому что поддерживает 53 региона",
+        "Потому что DNS использует порт 53",
+        "Потому что был 53-м сервисом AWS",
+        "Потому что обеспечивает 53 уровня безопасности"
+      ],
+      "correct": "Потому что DNS использует порт 53",
+      "explanation": "Route 53 назван так потому, что DNS традиционно работает на порту 53 (UDP/TCP). Это стандартный порт для DNS-запросов."
+    },
+    {
+      "id": "aws_route53_3",
+      "category": "aws",
+      "question": "Какие функции выполняет Amazon Route 53? (Выберите ДВА)",
+      "options": [
+        "Регистрация доменных имен",
+        "Маршрутизация DNS-запросов",
+        "Хранение файлов",
+        "Запуск контейнеров"
+      ],
+      "correct": [
+        "Регистрация доменных имен",
+        "Маршрутизация DNS-запросов"
+      ],
+      "explanation": "Route 53 выполняет три основные функции: регистрация доменов, DNS-маршрутизация (преобразование имен в IP), и проверка работоспособности ресурсов (health checks).",
+      "multiSelect": true
+    },
+    {
+      "id": "aws_cloudfront_1",
+      "category": "aws",
+      "question": "Что такое Amazon CloudFront?",
+      "options": [
+        "Сервис облачных вычислений",
+        "Глобальная сеть доставки контента (CDN)",
+        "База данных",
+        "Сервис мониторинга"
+      ],
+      "correct": "Глобальная сеть доставки контента (CDN)",
+      "explanation": "Amazon CloudFront — это CDN сервис, обеспечивающий быструю и безопасную передачу данных, видео, приложений и API клиентам по всему миру с низкими задержками."
+    },
+    {
+      "id": "aws_cloudfront_2",
+      "category": "aws",
+      "question": "Какие преимущества дает Amazon CloudFront? (Выберите ДВА)",
+      "options": [
+        "Низкая задержка (latency)",
+        "Высокая скорость передачи данных",
+        "Автоматическое масштабирование баз данных",
+        "Управление контейнерами"
+      ],
+      "correct": [
+        "Низкая задержка (latency)",
+        "Высокая скорость передачи данных"
+      ],
+      "explanation": "CloudFront использует глобальную сеть edge locations для кэширования контента ближе к пользователям, что обеспечивает низкую задержку и высокую скорость.",
+      "multiSelect": true
+    },
+    {
+      "id": "aws_cloudfront_3",
+      "category": "aws",
+      "question": "Что CloudFront может доставлять клиентам?",
+      "options": [
+        "Только статические файлы",
+        "Данные, видео, приложения и API",
+        "Только видео",
+        "Только API"
+      ],
+      "correct": "Данные, видео, приложения и API",
+      "explanation": "CloudFront — универсальный CDN, который может доставлять статический и динамический контент: данные, видео, приложения и API клиентам по всему миру."
+    },
+    {
+      "id": "aws_rds_1",
+      "category": "aws",
+      "question": "Что такое Amazon RDS?",
+      "options": [
+        "NoSQL база данных",
+        "Сервис для настройки и масштабирования реляционных баз данных",
+        "Сервис хранения файлов",
+        "Сервис очередей сообщений"
+      ],
+      "correct": "Сервис для настройки и масштабирования реляционных баз данных",
+      "explanation": "Amazon RDS (Relational Database Service) позволяет просто настраивать, использовать и масштабировать реляционные базы данных в облаке."
+    },
+    {
+      "id": "aws_rds_2",
+      "category": "aws",
+      "question": "Какие задачи автоматизирует Amazon RDS? (Выберите ДВА)",
+      "options": [
+        "Выделение аппаратного обеспечения",
+        "Резервное копирование",
+        "Написание SQL-запросов",
+        "Разработка приложений"
+      ],
+      "correct": [
+        "Выделение аппаратного обеспечения",
+        "Резервное копирование"
+      ],
+      "explanation": "RDS автоматизирует трудоемкие задачи администрирования: выделение оборудования, настройка БД, установка исправлений (patching) и резервное копирование.",
+      "multiSelect": true
+    },
+    {
+      "id": "aws_rds_3",
+      "category": "aws",
+      "question": "Какие СУБД поддерживает Amazon RDS? (Выберите ДВА)",
+      "options": [
+        "MySQL",
+        "PostgreSQL",
+        "MongoDB",
+        "Redis"
+      ],
+      "correct": [
+        "MySQL",
+        "PostgreSQL"
+      ],
+      "explanation": "RDS поддерживает реляционные СУБД: MySQL, PostgreSQL, MariaDB, Oracle, SQL Server и Amazon Aurora. MongoDB и Redis — это NoSQL (для них есть DocumentDB и ElastiCache).",
+      "multiSelect": true
+    },
+    {
+      "id": "aws_s3_durability_1",
+      "category": "aws_storage",
+      "question": "Какую надежность (durability) обеспечивает Amazon S3?",
+      "options": [
+        "99.9%",
+        "99.99%",
+        "99.999999999% (11 девяток)",
+        "99.9999%"
+      ],
+      "correct": "99.999999999% (11 девяток)",
+      "explanation": "Amazon S3 обеспечивает надежность 99.999999999% (11 девяток). Это означает, что из 10 миллионов объектов можно потерять в среднем 1 объект за 10 000 лет."
+    },
+    {
+      "id": "aws_s3_features_1",
+      "category": "aws_storage",
+      "question": "Какие характеристики обеспечивает Amazon S3? (Выберите ДВА)",
+      "options": [
+        "Высокая производительность",
+        "Масштабируемость",
+        "Управление контейнерами",
+        "DNS-маршрутизация"
+      ],
+      "correct": [
+        "Высокая производительность",
+        "Масштабируемость"
+      ],
+      "explanation": "Amazon S3 — сервис хранения объектов с отличными показателями производительности, масштабируемости, доступности и безопасности данных.",
+      "multiSelect": true
+    },
+    {
+      "id": "aws_cloudwatch_1",
+      "category": "aws",
+      "question": "Для чего используется Amazon CloudWatch?",
+      "options": [
+        "Хранение данных",
+        "Мониторинг и получение метрик AWS сервисов",
+        "Развертывание приложений",
+        "Управление DNS"
+      ],
+      "correct": "Мониторинг и получение метрик AWS сервисов",
+      "explanation": "Amazon CloudWatch — сервис мониторинга, позволяющий получить доступ к метрикам AWS сервисов, настроить алерты и дашборды."
+    },
+    {
+      "id": "aws_cloudwatch_2",
+      "category": "aws",
+      "question": "Что можно делать с помощью CloudWatch? (Выберите ДВА)",
+      "options": [
+        "Собирать метрики сервисов",
+        "Настраивать алерты",
+        "Регистрировать домены",
+        "Создавать VPC"
+      ],
+      "correct": [
+        "Собирать метрики сервисов",
+        "Настраивать алерты"
+      ],
+      "explanation": "CloudWatch позволяет: собирать метрики, логи и события; настраивать алерты (CloudWatch Alarms); создавать дашборды; автоматизировать действия на основе метрик.",
+      "multiSelect": true
+    },
+    {
+      "id": "aws_vpc_1",
+      "category": "aws",
+      "question": "Что такое Amazon VPC?",
+      "options": [
+        "Виртуальный процессор",
+        "Логически изолированный раздел облака AWS для запуска ресурсов",
+        "Сервис виртуальных машин",
+        "Протокол связи"
+      ],
+      "correct": "Логически изолированный раздел облака AWS для запуска ресурсов",
+      "explanation": "Amazon VPC (Virtual Private Cloud) — логически изолированный раздел облака AWS, в котором можно запускать ресурсы в самостоятельно заданной виртуальной сети."
+    },
+    {
+      "id": "aws_vpc_2",
+      "category": "aws",
+      "question": "Что можно контролировать в Amazon VPC? (Выберите ДВА)",
+      "options": [
+        "Диапазон IP-адресов",
+        "Таблицы маршрутизации",
+        "Цены на сервисы",
+        "Физическое расположение серверов"
+      ],
+      "correct": [
+        "Диапазон IP-адресов",
+        "Таблицы маршрутизации"
+      ],
+      "explanation": "VPC дает полный контроль над виртуальной сетью: выбор диапазона IP-адресов, создание подсетей, настройка таблиц маршрутизации и сетевых шлюзов.",
+      "multiSelect": true
+    },
+    {
+      "id": "aws_vpc_3",
+      "category": "aws",
+      "question": "Какие типы подсетей можно создать в VPC?",
+      "options": [
+        "Только публичные",
+        "Только частные",
+        "Публичные и частные",
+        "Только защищенные"
+      ],
+      "correct": "Публичные и частные",
+      "explanation": "В VPC можно создать публичную подсеть (с выходом в интернет) для веб-серверов и частную подсеть (без доступа к интернету) для баз данных и внутренних систем."
+    },
+    {
+      "id": "aws_vpc_4",
+      "category": "aws",
+      "question": "Какие компоненты безопасности предоставляет VPC? (Выберите ДВА)",
+      "options": [
+        "Security Groups (группы безопасности)",
+        "Network ACL (списки контроля доступа)",
+        "AWS Shield",
+        "AWS WAF"
+      ],
+      "correct": [
+        "Security Groups (группы безопасности)",
+        "Network ACL (списки контроля доступа)"
+      ],
+      "explanation": "VPC предоставляет многоуровневую безопасность: Security Groups (на уровне инстанса, stateful) и Network ACL (на уровне подсети, stateless).",
+      "multiSelect": true
+    },
+    {
+      "id": "aws_vpc_5",
+      "category": "aws",
+      "question": "Где лучше разместить базу данных в VPC?",
+      "options": [
+        "В публичной подсети",
+        "В частной подсети без доступа к интернету",
+        "Вне VPC",
+        "В любой подсети"
+      ],
+      "correct": "В частной подсети без доступа к интернету",
+      "explanation": "Базы данных и внутренние системы рекомендуется размещать в частной подсети без прямого доступа к интернету для повышения безопасности."
+    },
+    {
+      "id": "aws_ec2_ondemand_1",
+      "category": "aws",
+      "question": "Что такое On-Demand Instances?",
+      "options": [
+        "Зарезервированные инстансы",
+        "Инстансы с оплатой по факту использования",
+        "Бесплатные инстансы",
+        "Спотовые инстансы"
+      ],
+      "correct": "Инстансы с оплатой по факту использования",
+      "explanation": "On-Demand Instances — тарификация согласно использованию. Платите за вычислительные ресурсы по часам или секундам без долгосрочных обязательств."
+    },
+    {
+      "id": "aws_ec2_spot_1",
+      "category": "aws",
+      "question": "Какую скидку можно получить на Spot Instances?",
+      "options": [
+        "До 50%",
+        "До 75%",
+        "До 90%",
+        "До 30%"
+      ],
+      "correct": "До 90%",
+      "explanation": "Spot Instances позволяют работать с неиспользуемыми ресурсами EC2 со скидкой до 90% по сравнению с On-Demand. Но AWS может забрать их с уведомлением за 2 минуты."
+    },
+    {
+      "id": "aws_ec2_spot_2",
+      "category": "aws",
+      "question": "Что такое Spot Instances?",
+      "options": [
+        "Зарезервированные ресурсы",
+        "Неиспользуемые ресурсы EC2 со значительной скидкой",
+        "Выделенные серверы",
+        "Бесплатные инстансы"
+      ],
+      "correct": "Неиспользуемые ресурсы EC2 со значительной скидкой",
+      "explanation": "Spot Instances — это неиспользуемые (spare) ресурсы EC2 в облаке AWS, доступные со скидкой до 90%. Подходят для отказоустойчивых и гибких задач."
+    },
+    {
+      "id": "aws_ec2_reserved_1",
+      "category": "aws",
+      "question": "Какую скидку дают Reserved Instances по сравнению с On-Demand?",
+      "options": [
+        "До 50%",
+        "До 75%",
+        "До 90%",
+        "До 30%"
+      ],
+      "correct": "До 75%",
+      "explanation": "Reserved Instances (RI) стоят значительно дешевле (до 75%) чем On-Demand и обеспечивают резервирование ресурсов на 1 или 3 года."
+    },
+    {
+      "id": "aws_ec2_reserved_2",
+      "category": "aws",
+      "question": "Для каких сценариев лучше использовать Reserved Instances?",
+      "options": [
+        "Для непредсказуемых нагрузок",
+        "Для стабильных постоянных нагрузок",
+        "Для тестирования",
+        "Для batch-обработки"
+      ],
+      "correct": "Для стабильных постоянных нагрузок",
+      "explanation": "Reserved Instances оптимальны для стабильных, предсказуемых нагрузок — когда вы точно знаете, что будете использовать ресурсы 1-3 года."
+    },
+    {
+      "id": "aws_ec2_scheduled_1",
+      "category": "aws",
+      "question": "Что такое Scheduled Instances?",
+      "options": [
+        "Инстансы по расписанию обновлений",
+        "Инстансы, зарезервированные на конкретное время",
+        "Автоматически масштабируемые инстансы",
+        "Инстансы с отложенным запуском"
+      ],
+      "correct": "Инстансы, зарезервированные на конкретное время",
+      "explanation": "Scheduled Instances позволяют зарезервировать ресурсы на конкретное время — например, каждый день с 9:00 до 18:00 для бизнес-приложений."
+    },
+    {
+      "id": "aws_ec2_dedicated_1",
+      "category": "aws",
+      "question": "Что такое Dedicated Instances?",
+      "options": [
+        "Виртуальные машины общего пользования",
+        "Инстансы на оборудовании, выделенном для одного клиента",
+        "Бесплатные инстансы",
+        "Spot инстансы"
+      ],
+      "correct": "Инстансы на оборудовании, выделенном для одного клиента",
+      "explanation": "Dedicated Instances работают в VPC на оборудовании, выделенном для одного клиента. Физически изолированы на уровне хоста от инстансов других клиентов."
+    },
+    {
+      "id": "aws_ec2_dedicated_2",
+      "category": "aws",
+      "question": "Для чего нужны Dedicated Instances?",
+      "options": [
+        "Для экономии денег",
+        "Для физической изоляции и compliance требований",
+        "Для тестирования",
+        "Для обучения"
+      ],
+      "correct": "Для физической изоляции и compliance требований",
+      "explanation": "Dedicated Instances нужны когда требуется физическая изоляция от других клиентов — для соответствия требованиям compliance, лицензирования или безопасности."
+    },
+    {
+      "id": "aws_ec2_comparison_1",
+      "category": "aws",
+      "question": "Сопоставьте тип инстанса и скидку: какой дает максимальную скидку?",
+      "options": [
+        "Reserved Instances (до 75%)",
+        "Spot Instances (до 90%)",
+        "On-Demand (0%)",
+        "Dedicated (дороже On-Demand)"
+      ],
+      "correct": "Spot Instances (до 90%)",
+      "explanation": "Spot Instances дают максимальную скидку — до 90%. Reserved — до 75%. On-Demand — без скидки. Dedicated обычно дороже из-за выделенного оборудования."
+    },
+    {
+      "id": "aws_lambda_1",
+      "category": "aws",
+      "question": "Что такое AWS Lambda?",
+      "options": [
+        "Сервис виртуальных машин",
+        "Сервис запуска кода без управления серверами (Serverless)",
+        "База данных",
+        "CDN сервис"
+      ],
+      "correct": "Сервис запуска кода без управления серверами (Serverless)",
+      "explanation": "AWS Lambda позволяет запускать программные коды без выделения серверов и управления ими. Это ключевой serverless сервис AWS."
+    },
+    {
+      "id": "aws_lambda_2",
+      "category": "aws",
+      "question": "Как происходит оплата в AWS Lambda?",
+      "options": [
+        "Почасовая оплата",
+        "Только за фактическое время выполнения кода",
+        "Ежемесячная подписка",
+        "Оплата за количество функций"
+      ],
+      "correct": "Только за фактическое время выполнения кода",
+      "explanation": "В Lambda вы платите только за фактическое время вычисления (в миллисекундах). Если код не исполняется — оплата не требуется."
+    },
+    {
+      "id": "aws_lambda_3",
+      "category": "aws",
+      "question": "Верно ли: в AWS Lambda нужно управлять серверами?",
+      "options": [
+        "Верно",
+        "Неверно"
+      ],
+      "correct": "Неверно",
+      "explanation": "Lambda — это serverless сервис. Вам не нужно выделять серверы, управлять ими, масштабировать или патчить. AWS делает это автоматически."
+    },
+    {
+      "id": "aws_cloudformation_1",
+      "category": "aws",
+      "question": "Что такое AWS CloudFormation?",
+      "options": [
+        "Сервис мониторинга облака",
+        "Сервис описания инфраструктуры как кода (IaC)",
+        "Сервис резервного копирования",
+        "CDN сервис"
+      ],
+      "correct": "Сервис описания инфраструктуры как кода (IaC)",
+      "explanation": "AWS CloudFormation предоставляет универсальный язык для описания и выделения всех ресурсов инфраструктуры в облачной среде как код (Infrastructure as Code)."
+    },
+    {
+      "id": "aws_cloudformation_2",
+      "category": "aws",
+      "question": "Какой принцип реализует AWS CloudFormation?",
+      "options": [
+        "Pay-as-you-go",
+        "Infrastructure as Code (IaC)",
+        "Serverless",
+        "Microservices"
+      ],
+      "correct": "Infrastructure as Code (IaC)",
+      "explanation": "CloudFormation реализует принцип Infrastructure as Code — вся инфраструктура описывается в шаблонах (JSON/YAML), что позволяет версионировать и повторять развертывания."
+    },
+    {
+      "id": "aws_cloudformation_3",
+      "category": "aws",
+      "question": "В каких форматах можно писать шаблоны CloudFormation?",
+      "options": [
+        "Только JSON",
+        "Только YAML",
+        "JSON и YAML",
+        "XML и JSON"
+      ],
+      "correct": "JSON и YAML",
+      "explanation": "CloudFormation шаблоны можно писать в JSON или YAML формате. YAML более читаемый, JSON более строгий. Оба полностью поддерживаются."
+    },
+    {
+      "id": "aws_scenario_webserver_1",
+      "category": "aws",
+      "question": "Вы создаете веб-приложение. Где разместить веб-сервер в VPC?",
+      "options": [
+        "В частной подсети",
+        "В публичной подсети с выходом в интернет",
+        "Вне VPC",
+        "В любой подсети без разницы"
+      ],
+      "correct": "В публичной подсети с выходом в интернет",
+      "explanation": "Веб-серверы размещают в публичной подсети с выходом в интернет, чтобы пользователи могли к ним обращаться. БД — в частной подсети."
+    },
+    {
+      "id": "aws_scenario_batch_1",
+      "category": "aws",
+      "question": "У вас batch-задача обработки данных, которая может быть прервана. Какой тип EC2 выбрать для экономии?",
+      "options": [
+        "On-Demand Instances",
+        "Spot Instances",
+        "Reserved Instances",
+        "Dedicated Instances"
+      ],
+      "correct": "Spot Instances",
+      "explanation": "Для отказоустойчивых задач (batch, data processing), которые могут быть прерваны и перезапущены, Spot Instances дают до 90% экономии."
+    },
+    {
+      "id": "aws_scenario_stable_1",
+      "category": "aws",
+      "question": "У вас production база данных, которая работает 24/7 уже 2 года и будет работать еще 3 года. Какой тип EC2?",
+      "options": [
+        "On-Demand Instances",
+        "Spot Instances",
+        "Reserved Instances",
+        "Scheduled Instances"
+      ],
+      "correct": "Reserved Instances",
+      "explanation": "Для стабильных долгосрочных нагрузок (production DB 24/7) Reserved Instances дают до 75% экономии при обязательстве на 1-3 года."
+    }
+  ],
+  "aws_storage_questions": [
+    {
+      "id": "aws_storage_hard_1",
+      "category": "aws",
+      "question": "Компания хранит данные в Amazon S3. Доступ к данным требуется редко, но при обращении данные должны быть доступны мгновенно. Какой класс хранения выбрать?",
+      "options": [
+        "S3 Glacier",
+        "S3 Glacier Deep Archive",
+        "S3 Standard",
+        "S3 Standard-IA"
+      ],
+      "correct": "S3 Standard-IA",
+      "explanation": "S3 Standard-IA (Infrequent Access) предназначен для редко используемых данных с мгновенным доступом. Glacier требует времени на восстановление (от минут до часов). Standard дороже для редкого доступа."
+    },
+    {
+      "id": "aws_storage_hard_2",
+      "category": "aws",
+      "question": "Что означает показатель Durability в Amazon S3?",
+      "options": [
+        "Процент времени доступности сервиса",
+        "Вероятность сохранности данных",
+        "Скорость загрузки объектов",
+        "Количество копий файла"
+      ],
+      "correct": "Вероятность сохранности данных",
+      "explanation": "Durability (надежность) описывает вероятность НЕ потерять данные. В S3 это 99.999999999% (11 девяток) - означает, что из 10 млн файлов вы можете потерять максимум 1 файл за 10 000 лет."
+    },
+    {
+      "id": "aws_storage_hard_3",
+      "category": "aws",
+      "question": "Какое хранилище AWS используется как основной диск для EC2?",
+      "options": [
+        "Amazon S3",
+        "Amazon EFS",
+        "Amazon EBS",
+        "Amazon Glacier"
+      ],
+      "correct": "Amazon EBS",
+      "explanation": "EBS (Elastic Block Store) — блочное хранилище, которое используется как диск для EC2 инстансов. S3 — объектное хранилище для файлов. EFS — сетевая файловая система."
+    },
+    {
+      "id": "aws_storage_hard_4",
+      "category": "aws",
+      "question": "Какое утверждение о Amazon S3 является верным?",
+      "options": [
+        "S3 привязан к одной Availability Zone",
+        "S3 является файловой системой",
+        "S3 автоматически реплицирует данные между несколькими AZ",
+        "S3 используется только для резервных копий"
+      ],
+      "correct": "S3 автоматически реплицирует данные между несколькими AZ",
+      "explanation": "S3 хранит данные минимум в 3 Availability Zones внутри региона, обеспечивая высокую отказоустойчивость. S3 — объектное хранилище, не файловая система."
+    },
+    {
+      "id": "aws_storage_hard_5",
+      "category": "aws",
+      "question": "Что произойдет с данными в EBS volume при удалении EC2 инстанса?",
+      "options": [
+        "Данные всегда удаляются",
+        "Данные всегда сохраняются",
+        "Зависит от настройки Delete on Termination",
+        "EBS автоматически переносится в S3"
+      ],
+      "correct": "Зависит от настройки Delete on Termination",
+      "explanation": "EBS может быть удалён или сохранён при удалении EC2 — это зависит от флага 'Delete on Termination'. По умолчанию для root volume он включен, для дополнительных — выключен."
+    },
+    {
+      "id": "aws_storage_security_1",
+      "category": "aws",
+      "question": "Какой способ является наиболее безопасным для предоставления EC2 доступа к S3?",
+      "options": [
+        "Хранить Access Key в коде",
+        "Использовать IAM Role",
+        "Передавать ключи через переменные окружения",
+        "Создать публичный bucket"
+      ],
+      "correct": "Использовать IAM Role",
+      "explanation": "IAM Role использует временные credentials и не требует хранения ключей в коде. AWS автоматически ротирует credentials. Хранение ключей в коде — огромная уязвимость."
+    },
+    {
+      "id": "aws_storage_security_2",
+      "category": "aws",
+      "question": "Как ограничить доступ к объектам в Amazon S3?",
+      "options": [
+        "Security Groups",
+        "Network ACL",
+        "IAM Policies и Bucket Policies",
+        "Auto Scaling"
+      ],
+      "correct": "IAM Policies и Bucket Policies",
+      "explanation": "Доступ к S3 управляется через IAM Policies (кто может) и Bucket Policies (что можно). Security Groups работают только для EC2, не для S3."
+    },
+    {
+      "id": "aws_storage_logic_1",
+      "category": "aws",
+      "question": "Компания хочет хранить данные с максимальной надежностью, но не заботится о задержках при чтении. Какое решение наиболее экономично?",
+      "options": [
+        "S3 Standard",
+        "S3 Standard-IA",
+        "S3 Glacier",
+        "Amazon EBS"
+      ],
+      "correct": "S3 Glacier",
+      "explanation": "Glacier обеспечивает ту же durability (11 девяток), что и S3 Standard, но с более низкой стоимостью и задержкой доступа (минуты-часы). Идеально для архивов."
+    },
+    {
+      "id": "aws_storage_types_1",
+      "category": "aws",
+      "question": "Какие типы хранилищ существуют в AWS? (Выберите ДВА)",
+      "options": [
+        "Блочное хранилище (EBS)",
+        "Объектное хранилище (S3)",
+        "Реляционное хранилище (RDS)",
+        "Контейнерное хранилище (ECS)"
+      ],
+      "correct": [
+        "Блочное хранилище (EBS)",
+        "Объектное хранилище (S3)"
+      ],
+      "explanation": "AWS предоставляет: 1) Блочное (EBS) — как жесткий диск, 2) Объектное (S3) — для файлов, 3) Файловое (EFS) — сетевая ФС. RDS — база данных, ECS — контейнеры.",
+      "multiSelect": true
+    },
+    {
+      "id": "aws_storage_pricing_1",
+      "category": "aws",
+      "question": "За что НЕ взимается плата в Amazon S3?",
+      "options": [
+        "Хранение данных",
+        "Входящий трафик (upload)",
+        "Исходящий трафик (download)",
+        "Запросы (GET, PUT)"
+      ],
+      "correct": "Входящий трафик (upload)",
+      "explanation": "В S3 НЕ платят за загрузку данных (inbound transfer). Платят за: хранение ($/GB/месяц), скачивание (outbound transfer), запросы GET/PUT."
+    },
+    {
+      "id": "aws_storage_glacier_1",
+      "category": "aws",
+      "question": "Какое время требуется для извлечения данных из S3 Glacier Deep Archive?",
+      "options": [
+        "Мгновенно",
+        "Минуты",
+        "Часы (12+ часов)",
+        "Дни"
+      ],
+      "correct": "Часы (12+ часов)",
+      "explanation": "S3 Glacier Deep Archive — самый дешевый класс ($0.00099/GB), но восстановление занимает 12+ часов. Glacier Flexible — от минут до часов. Standard-IA — мгновенно."
+    },
+    {
+      "id": "aws_storage_usecase_1",
+      "category": "aws",
+      "question": "Какой класс S3 лучше для хранения логов, к которым обращаются раз в квартал?",
+      "options": [
+        "S3 Standard",
+        "S3 Standard-IA",
+        "S3 Glacier Instant Retrieval",
+        "S3 One Zone-IA"
+      ],
+      "correct": "S3 Standard-IA",
+      "explanation": "Standard-IA (Infrequent Access) оптимален для данных с редким доступом (раз в месяц/квартал), но требующих мгновенного доступа. Дешевле Standard на ~50%."
+    },
+    {
+      "id": "aws_storage_snapshot_1",
+      "category": "aws",
+      "question": "Что такое EBS Snapshot?",
+      "options": [
+        "Копия образа EC2 инстанса",
+        "Резервная копия EBS volume, хранящаяся в S3",
+        "Моментальное состояние базы данных",
+        "Копия Docker контейнера"
+      ],
+      "correct": "Резервная копия EBS volume, хранящаяся в S3",
+      "explanation": "EBS Snapshot — инкрементальная резервная копия EBS диска, автоматически сохраняется в S3. Первый snapshot — полный, последующие — только изменения."
+    },
+    {
+      "id": "aws_storage_multipart_1",
+      "category": "aws",
+      "question": "Когда рекомендуется использовать Multipart Upload в S3?",
+      "options": [
+        "Для файлов менее 5 MB",
+        "Для файлов более 100 MB",
+        "Только для видеофайлов",
+        "Только для зашифрованных файлов"
+      ],
+      "correct": "Для файлов более 100 MB",
+      "explanation": "Multipart Upload рекомендуется для файлов > 100 MB. Обязателен для файлов > 5 GB. Преимущества: быстрее, можно возобновить загрузку, параллельная загрузка частей."
+    },
+    {
+      "id": "aws_storage_versioning_1",
+      "category": "aws",
+      "question": "Что позволяет S3 Versioning?",
+      "options": [
+        "Сжатие файлов автоматически",
+        "Хранение нескольких версий одного объекта",
+        "Автоматическое удаление старых файлов",
+        "Шифрование данных"
+      ],
+      "correct": "Хранение нескольких версий одного объекта",
+      "explanation": "S3 Versioning сохраняет все версии объекта, даже при перезаписи или удалении. Защищает от случайного удаления. Можно восстановить предыдущую версию."
+    },
+    {
+      "id": "aws_storage_lifecycle_1",
+      "category": "aws",
+      "question": "Для чего используется S3 Lifecycle Policy?",
+      "options": [
+        "Автоматическое перемещение объектов между классами хранения",
+        "Управление доступом к bucket",
+        "Мониторинг производительности",
+        "Репликация данных между регионами"
+      ],
+      "correct": "Автоматическое перемещение объектов между классами хранения",
+      "explanation": "Lifecycle Policy автоматически переносит объекты: например, через 30 дней Standard → IA, через 90 дней → Glacier. Экономит деньги без ручной работы."
+    },
+    {
+      "id": "aws_storage_encryption_1",
+      "category": "aws",
+      "question": "Какие типы шифрования доступны в S3? (Выберите ДВА)",
+      "options": [
+        "SSE-S3 (управляется AWS)",
+        "SSE-C (ключи клиента)",
+        "SSE-RDS (для баз данных)",
+        "SSE-EC2 (для инстансов)"
+      ],
+      "correct": [
+        "SSE-S3 (управляется AWS)",
+        "SSE-C (ключи клиента)"
+      ],
+      "explanation": "S3 поддерживает: SSE-S3 (AWS управляет ключами), SSE-KMS (AWS KMS), SSE-C (вы управляете ключами). Также Client-Side Encryption (шифрование до загрузки).",
+      "multiSelect": true
+    },
+    {
+      "id": "aws_storage_cloudfront_1",
+      "category": "aws",
+      "question": "Как CloudFront улучшает работу с S3?",
+      "options": [
+        "Автоматически сжимает файлы",
+        "Кэширует контент ближе к пользователям",
+        "Увеличивает размер хранилища",
+        "Шифрует данные сильнее"
+      ],
+      "correct": "Кэширует контент ближе к пользователям",
+      "explanation": "CloudFront (CDN) кэширует S3 объекты в edge locations по всему миру. Пользователи получают данные из ближайшей точки → быстрее загрузка, меньше latency."
+    },
+    {
+      "id": "aws_storage_transfer_1",
+      "category": "aws",
+      "question": "Какой сервис AWS ускоряет загрузку больших файлов в S3 из удаленных локаций?",
+      "options": [
+        "AWS Direct Connect",
+        "S3 Transfer Acceleration",
+        "AWS DataSync",
+        "AWS Snowball"
+      ],
+      "correct": "S3 Transfer Acceleration",
+      "explanation": "S3 Transfer Acceleration использует CloudFront edge locations для ускорения загрузки в S3 через оптимизированные пути. До 50-500% быстрее для международных загрузок."
+    },
+    {
+      "id": "aws_storage_efs_1",
+      "category": "aws",
+      "question": "Чем Amazon EFS отличается от EBS?",
+      "options": [
+        "EFS — сетевая файловая система, доступна многим EC2 одновременно",
+        "EFS дешевле EBS",
+        "EFS работает только с Windows",
+        "EFS не поддерживает шифрование"
+      ],
+      "correct": "EFS — сетевая файловая система, доступна многим EC2 одновременно",
+      "explanation": "EFS (Elastic File System) — managed NFS для Linux. Может монтироваться к нескольким EC2 одновременно. EBS — блочное хранилище, привязано к одному EC2."
+    },
+    {
+      "id": "aws_storage_scenario_1",
+      "category": "aws",
+      "question": "Компания хранит 500 TB архивных данных, к которым не обращаются годами. Нужна минимальная стоимость. Что выбрать?",
+      "options": [
+        "S3 Standard",
+        "S3 Standard-IA",
+        "S3 Glacier Flexible Retrieval",
+        "S3 Glacier Deep Archive"
+      ],
+      "correct": "S3 Glacier Deep Archive",
+      "explanation": "S3 Glacier Deep Archive — самый дешевый ($0.00099/GB/месяц). Для 500 TB это ~$500/месяц vs ~$10,000+ в Standard. Восстановление 12+ часов, но для архивов это ОК."
+    },
+    {
+      "id": "aws_storage_scenario_2",
+      "category": "aws",
+      "question": "У вас веб-приложение с миллионами изображений. Пользователи загружают и просматривают их. Где хранить?",
+      "options": [
+        "Amazon RDS",
+        "Amazon S3",
+        "Amazon DynamoDB",
+        "Amazon EBS"
+      ],
+      "correct": "Amazon S3",
+      "explanation": "S3 идеален для статических файлов (изображения, видео). Неограниченная масштабируемость, 99.999999999% durability, интеграция с CloudFront для быстрой доставки."
+    },
+    {
+      "id": "aws_storage_scenario_3",
+      "category": "aws",
+      "question": "База данных на EC2 требует высокопроизводительное хранилище с низкой latency. Что выбрать?",
+      "options": [
+        "S3 Standard",
+        "EBS Provisioned IOPS SSD (io2)",
+        "EFS",
+        "Glacier"
+      ],
+      "correct": "EBS Provisioned IOPS SSD (io2)",
+      "explanation": "EBS io2 — высокопроизводительный SSD с гарантированными IOPS (до 64,000 IOPS). Идеален для баз данных (MySQL, PostgreSQL, MongoDB). S3 — не для БД."
+    },
+    {
+      "id": "aws_storage_durability_1",
+      "category": "aws",
+      "question": "Какая разница между Durability и Availability в S3?",
+      "options": [
+        "Durability — вероятность НЕ потерять данные, Availability — процент времени доступа",
+        "Это одно и то же",
+        "Durability — скорость, Availability — безопасность",
+        "Durability — для Glacier, Availability — для Standard"
+      ],
+      "correct": "Durability — вероятность НЕ потерять данные, Availability — процент времени доступа",
+      "explanation": "Durability (99.999999999%) — данные не потеряются. Availability (99.99% для Standard) — процент времени, когда сервис доступен. Высокая durability не гарантирует 100% availability."
+    },
+    {
+      "id": "aws_storage_crossregion_1",
+      "category": "aws",
+      "question": "Для чего используется S3 Cross-Region Replication (CRR)?",
+      "options": [
+        "Автоматическое резервное копирование в другой регион",
+        "Ускорение загрузки файлов",
+        "Сжатие данных",
+        "Мониторинг доступа"
+      ],
+      "correct": "Автоматическое резервное копирование в другой регион",
+      "explanation": "CRR автоматически копирует объекты между регионами. Цели: disaster recovery, соответствие compliance (данные в определенных странах), снижение latency для пользователей."
     }
   ]
 }

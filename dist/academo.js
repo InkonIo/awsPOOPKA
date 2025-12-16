@@ -7,6 +7,7 @@ const API_BASE = window.location.hostname === 'localhost' || window.location.hos
 let allQuestions = [];
 let currentQuestions = [];
 let currentQuestionIndex = 0;
+let currentQuestion = null; // ← ДОБАВЛЕНО: явное хранение текущего вопроса
 let userAnswers = [];
 let stats = { correct: 0, incorrect: 0, total: 0 };
 let selectedCategory = 'all';
@@ -56,6 +57,7 @@ const elements = {
 const categoryNames = {
     'cloud_basics': '☁️ Основы облаков',
     'aws': '🚀 AWS Сервисы',
+    'aws_storage': '💾 AWS Storage',
     'docker': '🐳 Docker'
 };
 
@@ -118,6 +120,7 @@ async function loadQuestions() {
         });
         
         console.log('Loaded questions:', allQuestions.length);
+        console.log('Categories:', categoryCounts);
     } catch (error) {
         showToast('Не удалось загрузить вопросы', 'error');
     } finally {
@@ -152,8 +155,11 @@ function startQuiz(category) {
     
     // Reset state
     currentQuestionIndex = 0;
+    currentQuestion = null;
     userAnswers = new Array(currentQuestions.length).fill(null);
     stats = { correct: 0, incorrect: 0, total: 0 };
+    selectedOption = null;
+    selectedOptions = [];
     
     // Update UI
     elements.totalQuestions.textContent = currentQuestions.length;
@@ -175,12 +181,15 @@ function shuffleArray(array) {
 
 // Load Question
 function loadQuestion() {
-    const question = currentQuestions[currentQuestionIndex];
+    // ← ИСПРАВЛЕНО: сохраняем текущий вопрос в переменную
+    currentQuestion = currentQuestions[currentQuestionIndex];
+    const question = currentQuestion;
     const answered = userAnswers[currentQuestionIndex] !== null;
     const isMultiSelect = question.multiSelect === true;
     
     // Reset selected options for new question
     if (!answered) {
+        selectedOption = null;
         selectedOptions = [];
     }
     
@@ -254,6 +263,9 @@ function loadQuestion() {
     } else {
         elements.finishQuizBtn.classList.add('hidden');
     }
+    
+    // Debug log
+    console.log(`Question ${currentQuestionIndex + 1}:`, question.id, question.question.substring(0, 50));
 }
 
 // Select Option - supports both single and multi-select
@@ -261,7 +273,13 @@ let selectedOption = null;
 let selectedOptions = [];
 
 function selectOption(optionEl, option, isMultiSelect = false) {
-    const question = currentQuestions[currentQuestionIndex];
+    // ← ИСПРАВЛЕНО: используем currentQuestion вместо повторного обращения к массиву
+    const question = currentQuestion;
+    if (!question) {
+        console.error('No current question!');
+        return;
+    }
+    
     const requiredCount = Array.isArray(question.correct) ? question.correct.length : 1;
     
     if (isMultiSelect) {
@@ -307,11 +325,25 @@ function selectOption(optionEl, option, isMultiSelect = false) {
 
 // Check Answer
 elements.checkAnswerBtn.addEventListener('click', async () => {
-    const question = currentQuestions[currentQuestionIndex];
+    // ← ИСПРАВЛЕНО: используем currentQuestion вместо повторного обращения к массиву
+    const question = currentQuestion;
+    
+    if (!question) {
+        console.error('No current question to check!');
+        showToast('Ошибка: вопрос не найден', 'error');
+        return;
+    }
+    
     const isMultiSelect = question.multiSelect === true;
     const answerToSend = isMultiSelect ? selectedOptions : selectedOption;
     
-    if (!answerToSend || (Array.isArray(answerToSend) && answerToSend.length === 0)) return;
+    if (!answerToSend || (Array.isArray(answerToSend) && answerToSend.length === 0)) {
+        showToast('Выберите ответ', 'error');
+        return;
+    }
+    
+    // Debug log
+    console.log('Checking answer for:', question.id, 'Answer:', answerToSend);
     
     try {
         showLoading();
@@ -325,6 +357,9 @@ elements.checkAnswerBtn.addEventListener('click', async () => {
                 isMultiSelect: isMultiSelect
             })
         });
+        
+        // Debug log
+        console.log('Result:', result);
         
         // Save answer
         userAnswers[currentQuestionIndex] = {
@@ -404,6 +439,7 @@ elements.nextQuestionBtn.addEventListener('click', () => {
     if (currentQuestionIndex < currentQuestions.length - 1) {
         currentQuestionIndex++;
         selectedOption = null;
+        selectedOptions = [];
         loadQuestion();
     }
 });
@@ -412,6 +448,7 @@ elements.prevQuestionBtn.addEventListener('click', () => {
     if (currentQuestionIndex > 0) {
         currentQuestionIndex--;
         selectedOption = null;
+        selectedOptions = [];
         loadQuestion();
     }
 });
